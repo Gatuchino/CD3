@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dashboard — DocuBot</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+tailwind.config = {
+  darkMode:"class",
+  theme:{extend:{
+    colors:{"secondary":"#835410","primary-fixed-dim":"#bdc7dd","error-container":"#ffdad6","surface-dim":"#d8dae0","on-primary-container":"#7a8498","outline-variant":"#c5c6cd","surface-container":"#eceef3","surface-container-lowest":"#ffffff","on-error-container":"#93000a","on-surface":"#191c20","on-surface-variant":"#45474c","primary":"#000000","background":"#f8f9ff","tertiary-container":"#001f25","surface-variant":"#e1e2e8","on-secondary":"#ffffff","on-secondary-container":"#774a04","error":"#ba1a1a","secondary-container":"#fdbd71","surface":"#f8f9ff","primary-container":"#121c2c","on-primary":"#ffffff","on-error":"#ffffff","surface-container-high":"#e7e8ee"},
+    fontFamily:{"label-caps":["Inter"],"h2":["Noto Serif"],"h3":["Noto Serif"],"mono":["monospace"],"body-sm":["Inter"],"body-md":["Inter"],"h1":["Noto Serif"],"body-lg":["Inter"]},
+    fontSize:{"label-caps":["12px",{"lineHeight":"1","letterSpacing":"0.1em","fontWeight":"700"}],"h2":["32px",{"lineHeight":"1.3","letterSpacing":"-0.01em","fontWeight":"600"}],"h3":["24px",{"lineHeight":"1.4","letterSpacing":"0","fontWeight":"600"}],"mono":["13px",{"lineHeight":"1.5","letterSpacing":"0","fontWeight":"400"}],"body-sm":["14px",{"lineHeight":"1.5","letterSpacing":"0","fontWeight":"400"}],"body-md":["16px",{"lineHeight":"1.5","letterSpacing":"0","fontWeight":"400"}],"h1":["40px",{"lineHeight":"1.2","letterSpacing":"-0.02em","fontWeight":"700"}],"body-lg":["18px",{"lineHeight":"1.6","letterSpacing":"0","fontWeight":"400"}]},
+    spacing:{"sm":"8px","gutter":"16px","lg":"24px","md":"16px","xs":"4px","unit":"8px","xl":"40px","margin":"32px"}
+  }}
+}
+</script>
+<style>.brutalist-border{border:1px solid rgba(0,6,21,0.1)}.brutalist-shadow{box-shadow:2px 2px 0px 0px rgba(0,0,0,0.05)}</style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased overflow-x-hidden">
+
+<nav class="w-[280px] h-full fixed left-0 top-0 border-r border-on-surface/10 bg-primary text-on-primary flex flex-col overflow-y-auto px-md py-lg z-20">
+  <div class="mb-xl"><h1 class="font-h3 text-h3 font-bold mb-xs">DocuBot</h1><p class="font-label-caps text-label-caps text-on-primary/70">AI Document Control</p></div>
+  <ul class="flex flex-col gap-sm flex-grow">
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary bg-primary-container" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">dashboard</span><span class="font-body-md text-body-md font-bold">Dashboard</span></a></li>
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 0">folder_open</span><span class="font-body-md text-body-md">Proyectos</span></a></li>
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 0">description</span><span class="font-body-md text-body-md">Documentos</span></a></li>
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 0">search</span><span class="font-body-md text-body-md">Búsqueda IA</span></a></li>
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 0">notifications</span><span class="font-body-md text-body-md">Alertas</span></a></li>
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 0">history</span><span class="font-body-md text-body-md">Auditoría</span></a></li>
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 0">bar_chart</span><span class="font-body-md text-body-md">Métricas</span></a></li>
+  </ul>
+  <div class="pt-lg border-t border-on-primary/20"><a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary transition-colors" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 0">settings</span><span class="font-body-md text-body-md">Configuración</span></a></div>
+</nav>
+
+<div class="ml-[280px] min-h-screen flex flex-col">
+  <header class="bg-surface flex justify-between items-center h-16 px-lg w-full border-b border-on-surface/10 sticky top-0 z-10">
+    <div class="flex items-center gap-md">
+      <span class="font-h3 text-h3 text-primary uppercase tracking-tighter">Aurenza Group</span>
+      <span class="text-on-surface-variant">/</span>
+      <span class="font-body-md text-body-md text-on-surface-variant">Dashboard General</span>
+    </div>
+    <div class="flex items-center gap-md">
+      <span class="font-mono text-mono text-on-surface-variant">Hoy: 08 May 2026</span>
+      <div class="w-8 h-8 bg-secondary rounded-full flex items-center justify-center text-on-primary font-bold text-sm">CJ</div>
+    </div>
+  </header>
+
+  <main class="flex-1 p-lg flex flex-col gap-lg">
+
+    <!-- KPIs -->
+    <div class="grid grid-cols-4 gap-md">
+      <div class="bg-surface-container-lowest brutalist-border brutalist-shadow p-md border-t-4 border-t-secondary">
+        <p class="font-label-caps text-label-caps text-on-surface-variant mb-sm">PROYECTOS ACTIVOS</p>
+        <p class="font-h2 text-h2 text-primary">7</p>
+        <p class="font-body-sm text-body-sm text-on-surface-variant mt-xs">3 minería · 4 construcción</p>
+      </div>
+      <div class="bg-surface-container-lowest brutalist-border brutalist-shadow p-md">
+        <p class="font-label-caps text-label-caps text-on-surface-variant mb-sm">DOCUMENTOS INDEXADOS</p>
+        <p class="font-h2 text-h2 text-primary">2,847</p>
+        <p class="font-body-sm text-body-sm text-on-surface-variant mt-xs flex items-center gap-xs"><span class="material-symbols-outlined text-[14px]">arrow_upward</span>+143 este mes</p>
+      </div>
+      <div class="bg-surface-container-lowest brutalist-border brutalist-shadow p-md border-l-4 border-l-error">
+        <p class="font-label-caps text-label-caps text-on-surface-variant mb-sm">ALERTAS CRÍTICAS</p>
+        <p class="font-h2 text-h2 text-error">12</p>
+        <p class="font-body-sm text-body-sm text-on-surface-variant mt-xs">Requieren acción inmediata</p>
+      </div>
+      <div class="bg-surface-container-lowest brutalist-border brutalist-shadow p-md">
+        <p class="font-label-caps text-label-caps text-on-surface-variant mb-sm">CONSULTAS RAG HOY</p>
+        <p class="font-h2 text-h2 text-primary">38</p>
+        <p class="font-body-sm text-body-sm text-on-surface-variant mt-xs">Confianza promedio 89%</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-12 gap-lg">
+
+      <!-- Actividad reciente -->
+      <div class="col-span-8 bg-surface-container-lowest brutalist-border brutalist-shadow">
+        <div class="p-md border-b border-on-surface/10 flex justify-between items-center">
+          <h3 class="font-h3 text-h3 text-primary">Documentos recientes</h3>
+          <button class="font-label-caps text-label-caps text-secondary hover:text-secondary/80">VER TODO</button>
+        </div>
+        <table class="w-full text-left">
+          <thead><tr class="border-b border-on-surface/10 bg-surface-container">
+            <th class="p-sm pl-md font-label-caps text-label-caps text-on-surface-variant">DOCUMENTO</th>
+            <th class="p-sm font-label-caps text-label-caps text-on-surface-variant">PROYECTO</th>
+            <th class="p-sm font-label-caps text-label-caps text-on-surface-variant">TIPO</th>
+            <th class="p-sm pr-md font-label-caps text-label-caps text-on-surface-variant">ESTADO IA</th>
+          </tr></thead>
+          <tbody class="font-body-sm text-body-sm">
+            <tr class="border-b border-on-surface/5 hover:bg-surface-container transition-colors">
+              <td class="p-sm pl-md font-mono text-mono text-primary">EPC-2023-001-RevD.pdf</td>
+              <td class="p-sm text-on-surface-variant">Planta Concentradora</td>
+              <td class="p-sm text-on-surface-variant">Contrato EPC</td>
+              <td class="p-sm pr-md"><span class="px-xs py-[2px] bg-primary-container text-on-primary font-label-caps text-label-caps">PROCESADO</span></td>
+            </tr>
+            <tr class="border-b border-on-surface/5 hover:bg-surface-container transition-colors">
+              <td class="p-sm pl-md font-mono text-mono text-primary">RFI-104-Iluminacion.pdf</td>
+              <td class="p-sm text-on-surface-variant">Edificio Corporativo</td>
+              <td class="p-sm text-on-surface-variant">RFI</td>
+              <td class="p-sm pr-md"><span class="px-xs py-[2px] bg-primary-container text-on-primary font-label-caps text-label-caps">PROCESADO</span></td>
+            </tr>
+            <tr class="border-b border-on-surface/5 hover:bg-surface-container transition-colors">
+              <td class="p-sm pl-md font-mono text-mono text-primary">ET-HVAC-Vol2.docx</td>
+              <td class="p-sm text-on-surface-variant">Planta Concentradora</td>
+              <td class="p-sm text-on-surface-variant">Esp. Técnica</td>
+              <td class="p-sm pr-md"><span class="px-xs py-[2px] bg-secondary text-on-secondary font-label-caps text-label-caps">CLASIFICANDO</span></td>
+            </tr>
+            <tr class="hover:bg-surface-container transition-colors">
+              <td class="p-sm pl-md font-mono text-mono text-primary">ADENDA-03-RevA.pdf</td>
+              <td class="p-sm text-on-surface-variant">Puerto Angamos</td>
+              <td class="p-sm text-on-surface-variant">Adenda</td>
+              <td class="p-sm pr-md"><span class="px-xs py-[2px] bg-surface-container-high text-on-surface-variant border border-on-surface/20 font-label-caps text-label-caps">EN COLA</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Alertas y panel lateral -->
+      <div class="col-span-4 flex flex-col gap-md">
+        <div class="bg-surface-container-lowest brutalist-border brutalist-shadow p-md">
+          <p class="font-label-caps text-label-caps text-on-surface-variant mb-sm">PROCESAMIENTO OCR</p>
+          <div class="flex justify-between items-end mb-xs">
+            <span class="font-h3 text-h3 text-primary">85%</span>
+            <span class="font-mono text-mono text-on-surface-variant">2,419 / 2,847</span>
+          </div>
+          <div class="w-full bg-surface-container h-2 brutalist-border">
+            <div class="bg-primary h-full" style="width:85%"></div>
+          </div>
+        </div>
+
+        <div class="bg-surface-container-lowest brutalist-border brutalist-shadow p-md flex-1">
+          <p class="font-label-caps text-label-caps text-on-surface-variant mb-sm">ALERTAS RECIENTES</p>
+          <div class="flex flex-col gap-xs">
+            <div class="p-sm bg-error-container flex items-start gap-xs">
+              <span class="material-symbols-outlined text-error text-[16px] mt-0.5" style="font-variation-settings:'FILL' 1">priority_high</span>
+              <div><p class="font-body-sm text-body-sm font-bold text-primary">Informe Fase 1 — VENCIDO</p><p class="font-mono text-mono text-on-surface-variant">EPC-2023-001 · Multa activa</p></div>
+            </div>
+            <div class="p-sm bg-secondary-container/20 flex items-start gap-xs">
+              <span class="material-symbols-outlined text-secondary text-[16px] mt-0.5" style="font-variation-settings:'FILL' 1">schedule</span>
+              <div><p class="font-body-sm text-body-sm font-bold text-primary">Plan de Calidad — 3 días</p><p class="font-mono text-mono text-on-surface-variant">EPC-2023-001 · Vence 11 May</p></div>
+            </div>
+            <div class="p-sm bg-surface-container flex items-start gap-xs">
+              <span class="material-symbols-outlined text-on-surface-variant text-[16px] mt-0.5" style="font-variation-settings:'FILL' 1">task</span>
+              <div><p class="font-body-sm text-body-sm font-bold text-primary">Nómina Subcontratistas — 14d</p><p class="font-mono text-mono text-on-surface-variant">Puerto Angamos · Vence 22 May</p></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-surface-container-lowest brutalist-border brutalist-shadow p-md">
+          <p class="font-label-caps text-label-caps text-on-surface-variant mb-sm">ÚLTIMA CONSULTA RAG</p>
+          <p class="font-body-sm text-body-sm text-primary italic">"¿Cuáles son las penalidades por incumplimiento de plazo en el contrato EPC-2023-001?"</p>
+          <p class="font-mono text-mono text-on-surface-variant mt-xs">Confianza: 91% · Hace 12 min</p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+</body>
+</html>

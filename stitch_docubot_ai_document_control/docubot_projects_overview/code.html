@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Proyectos — DocuBot</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+tailwind.config={darkMode:"class",theme:{extend:{colors:{"secondary":"#835410","error-container":"#ffdad6","surface-container":"#eceef3","surface-container-lowest":"#ffffff","on-surface":"#191c20","on-surface-variant":"#45474c","primary":"#000000","background":"#f8f9ff","surface-variant":"#e1e2e8","on-secondary":"#ffffff","error":"#ba1a1a","secondary-container":"#fdbd71","surface":"#f8f9ff","primary-container":"#121c2c","on-primary":"#ffffff","surface-container-high":"#e7e8ee"},fontFamily:{"label-caps":["Inter"],"h2":["Noto Serif"],"h3":["Noto Serif"],"mono":["monospace"],"body-sm":["Inter"],"body-md":["Inter"],"h1":["Noto Serif"]},fontSize:{"label-caps":["12px",{"lineHeight":"1","letterSpacing":"0.1em","fontWeight":"700"}],"h2":["32px",{"lineHeight":"1.3","letterSpacing":"-0.01em","fontWeight":"600"}],"h3":["24px",{"lineHeight":"1.4","letterSpacing":"0","fontWeight":"600"}],"mono":["13px",{"lineHeight":"1.5","letterSpacing":"0","fontWeight":"400"}],"body-sm":["14px",{"lineHeight":"1.5","letterSpacing":"0","fontWeight":"400"}],"body-md":["16px",{"lineHeight":"1.5","letterSpacing":"0","fontWeight":"400"}],"h1":["40px",{"lineHeight":"1.2","letterSpacing":"-0.02em","fontWeight":"700"}]},spacing:{"sm":"8px","gutter":"16px","lg":"24px","md":"16px","xs":"4px","unit":"8px","xl":"40px","margin":"32px"}}}}
+</script>
+<style>.brutalist-border{border:1px solid rgba(0,6,21,0.1)}.brutalist-shadow{box-shadow:2px 2px 0px 0px rgba(0,0,0,0.05)}</style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased overflow-x-hidden">
+
+<nav class="w-[280px] h-full fixed left-0 top-0 border-r border-on-surface/10 bg-primary text-on-primary flex flex-col overflow-y-auto px-md py-lg z-20">
+  <div class="mb-xl"><h1 class="font-h3 text-h3 font-bold mb-xs">DocuBot</h1><p class="font-label-caps text-label-caps text-on-primary/70">AI Document Control</p></div>
+  <ul class="flex flex-col gap-sm flex-grow">
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 0">dashboard</span><span class="font-body-md text-body-md">Dashboard</span></a></li>
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary bg-primary-container" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">folder_open</span><span class="font-body-md text-body-md font-bold">Proyectos</span></a></li>
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 0">description</span><span class="font-body-md text-body-md">Documentos</span></a></li>
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 0">search</span><span class="font-body-md text-body-md">Búsqueda IA</span></a></li>
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 0">notifications</span><span class="font-body-md text-body-md">Alertas</span></a></li>
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 0">history</span><span class="font-body-md text-body-md">Auditoría</span></a></li>
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 0">bar_chart</span><span class="font-body-md text-body-md">Métricas</span></a></li>
+  </ul>
+</nav>
+
+<div class="ml-[280px] min-h-screen flex flex-col">
+  <header class="bg-surface flex justify-between items-center h-16 px-lg w-full border-b border-on-surface/10 sticky top-0 z-10">
+    <div class="flex items-center gap-md">
+      <span class="font-h3 text-h3 text-primary uppercase tracking-tighter">Aurenza Group</span>
+      <span class="text-on-surface-variant">/</span>
+      <span class="font-body-md text-body-md text-on-surface-variant">Proyectos</span>
+    </div>
+    <div class="flex items-center gap-md">
+      <button class="bg-secondary text-on-primary px-md py-sm font-label-caps text-label-caps flex items-center gap-xs hover:bg-secondary/90" style="border-radius:0">
+        <span class="material-symbols-outlined text-[16px]">add</span> Nuevo proyecto
+      </button>
+      <div class="w-8 h-8 bg-secondary rounded-full flex items-center justify-center text-on-primary font-bold text-sm">CJ</div>
+    </div>
+  </header>
+
+  <main class="flex-1 p-lg flex flex-col gap-lg">
+    <div class="flex items-center gap-md">
+      <div class="flex-1 brutalist-border bg-surface-container-lowest flex items-center gap-sm px-md py-sm">
+        <span class="material-symbols-outlined text-on-surface-variant text-[18px]">search</span>
+        <span class="font-body-sm text-body-sm text-on-surface-variant">Buscar proyecto por nombre, código o cliente…</span>
+      </div>
+      <select class="brutalist-border bg-surface-container-lowest px-md py-sm font-body-sm text-body-sm text-on-surface" style="border-radius:0;outline:none">
+        <option>Todos los estados</option><option>Activo</option><option>En pausa</option><option>Cerrado</option>
+      </select>
+    </div>
+
+    <div class="grid grid-cols-3 gap-md">
+
+      <!-- Proyecto 1 — con alerta crítica -->
+      <div class="bg-surface-container-lowest brutalist-border brutalist-shadow flex flex-col">
+        <div class="bg-primary-container p-md">
+          <div class="flex justify-between items-start mb-sm">
+            <span class="font-mono text-mono text-on-primary/70">PROY-001</span>
+            <span class="px-xs py-[2px] bg-error text-on-primary font-label-caps text-label-caps">ALERTA CRÍTICA</span>
+          </div>
+          <h3 class="font-h3 text-h3 text-on-primary">Planta Concentradora de Cobre</h3>
+          <p class="font-body-sm text-body-sm text-on-primary/70 mt-xs">Cliente: Minera Andes Sur · Contrato EPC</p>
+        </div>
+        <div class="p-md flex flex-col gap-sm flex-1">
+          <div class="grid grid-cols-3 gap-xs text-center">
+            <div class="bg-surface-container p-sm"><p class="font-h3 text-h3 text-primary">847</p><p class="font-label-caps text-label-caps text-on-surface-variant">DOCS</p></div>
+            <div class="bg-error-container p-sm"><p class="font-h3 text-h3 text-error">8</p><p class="font-label-caps text-label-caps text-on-surface-variant">ALERTAS</p></div>
+            <div class="bg-surface-container p-sm"><p class="font-h3 text-h3 text-primary">94%</p><p class="font-label-caps text-label-caps text-on-surface-variant">OCR</p></div>
+          </div>
+          <div class="w-full bg-surface-container h-1.5 brutalist-border mt-xs"><div class="bg-secondary h-full" style="width:68%"></div></div>
+          <p class="font-mono text-mono text-on-surface-variant">Avance contractual 68% · Fase 1 en ejecución</p>
+        </div>
+        <div class="p-md border-t border-on-surface/10 flex gap-sm">
+          <button class="flex-1 border border-primary text-primary py-sm font-label-caps text-label-caps hover:bg-primary hover:text-on-primary transition-colors" style="border-radius:0">Ver documentos</button>
+          <button class="px-md py-sm bg-secondary text-on-primary font-label-caps text-label-caps" style="border-radius:0">Consultar IA</button>
+        </div>
+      </div>
+
+      <!-- Proyecto 2 -->
+      <div class="bg-surface-container-lowest brutalist-border brutalist-shadow flex flex-col">
+        <div class="bg-primary-container p-md">
+          <div class="flex justify-between items-start mb-sm">
+            <span class="font-mono text-mono text-on-primary/70">PROY-002</span>
+            <span class="px-xs py-[2px] bg-secondary text-on-secondary font-label-caps text-label-caps">ACTIVO</span>
+          </div>
+          <h3 class="font-h3 text-h3 text-on-primary">Edificio Corporativo Aurenza</h3>
+          <p class="font-body-sm text-body-sm text-on-primary/70 mt-xs">Cliente: Aurenza Group · Contrato Llave en Mano</p>
+        </div>
+        <div class="p-md flex flex-col gap-sm flex-1">
+          <div class="grid grid-cols-3 gap-xs text-center">
+            <div class="bg-surface-container p-sm"><p class="font-h3 text-h3 text-primary">312</p><p class="font-label-caps text-label-caps text-on-surface-variant">DOCS</p></div>
+            <div class="bg-surface-container p-sm"><p class="font-h3 text-h3 text-primary">2</p><p class="font-label-caps text-label-caps text-on-surface-variant">ALERTAS</p></div>
+            <div class="bg-surface-container p-sm"><p class="font-h3 text-h3 text-primary">100%</p><p class="font-label-caps text-label-caps text-on-surface-variant">OCR</p></div>
+          </div>
+          <div class="w-full bg-surface-container h-1.5 brutalist-border mt-xs"><div class="bg-secondary h-full" style="width:45%"></div></div>
+          <p class="font-mono text-mono text-on-surface-variant">Avance contractual 45% · Estructura terminada</p>
+        </div>
+        <div class="p-md border-t border-on-surface/10 flex gap-sm">
+          <button class="flex-1 border border-primary text-primary py-sm font-label-caps text-label-caps hover:bg-primary hover:text-on-primary transition-colors" style="border-radius:0">Ver documentos</button>
+          <button class="px-md py-sm bg-secondary text-on-primary font-label-caps text-label-caps" style="border-radius:0">Consultar IA</button>
+        </div>
+      </div>
+
+      <!-- Proyecto 3 -->
+      <div class="bg-surface-container-lowest brutalist-border brutalist-shadow flex flex-col">
+        <div class="bg-primary-container p-md">
+          <div class="flex justify-between items-start mb-sm">
+            <span class="font-mono text-mono text-on-primary/70">PROY-003</span>
+            <span class="px-xs py-[2px] bg-secondary text-on-secondary font-label-caps text-label-caps">ACTIVO</span>
+          </div>
+          <h3 class="font-h3 text-h3 text-on-primary">Terminal Puerto Angamos</h3>
+          <p class="font-body-sm text-body-sm text-on-primary/70 mt-xs">Cliente: Puerto Angamos S.A. · Contrato EPCM</p>
+        </div>
+        <div class="p-md flex flex-col gap-sm flex-1">
+          <div class="grid grid-cols-3 gap-xs text-center">
+            <div class="bg-surface-container p-sm"><p class="font-h3 text-h3 text-primary">524</p><p class="font-label-caps text-label-caps text-on-surface-variant">DOCS</p></div>
+            <div class="bg-surface-container p-sm"><p class="font-h3 text-h3 text-primary">4</p><p class="font-label-caps text-label-caps text-on-surface-variant">ALERTAS</p></div>
+            <div class="bg-surface-container p-sm"><p class="font-h3 text-h3 text-primary">88%</p><p class="font-label-caps text-label-caps text-on-surface-variant">OCR</p></div>
+          </div>
+          <div class="w-full bg-surface-container h-1.5 brutalist-border mt-xs"><div class="bg-secondary h-full" style="width:82%"></div></div>
+          <p class="font-mono text-mono text-on-surface-variant">Avance contractual 82% · Fase final obras civiles</p>
+        </div>
+        <div class="p-md border-t border-on-surface/10 flex gap-sm">
+          <button class="flex-1 border border-primary text-primary py-sm font-label-caps text-label-caps hover:bg-primary hover:text-on-primary transition-colors" style="border-radius:0">Ver documentos</button>
+          <button class="px-md py-sm bg-secondary text-on-primary font-label-caps text-label-caps" style="border-radius:0">Consultar IA</button>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="font-mono text-mono text-on-surface-variant">Mostrando 3 de 7 proyectos activos · <span class="text-secondary cursor-pointer">Ver todos →</span></p>
+  </main>
+</div>
+</body>
+</html>

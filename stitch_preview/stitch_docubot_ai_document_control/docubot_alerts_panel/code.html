@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Panel de Alertas - DocuBot</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&amp;family=Noto+Serif:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#835410",
+                        "primary-fixed-dim": "#bdc7dd",
+                        "error-container": "#ffdad6",
+                        "surface-dim": "#d8dae0",
+                        "on-primary-container": "#7a8498",
+                        "inverse-on-surface": "#eff0f6",
+                        "outline-variant": "#c5c6cd",
+                        "surface-container": "#eceef3",
+                        "on-background": "#191c20",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#a3eeff",
+                        "on-surface": "#191c20",
+                        "on-surface-variant": "#45474c",
+                        "primary": "#000000",
+                        "outline": "#75777d",
+                        "inverse-primary": "#bdc7dd",
+                        "on-tertiary-fixed-variant": "#004e5a",
+                        "background": "#f8f9ff",
+                        "on-tertiary-fixed": "#001f25",
+                        "tertiary": "#000000",
+                        "secondary-fixed-dim": "#faba6f",
+                        "surface-container-low": "#f2f3f9",
+                        "surface-container-highest": "#e1e2e8",
+                        "on-secondary-fixed": "#2b1700",
+                        "on-tertiary-container": "#418e9d",
+                        "surface-container-high": "#e7e8ee",
+                        "surface": "#f8f9ff",
+                        "tertiary-container": "#001f25",
+                        "surface-variant": "#e1e2e8",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed-variant": "#663e00",
+                        "on-secondary-container": "#774a04",
+                        "error": "#ba1a1a",
+                        "inverse-surface": "#2e3135",
+                        "primary-fixed": "#d9e3f9",
+                        "secondary-container": "#fdbd71",
+                        "surface-tint": "#555f71",
+                        "surface-bright": "#f8f9ff",
+                        "on-primary-fixed-variant": "#3d4759",
+                        "on-primary-fixed": "#121c2c",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed": "#ffddb9",
+                        "tertiary-fixed-dim": "#87d2e2",
+                        "primary-container": "#121c2c",
+                        "on-primary": "#ffffff",
+                        "on-error": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "gutter": "16px",
+                        "lg": "24px",
+                        "md": "16px",
+                        "xs": "4px",
+                        "unit": "8px",
+                        "xl": "40px",
+                        "margin": "32px"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["Inter"],
+                        "h2": ["Noto Serif"],
+                        "h3": ["Noto Serif"],
+                        "mono": ["monospace"],
+                        "body-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "h1": ["Noto Serif"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["12px", { "lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700" }],
+                        "h2": ["32px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "h3": ["24px", { "lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "600" }],
+                        "mono": ["13px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                        "h1": ["40px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .brutalist-border { border: 1px solid rgba(0, 6, 21, 0.1); }
+        .brutalist-shadow { box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 0.05); }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased overflow-x-hidden">
+<!-- SideNavBar (Shared Component) -->
+<nav class="w-[280px] h-full fixed left-0 top-0 border-r border-on-surface/10 bg-primary text-on-primary flex flex-col overflow-y-auto px-md py-lg z-20">
+<div class="mb-xl">
+<h1 class="font-h3 text-h3 font-bold text-on-primary mb-xs">DocuBot</h1>
+<p class="font-label-caps text-label-caps text-on-primary/70">Control Documental IA</p>
+</div>
+<ul class="flex flex-col gap-sm flex-grow">
+<!-- No active tab matches "Panel de Alertas", defaulting to inactive for all per instructions if intent isn't clear, but intent might be Settings or general dashboard. We'll leave all inactive as it's a specific control center view. -->
+<li>
+<a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors duration-200" href="#" style="border-radius: 0px;">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">folder_open</span>
+<span class="font-body-md text-body-md">Proyectos</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors duration-200" href="#" style="border-radius: 0px;">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">description</span>
+<span class="font-body-md text-body-md">Contratos</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors duration-200" href="#" style="border-radius: 0px;">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">assignment_late</span>
+<span class="font-body-md text-body-md">RFIs</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors duration-200" href="#" style="border-radius: 0px;">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">architecture</span>
+<span class="font-body-md text-body-md">Especificaciones Técnicas</span>
+</a>
+</li>
+<li class="mt-auto">
+<a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors duration-200" href="#" style="border-radius: 0px;">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+<span class="font-body-md text-body-md">Configuración</span>
+</a>
+</li>
+</ul>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="ml-[280px] min-h-screen flex flex-col">
+<!-- TopAppBar (Shared Component) -->
+<header class="bg-surface flex justify-between items-center h-16 px-lg w-full border-b border-on-surface/10 sticky top-0 z-10">
+<div class="flex items-center gap-md">
+<span class="font-h3 text-h3 text-primary uppercase tracking-tighter">Aurenza Group</span>
+</div>
+<div class="flex items-center gap-md">
+<button aria-label="notifications" class="text-on-surface-variant hover:text-primary transition-colors scale-95 active:scale-90">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">notifications</span>
+</button>
+<button aria-label="account_circle" class="text-on-surface-variant hover:text-primary transition-colors scale-95 active:scale-90">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Canvas -->
+<main class="flex-grow p-margin">
+<div class="mb-lg flex justify-between items-end">
+<div>
+<h2 class="font-h2 text-h2 text-primary mb-xs">Panel de Alertas</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Centro de control de vencimientos críticos e inconsistencias documentales.</p>
+</div>
+</div>
+<!-- Dashboard Grid -->
+<div class="grid grid-cols-12 gap-lg">
+<!-- Crítica Alerts Column -->
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-md">
+<div class="flex items-center gap-sm mb-sm">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">error</span>
+<h3 class="font-label-caps text-label-caps text-secondary uppercase">Crítica</h3>
+<span class="font-mono text-mono bg-surface-variant px-2 py-1 ml-auto">3</span>
+</div>
+<!-- Crítica Card 1 -->
+<div class="bg-surface-container-lowest brutalist-border brutalist-shadow p-md border-t-[4px] border-t-secondary relative" style="border-radius: 0px;">
+<div class="flex justify-between items-start mb-sm">
+<span class="font-mono text-mono text-on-surface-variant">PRY-2025-Norte</span>
+<span class="font-label-caps text-label-caps text-error">Vencida</span>
+</div>
+<h4 class="font-h3 text-h3 text-primary mb-xs">Hito Fase 2 Atrasado</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-md">El documento estructural base no ha sido validado. Retraso crítico en cadena.</p>
+<div class="flex items-center justify-between border-t border-on-surface/10 pt-sm mt-sm">
+<span class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-xs"><span class="material-symbols-outlined text-[16px]">calendar_today</span> 12 Oct 2023</span>
+<button class="bg-primary text-on-primary font-body-sm text-body-sm font-bold px-4 py-2 hover:bg-primary/90 transition-colors" style="border-radius: 0px;">Resolve</button>
+</div>
+</div>
+<!-- Crítica Card 2 -->
+<div class="bg-surface-container-lowest brutalist-border brutalist-shadow p-md border-t-[4px] border-t-secondary relative" style="border-radius: 0px;">
+<div class="flex justify-between items-start mb-sm">
+<span class="font-mono text-mono text-on-surface-variant">RFI-224</span>
+<span class="font-label-caps text-label-caps text-error">&gt; 5 Días</span>
+</div>
+<h4 class="font-h3 text-h3 text-primary mb-xs">RFI Sin Respuesta</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-md">Consulta técnica sobre cimentación profunda en sector B permanece sin asignar.</p>
+<div class="flex items-center justify-between border-t border-on-surface/10 pt-sm mt-sm">
+<span class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-xs"><span class="material-symbols-outlined text-[16px]">calendar_today</span> 10 Oct 2023</span>
+<button class="bg-primary text-on-primary font-body-sm text-body-sm font-bold px-4 py-2 hover:bg-primary/90 transition-colors" style="border-radius: 0px;">Resolve</button>
+</div>
+</div>
+</div>
+<!-- Warning Alerts Column -->
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-md">
+<div class="flex items-center gap-sm mb-sm">
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">warning</span>
+<h3 class="font-label-caps text-label-caps text-primary uppercase">Warning</h3>
+<span class="font-mono text-mono bg-surface-variant px-2 py-1 ml-auto">2</span>
+</div>
+<!-- Warning Card 1 -->
+<div class="bg-surface-container-lowest brutalist-border p-md border-l-[4px] border-l-secondary-container relative" style="border-radius: 0px;">
+<div class="flex justify-between items-start mb-sm">
+<span class="font-mono text-mono text-on-surface-variant">CTR-Ins-01</span>
+<span class="font-label-caps text-label-caps text-on-secondary-container bg-secondary-container/20 px-2 py-1">48h</span>
+</div>
+<h4 class="font-body-lg text-body-lg font-bold text-primary mb-xs">Póliza de Seguro por Vencer</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-md">Renovación de póliza de responsabilidad civil requerida para contratista principal.</p>
+<div class="flex items-center justify-between border-t border-on-surface/10 pt-sm mt-sm">
+<span class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-xs"><span class="material-symbols-outlined text-[16px]">schedule</span> Expires soon</span>
+<button class="border border-primary text-primary font-body-sm text-body-sm font-bold px-4 py-2 hover:bg-surface-variant transition-colors" style="border-radius: 0px;">Review</button>
+</div>
+</div>
+<!-- Warning Card 2 -->
+<div class="bg-surface-container-lowest brutalist-border p-md border-l-[4px] border-l-secondary-container relative" style="border-radius: 0px;">
+<div class="flex justify-between items-start mb-sm">
+<span class="font-mono text-mono text-on-surface-variant">PRJ-Beta-12</span>
+<span class="font-label-caps text-label-caps text-on-secondary-container bg-secondary-container/20 px-2 py-1">Pendiente</span>
+</div>
+<h4 class="font-body-lg text-body-lg font-bold text-primary mb-xs">Firmas Faltantes</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-md">Acta de replanteo requiere firma del director de obra para proceder.</p>
+<div class="flex items-center justify-between border-t border-on-surface/10 pt-sm mt-sm">
+<span class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-xs"><span class="material-symbols-outlined text-[16px]">draw</span> Awaiting Action</span>
+<button class="border border-primary text-primary font-body-sm text-body-sm font-bold px-4 py-2 hover:bg-surface-variant transition-colors" style="border-radius: 0px;">Review</button>
+</div>
+</div>
+</div>
+<!-- Info Alerts Column -->
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-md">
+<div class="flex items-center gap-sm mb-sm">
+<span class="material-symbols-outlined text-on-surface-variant" style="font-variation-settings: 'FILL' 1;">info</span>
+<h3 class="font-label-caps text-label-caps text-on-surface-variant uppercase">Info</h3>
+<span class="font-mono text-mono bg-surface-variant px-2 py-1 ml-auto">4</span>
+</div>
+<!-- Info Card 1 -->
+<div class="bg-surface-container-lowest brutalist-border p-md relative" style="border-radius: 0px;">
+<div class="flex justify-between items-start mb-sm">
+<span class="font-mono text-mono text-on-surface-variant">DOC-Arch-v3</span>
+<span class="material-symbols-outlined text-tertiary-container">upload_file</span>
+</div>
+<h4 class="font-body-lg text-body-lg font-bold text-primary mb-xs">Nueva Versión Cargada</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-md">Planos de arquitectura actualizados a la versión 3 por el equipo de diseño.</p>
+<div class="flex items-center justify-between border-t border-on-surface/10 pt-sm mt-sm">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Just now</span>
+<a class="text-tertiary-container hover:underline font-body-sm text-body-sm font-bold" href="#">View Changes</a>
+</div>
+</div>
+<!-- Info Card 2 -->
+<div class="bg-surface-container-lowest brutalist-border p-md relative" style="border-radius: 0px;">
+<div class="flex justify-between items-start mb-sm">
+<span class="font-mono text-mono text-on-surface-variant">SYS-Log</span>
+<span class="material-symbols-outlined text-tertiary-container">sync</span>
+</div>
+<h4 class="font-body-lg text-body-lg font-bold text-primary mb-xs">Sync Complete</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-md">Sincronización con base de datos de contratistas completada exitosamente.</p>
+<div class="flex items-center justify-between border-t border-on-surface/10 pt-sm mt-sm">
+<span class="font-body-sm text-body-sm text-on-surface-variant">2 hours ago</span>
+<a class="text-tertiary-container hover:underline font-body-sm text-body-sm font-bold" href="#">Details</a>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

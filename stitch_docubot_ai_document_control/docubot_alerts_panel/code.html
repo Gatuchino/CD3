@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Panel de Alertas — DocuBot</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+tailwind.config={darkMode:"class",theme:{extend:{colors:{"secondary":"#835410","error-container":"#ffdad6","surface-container":"#eceef3","surface-container-lowest":"#ffffff","on-surface":"#191c20","on-surface-variant":"#45474c","primary":"#000000","background":"#f8f9ff","on-secondary":"#ffffff","error":"#ba1a1a","secondary-container":"#fdbd71","surface":"#f8f9ff","primary-container":"#121c2c","on-primary":"#ffffff","surface-container-high":"#e7e8ee"},fontFamily:{"label-caps":["Inter"],"h2":["Noto Serif"],"h3":["Noto Serif"],"mono":["monospace"],"body-sm":["Inter"],"body-md":["Inter"]},fontSize:{"label-caps":["12px",{"lineHeight":"1","letterSpacing":"0.1em","fontWeight":"700"}],"h2":["32px",{"lineHeight":"1.3","letterSpacing":"-0.01em","fontWeight":"600"}],"h3":["24px",{"lineHeight":"1.4","letterSpacing":"0","fontWeight":"600"}],"mono":["13px",{"lineHeight":"1.5","letterSpacing":"0","fontWeight":"400"}],"body-sm":["14px",{"lineHeight":"1.5","letterSpacing":"0","fontWeight":"400"}],"body-md":["16px",{"lineHeight":"1.5","letterSpacing":"0","fontWeight":"400"}]},spacing:{"sm":"8px","gutter":"16px","lg":"24px","md":"16px","xs":"4px","unit":"8px","xl":"40px","margin":"32px"}}}}
+</script>
+<style>.brutalist-border{border:1px solid rgba(0,6,21,0.1)}.brutalist-shadow{box-shadow:2px 2px 0px 0px rgba(0,0,0,0.05)}</style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased overflow-x-hidden">
+
+<nav class="w-[280px] h-full fixed left-0 top-0 border-r border-on-surface/10 bg-primary text-on-primary flex flex-col overflow-y-auto px-md py-lg z-20">
+  <div class="mb-xl"><h1 class="font-h3 text-h3 font-bold mb-xs">DocuBot</h1><p class="font-label-caps text-label-caps text-on-primary/70">AI Document Control</p></div>
+  <ul class="flex flex-col gap-sm flex-grow">
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 0">dashboard</span><span class="font-body-md text-body-md">Dashboard</span></a></li>
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 0">folder_open</span><span class="font-body-md text-body-md">Proyectos</span></a></li>
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 0">description</span><span class="font-body-md text-body-md">Documentos</span></a></li>
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 0">search</span><span class="font-body-md text-body-md">Búsqueda IA</span></a></li>
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary bg-primary-container" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">notifications</span><span class="font-body-md text-body-md font-bold">Alertas</span></a></li>
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 0">history</span><span class="font-body-md text-body-md">Auditoría</span></a></li>
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 0">bar_chart</span><span class="font-body-md text-body-md">Métricas</span></a></li>
+  </ul>
+</nav>
+
+<div class="ml-[280px] min-h-screen flex flex-col">
+  <header class="bg-surface flex justify-between items-center h-16 px-lg w-full border-b border-on-surface/10 sticky top-0 z-10">
+    <div class="flex items-center gap-md">
+      <span class="font-h3 text-h3 text-primary uppercase tracking-tighter">Aurenza Group</span>
+      <span class="text-on-surface-variant">/</span>
+      <span class="font-body-md text-body-md text-on-surface-variant">Panel de Alertas</span>
+    </div>
+    <div class="w-8 h-8 bg-secondary rounded-full flex items-center justify-center text-on-primary font-bold text-sm">CJ</div>
+  </header>
+
+  <main class="flex-1 p-lg flex flex-col gap-lg">
+
+    <!-- KPIs -->
+    <div class="grid grid-cols-4 gap-md">
+      <div class="bg-surface-container-lowest brutalist-border brutalist-shadow p-md border-l-4 border-l-error">
+        <p class="font-label-caps text-label-caps text-on-surface-variant mb-xs">CRÍTICAS</p>
+        <p class="font-h2 text-h2 text-error">4</p>
+        <p class="font-mono text-mono text-on-surface-variant">Requieren acción hoy</p>
+      </div>
+      <div class="bg-surface-container-lowest brutalist-border brutalist-shadow p-md border-l-4 border-l-secondary">
+        <p class="font-label-caps text-label-caps text-on-surface-variant mb-xs">ALTAS</p>
+        <p class="font-h2 text-h2 text-secondary">5</p>
+        <p class="font-mono text-mono text-on-surface-variant">Próximos 14 días</p>
+      </div>
+      <div class="bg-surface-container-lowest brutalist-border brutalist-shadow p-md">
+        <p class="font-label-caps text-label-caps text-on-surface-variant mb-xs">MEDIAS</p>
+        <p class="font-h2 text-h2 text-primary">8</p>
+        <p class="font-mono text-mono text-on-surface-variant">Próximos 30 días</p>
+      </div>
+      <div class="bg-surface-container-lowest brutalist-border brutalist-shadow p-md">
+        <p class="font-label-caps text-label-caps text-on-surface-variant mb-xs">RESUELTAS HOY</p>
+        <p class="font-h2 text-h2 text-primary">2</p>
+        <p class="font-mono text-mono text-on-surface-variant">Acuse recibido</p>
+      </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="flex gap-sm items-center">
+      <button class="px-md py-sm bg-primary text-on-primary font-label-caps text-label-caps" style="border-radius:0">TODAS</button>
+      <button class="px-md py-sm border border-on-surface/20 text-on-surface-variant font-label-caps text-label-caps hover:bg-surface-container transition-colors" style="border-radius:0">CRÍTICAS</button>
+      <button class="px-md py-sm border border-on-surface/20 text-on-surface-variant font-label-caps text-label-caps hover:bg-surface-container transition-colors" style="border-radius:0">VENCIMIENTO</button>
+      <button class="px-md py-sm border border-on-surface/20 text-on-surface-variant font-label-caps text-label-caps hover:bg-surface-container transition-colors" style="border-radius:0">INCONSISTENCIAS</button>
+      <div class="flex-1"></div>
+      <select class="brutalist-border bg-surface-container-lowest px-md py-sm font-body-sm text-body-sm" style="border-radius:0;outline:none">
+        <option>Todos los proyectos</option>
+        <option>Planta Concentradora</option>
+        <option>Edificio Corporativo</option>
+      </select>
+    </div>
+
+    <!-- Lista de alertas -->
+    <div class="flex flex-col gap-sm">
+
+      <div class="bg-surface-container-lowest brutalist-border brutalist-shadow p-md flex items-start gap-md border-l-4 border-l-error">
+        <span class="material-symbols-outlined text-error text-[22px] mt-0.5" style="font-variation-settings:'FILL' 1">priority_high</span>
+        <div class="flex-1">
+          <div class="flex justify-between items-start">
+            <div><p class="font-body-md text-body-md font-bold text-primary">Informe de Avance Fase 1 — VENCIDO</p><p class="font-body-sm text-body-sm text-on-surface-variant">Debió entregarse el 15 Oct 2023 · Penalidad activa: 0.1%/día · Acumulado ~USD 42.500</p></div>
+            <span class="px-xs py-[2px] bg-error text-on-primary font-label-caps text-label-caps ml-md">VENCIDO</span>
+          </div>
+          <p class="font-mono text-mono text-on-surface-variant mt-xs">Planta Concentradora · Cláusula 7.3 · EPC-2023-001</p>
+        </div>
+        <button class="px-md py-sm border border-error text-error font-label-caps text-label-caps hover:bg-error-container transition-colors" style="border-radius:0">Acusar</button>
+      </div>
+
+      <div class="bg-surface-container-lowest brutalist-border brutalist-shadow p-md flex items-start gap-md border-l-4 border-l-error">
+        <span class="material-symbols-outlined text-error text-[22px] mt-0.5" style="font-variation-settings:'FILL' 1">warning</span>
+        <div class="flex-1">
+          <div class="flex justify-between items-start">
+            <div><p class="font-body-md text-body-md font-bold text-primary">Inconsistencia Rev. C vs Rev. D — Cláusulas 22.1 y 23.5</p><p class="font-body-sm text-body-sm text-on-surface-variant">Rev. D eliminó cláusulas de exención ante eventos climáticos y laborales. Exposición contractual aumentada.</p></div>
+            <span class="px-xs py-[2px] bg-error text-on-primary font-label-caps text-label-caps ml-md">CRÍTICO</span>
+          </div>
+          <p class="font-mono text-mono text-on-surface-variant mt-xs">Planta Concentradora · Detectado por IA · EPC-2023-001</p>
+        </div>
+        <button class="px-md py-sm border border-error text-error font-label-caps text-label-caps hover:bg-error-container transition-colors" style="border-radius:0">Revisar</button>
+      </div>
+
+      <div class="bg-surface-container-lowest brutalist-border brutalist-shadow p-md flex items-start gap-md border-l-4 border-l-secondary">
+        <span class="material-symbols-outlined text-secondary text-[22px] mt-0.5" style="font-variation-settings:'FILL' 1">schedule</span>
+        <div class="flex-1">
+          <div class="flex justify-between items-start">
+            <div><p class="font-body-md text-body-md font-bold text-primary">Plan de Calidad ISO 9001 — 3 días</p><p class="font-body-sm text-body-sm text-on-surface-variant">Vence 11 May 2026. Debe ser aprobado por la inspección técnica antes del plazo.</p></div>
+            <span class="px-xs py-[2px] bg-secondary text-on-secondary font-label-caps text-label-caps ml-md">ALTA</span>
+          </div>
+          <p class="font-mono text-mono text-on-surface-variant mt-xs">Planta Concentradora · Cláusula 12.1 · EPC-2023-001</p>
+        </div>
+        <button class="px-md py-sm border border-secondary text-secondary font-label-caps text-label-caps hover:bg-secondary-container/20 transition-colors" style="border-radius:0">Acusar</button>
+      </div>
+
+      <div class="bg-surface-container-lowest brutalist-border brutalist-shadow p-md flex items-start gap-md border-l-4 border-l-secondary">
+        <span class="material-symbols-outlined text-secondary text-[22px] mt-0.5" style="font-variation-settings:'FILL' 1">schedule</span>
+        <div class="flex-1">
+          <div class="flex justify-between items-start">
+            <div><p class="font-body-md text-body-md font-bold text-primary">Boleta de Fidelidad — renovación 10 días</p><p class="font-body-sm text-body-sm text-on-surface-variant">Vence 18 May 2026. Monto: USD 2.125.000 (5% del contrato). Banco a confirmar.</p></div>
+            <span class="px-xs py-[2px] bg-secondary text-on-secondary font-label-caps text-label-caps ml-md">ALTA</span>
+          </div>
+          <p class="font-mono text-mono text-on-surface-variant mt-xs">Planta Concentradora · Cláusula 9.1 · EPC-2023-001</p>
+        </div>
+        <button class="px-md py-sm border border-secondary text-secondary font-label-caps text-label-caps hover:bg-secondary-container/20 transition-colors" style="border-radius:0">Acusar</button>
+      </div>
+
+      <div class="bg-surface-container-lowest brutalist-border p-md flex items-start gap-md opacity-70">
+        <span class="material-symbols-outlined text-on-surface-variant text-[22px] mt-0.5" style="font-variation-settings:'FILL' 1">task_alt</span>
+        <div class="flex-1">
+          <p class="font-body-md text-body-md font-bold text-primary">Nómina de Subcontratistas — 14 días</p>
+          <p class="font-body-sm text-body-sm text-on-surface-variant">Vence 22 May 2026. Requiere validación IA de cada subcontratista listado.</p>
+          <p class="font-mono text-mono text-on-surface-variant mt-xs">Planta Concentradora · Cláusula 8.4 · EPC-2023-001</p>
+        </div>
+        <span class="px-xs py-[2px] bg-surface-container-high text-on-surface-variant border border-on-surface/20 font-label-caps text-label-caps">MEDIA</span>
+      </div>
+
+    </div>
+  </main>
+</div>
+</body>
+</html>

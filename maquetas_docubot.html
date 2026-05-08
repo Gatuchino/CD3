@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DocuBot — Índice de Maquetas UX/UI</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet"/>
+<style>
+  body { font-family: 'Inter', sans-serif; background: #f8f9ff; }
+  h1, h2 { font-family: 'Noto Serif', serif; }
+  .card { transition: box-shadow 0.2s, transform 0.2s; }
+  .card:hover { box-shadow: 4px 4px 0 #835410; transform: translate(-2px,-2px); }
+  .card-overlay { opacity: 0; transition: opacity 0.2s; }
+  .card:hover .card-overlay { opacity: 1; }
+  .badge-ready { background:#dcfce7; color:#166534; }
+  .badge-new { background:#fef3c7; color:#92400e; font-weight:700; }
+</style>
+</head>
+<body class="min-h-screen">
+
+<!-- Header -->
+<header style="background:#000615; border-bottom:3px solid #835410;" class="px-8 py-5 flex items-center justify-between">
+  <div>
+    <h1 style="color:white; font-size:22px; letter-spacing:-0.02em;">DocuBot</h1>
+    <p style="color:#835410; font-size:11px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; margin-top:2px;">Aurenza IA — Maquetas UX/UI</p>
+  </div>
+  <div class="flex items-center gap-6">
+    <div class="text-center">
+      <div style="color:white; font-size:24px; font-weight:700; font-family:'Noto Serif',serif;">13</div>
+      <div style="color:#835410; font-size:10px; font-weight:700; letter-spacing:0.1em;">TOTAL</div>
+    </div>
+    <div class="text-center">
+      <div style="color:#4ade80; font-size:24px; font-weight:700; font-family:'Noto Serif',serif;">13</div>
+      <div style="color:#4ade80; font-size:10px; font-weight:700; letter-spacing:0.1em;">DISEÑADAS</div>
+    </div>
+    <div class="text-center">
+      <div style="color:#835410; font-size:24px; font-weight:700; font-family:'Noto Serif',serif;">100%</div>
+      <div style="color:#835410; font-size:10px; font-weight:700; letter-spacing:0.1em;">COMPLETADO</div>
+    </div>
+  </div>
+</header>
+
+<!-- Progress Bar -->
+<div style="background:#000615; height:4px;">
+  <div style="background:#835410; height:100%; width:100%; transition:width 1s;"></div>
+</div>
+
+<main class="max-w-7xl mx-auto px-8 py-10">
+
+  <!-- Complete badge -->
+  <div style="background:#dcfce7; border:1px solid #16a34a; border-left:4px solid #16a34a;" class="px-5 py-3 mb-8 flex items-center gap-3">
+    <span style="font-size:20px;">✓</span>
+    <div>
+      <p style="font-weight:700; color:#166534; font-size:14px;">Diseño UX/UI completo — 13/13 pantallas</p>
+      <p style="color:#166534; font-size:12px; margin-top:2px;">Tarea 2 completada. Todas las pantallas tienen prototipo HTML interactivo.</p>
+    </div>
+  </div>
+
+  <!-- Section: Original screens -->
+  <div class="mb-8">
+    <p style="font-size:11px; font-weight:700; letter-spacing:0.12em; color:#835410; text-transform:uppercase; margin-bottom:16px;">PANTALLAS ORIGINALES — SPRINT 1</p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+
+      <a href="stitch_preview/stitch_docubot_ai_document_control/docubot_dashboard/code.html" target="_blank" class="card block border border-gray-200 bg-white" style="border-top:3px solid #835410;">
+        <div class="relative overflow-hidden" style="height:140px;background:linear-gradient(135deg,#000615 0%,#1a2340 100%);">
+          <div class="p-4">
+            <div style="background:#835410;display:inline-block;padding:2px 8px;font-size:10px;font-weight:700;color:white;letter-spacing:0.1em;margin-bottom:8px;">DASHBOARD</div>
+            <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);padding:8px;margin-bottom:4px;">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;">
+                <div style="background:rgba(131,84,16,0.3);height:20px;border-top:2px solid #835410;"></div>
+                <div style="background:rgba(131,84,16,0.3);height:20px;border-top:2px solid #835410;"></div>
+                <div style="background:rgba(131,84,16,0.3);height:20px;border-top:2px solid #835410;"></div>
+                <div style="background:rgba(131,84,16,0.3);height:20px;border-top:2px solid #835410;"></div>
+              </div>
+            </div>
+          </div>
+          <div class="card-overlay absolute inset-0 flex items-center justify-center" style="background:rgba(131,84,16,0.9);">
+            <span style="color:white;font-weight:700;font-size:14px;">Ver pantalla →</span>
+          </div>
+        </div>
+        <div class="p-3">
+          <p style="font-weight:700;font-size:13px;color:#191c20;">Dashboard Principal</p>
+          <p style="font-size:11px;color:#75777d;margin-top:2px;">Vista ejecutiva del sistema</p>
+          <span class="badge-ready" style="display:inline-block;font-size:10px;font-weight:700;padding:2px 6px;margin-top:6px;">LISTO</span>
+        </div>
+      </a>
+
+      <a href="stitch_preview/stitch_docubot_ai_document_control/docubot_semantic_search/code.html" target="_blank" class="card block border border-gray-200 bg-white" style="border-top:3px solid #835410;">
+        <div class="relative overflow-hidden" style="height:140px;background:linear-gradient(135deg,#000615 0%,#1a2340 100%);">
+          <div class="p-4">
+            <div style="background:#835410;display:inline-block;padding:2px 8px;font-size:10px;font-weight:700;color:white;letter-spacing:0.1em;margin-bottom:8px;">BÚSQUEDA IA</div>
+            <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);padding:6px;margin-bottom:6px;">
+              <div style="background:rgba(255,255,255,0.1);height:14px;border-radius:0;"></div>
+            </div>
+            <div style="background:rgba(131,84,16,0.2);padding:6px;font-size:10px;color:rgba(255,255,255,0.6);border-left:2px solid #835410;">Respuesta RAG con citas exactas...</div>
+          </div>
+          <div class="card-overlay absolute inset-0 flex items-center justify-center" style="background:rgba(131,84,16,0.9);">
+            <span style="color:white;font-weight:700;font-size:14px;">Ver pantalla →</span>
+          </div>
+        </div>
+        <div class="p-3">
+          <p style="font-weight:700;font-size:13px;color:#191c20;">Búsqueda Semántica RAG</p>
+          <p style="font-size:11px;color:#75777d;margin-top:2px;">Consultas en lenguaje natural</p>
+          <span class="badge-ready" style="display:inline-block;font-size:10px;font-weight:700;padding:2px 6px;margin-top:6px;">LISTO</span>
+        </div>
+      </a>
+
+      <a href="stitch_preview/stitch_docubot_ai_document_control/docubot_document_uploader/code.html" target="_blank" class="card block border border-gray-200 bg-white" style="border-top:3px solid #835410;">
+        <div class="relative overflow-hidden" style="height:140px;background:linear-gradient(135deg,#000615 0%,#1a2340 100%);">
+          <div class="p-4">
+            <div style="background:#835410;display:inline-block;padding:2px 8px;font-size:10px;font-weight:700;color:white;letter-spacing:0.1em;margin-bottom:8px;">CARGA</div>
+            <div style="border:2px dashed rgba(131,84,16,0.6);padding:16px;text-align:center;">
+              <div style="color:rgba(255,255,255,0.5);font-size:10px;">↑ Arrastrar documentos</div>
+            </div>
+          </div>
+          <div class="card-overlay absolute inset-0 flex items-center justify-center" style="background:rgba(131,84,16,0.9);">
+            <span style="color:white;font-weight:700;font-size:14px;">Ver pantalla →</span>
+          </div>
+        </div>
+        <div class="p-3">
+          <p style="font-weight:700;font-size:13px;color:#191c20;">Carga de Documentos</p>
+          <p style="font-size:11px;color:#75777d;margin-top:2px;">Upload con clasificación automática</p>
+          <span class="badge-ready" style="display:inline-block;font-size:10px;font-weight:700;padding:2px 6px;margin-top:6px;">LISTO</span>
+        </div>
+      </a>
+
+      <a href="stitch_preview/stitch_docubot_ai_document_control/docubot_document_viewer/code.html" target="_blank" class="card block border border-gray-200 bg-white" style="border-top:3px solid #835410;">
+        <div class="relative overflow-hidden" style="height:140px;background:linear-gradient(135deg,#000615 0%,#1a2340 100%);">
+          <div class="p-4">
+            <div style="background:#835410;display:inline-block;padding:2px 8px;font-size:10px;font-weight:700;color:white;letter-spacing:0.1em;margin-bottom:8px;">VISOR</div>
+            <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);padding:8px;">
+              <div style="background:rgba(255,255,255,0.1);height:8px;margin-bottom:4px;"></div>
+              <div style="background:rgba(255,255,255,0.07);height:8px;margin-bottom:4px;width:80%;"></div>
+              <div style="background:rgba(255,255,255,0.07);height:8px;width:90%;"></div>
+            </div>
+          </div>
+          <div class="card-overlay absolute inset-0 flex items-center justify-center" style="background:rgba(131,84,16,0.9);">
+            <span style="color:white;font-weight:700;font-size:14px;">Ver pantalla →</span>
+          </div>
+        </div>
+        <div class="p-3">
+          <p style="font-weight:700;font-size:13px;color:#191c20;">Visor de Documentos</p>
+          <p style="font-size:11px;color:#75777d;margin-top:2px;">Lectura con metadatos</p>
+          <span class="badge-ready" style="display:inline-block;font-size:10px;font-weight:700;padding:2px 6px;margin-top:6px;">LISTO</span>
+        </div>
+      </a>
+
+      <a href="stitch_preview/stitch_docubot_ai_document_control/docubot_alerts_panel/code.html" target="_blank" class="card block border border-gray-200 bg-white" style="border-top:3px solid #835410;">
+        <div class="relative overflow-hidden" style="height:140px;background:linear-gradient(135deg,#000615 0%,#1a2340 100%);">
+          <div class="p-4">
+            <div style="background:#835410;display:inline-block;padding:2px 8px;font-size:10px;font-weight:700;color:white;letter-spacing:0.1em;margin-bottom:8px;">ALERTAS</div>
+            <div class="space-y-2">
+              <div style="background:rgba(186,26,26,0.3);border-left:2px solid #ba1a1a;padding:4px 6px;font-size:9px;color:rgba(255,255,255,0.7);">● VENCIDA — Entregable 12.3</div>
+              <div style="background:rgba(131,84,16,0.3);border-left:2px solid #835410;padding:4px 6px;font-size:9px;color:rgba(255,255,255,0.7);">⚠ PRÓXIMA — Pago Estado N°4</div>
+            </div>
+          </div>
+          <div class="card-overlay absolute inset-0 flex items-center justify-center" style="background:rgba(131,84,16,0.9);">
+            <span style="color:white;font-weight:700;font-size:14px;">Ver pantalla →</span>
+          </div>
+        </div>
+        <div class="p-3">
+          <p style="font-weight:700;font-size:13px;color:#191c20;">Panel de Alertas</p>
+          <p style="font-size:11px;color:#75777d;margin-top:2px;">Vencimientos y notificaciones</p>
+          <span class="badge-ready" style="display:inline-block;font-size:10px;font-weight:700;padding:2px 6px;margin-top:6px;">LISTO</span>
+        </div>
+      </a>
+
+      <a href="stitch_preview/stitch_docubot_ai_document_control/docubot_query_history/code.html" target="_blank" class="card block border border-gray-200 bg-white" style="border-top:3px solid #835410;">
+        <div class="relative overflow-hidden" style="height:140px;background:linear-gradient(135deg,#000615 0%,#1a2340 100%);">
+          <div class="p-4">
+            <div style="background:#835410;display:inline-block;padding:2px 8px;font-size:10px;font-weight:700;color:white;letter-spacing:0.1em;margin-bottom:8px;">HISTORIAL</div>
+            <div class="space-y-1">
+              <div style="background:rgba(255,255,255,0.05);padding:4px 6px;font-size:9px;color:rgba(255,255,255,0.6);">¿Cuál es el plazo de entrega?</div>
+              <div style="background:rgba(255,255,255,0.05);padding:4px 6px;font-size:9px;color:rgba(255,255,255,0.6);">¿Qué cubre la garantía?</div>
+            </div>
+          </div>
+          <div class="card-overlay absolute inset-0 flex items-center justify-center" style="background:rgba(131,84,16,0.9);">
+            <span style="color:white;font-weight:700;font-size:14px;">Ver pantalla →</span>
+          </div>
+        </div>
+        <div class="p-3">
+          <p style="font-weight:700;font-size:13px;color:#191c20;">Historial de Consultas</p>
+          <p style="font-size:11px;color:#75777d;margin-top:2px;">Registro de búsquedas RAG</p>
+          <span class="badge-ready" style="display:inline-block;font-size:10px;font-weight:700;padding:2px 6px;margin-top:6px;">LISTO</span>
+        </div>
+      </a>
+
+      <a href="stitch_preview/stitch_docubot_ai_document_control/docubot_projects_overview/code.html" target="_blank" class="card block border border-gray-200 bg-white" style="border-top:3px solid #835410;">
+        <div class="relative overflow-hidden" style="height:140px;background:linear-gradient(135deg,#000615 0%,#1a2340 100%);">
+          <div class="p-4">
+            <div style="background:#835410;display:inline-block;padding:2px 8px;font-size:10px;font-weight:700;color:white;letter-spacing:0.1em;margin-bottom:8px;">PROYECTOS</div>
+            <div class="space-y-2">
+              <div style="background:rgba(255,255,255,0.05);padding:6px;display:flex;justify-content:space-between;align-items:center;">
+                <span style="font-size:9px;color:rgba(255,255,255,0.7);">Planta Concentradora</span>
+                <span style="background:#835410;font-size:8px;color:white;padding:1px 4px;">ACTIVO</span>
+              </div>
+            </div>
+          </div>
+          <div class="card-overlay absolute inset-0 flex items-center justify-center" style="background:rgba(131,84,16,0.9);">
+            <span style="color:white;font-weight:700;font-size:14px;">Ver pantalla →</span>
+          </div>
+        </div>
+        <div class="p-3">
+          <p style="font-weight:700;font-size:13px;color:#191c20;">Vista de Proyectos</p>
+          <p style="font-size:11px;color:#75777d;margin-top:2px;">Gestión multi-proyecto</p>
+          <span class="badge-ready" style="display:inline-block;font-size:10px;font-weight:700;padding:2px 6px;margin-top:6px;">LISTO</span>
+        </div>
+      </a>
+
+      <a href="stitch_preview/stitch_docubot_ai_document_control/docubot_corporate_login/code.html" target="_blank" class="card block border border-gray-200 bg-white" style="border-top:3px solid #835410;">
+        <div class="relative overflow-hidden" style="height:140px;background:linear-gradient(135deg,#000615 0%,#1a2340 100%);">
+          <div class="p-4 flex items-center justify-center h-full">
+            <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(131,84,16,0.5);padding:16px;text-align:center;width:100%;">
+              <div style="color:white;font-weight:700;font-size:12px;margin-bottom:8px;">DocuBot</div>
+              <div style="background:#835410;height:12px;width:80%;margin:0 auto;"></div>
+            </div>
+          </div>
+          <div class="card-overlay absolute inset-0 flex items-center justify-center" style="background:rgba(131,84,16,0.9);">
+            <span style="color:white;font-weight:700;font-size:14px;">Ver pantalla →</span>
+          </div>
+        </div>
+        <div class="p-3">
+          <p style="font-weight:700;font-size:13px;color:#191c20;">Login Corporativo</p>
+          <p style="font-size:11px;color:#75777d;margin-top:2px;">Azure AD B2C</p>
+          <span class="badge-ready" style="display:inline-block;font-size:10px;font-weight:700;padding:2px 6px;margin-top:6px;">LISTO</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- Section: New screens -->
+  <div>
+    <p style="font-size:11px; font-weight:700; letter-spacing:0.12em; color:#835410; text-transform:uppercase; margin-bottom:16px;">PANTALLAS NUEVAS — SPRINT 2 ✦</p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+
+      <a href="stitch_preview/stitch_docubot_ai_document_control/docubot_version_diff/code.html" target="_blank" class="card block border-2 border-yellow-400 bg-white" style="border-top:3px solid #835410;">
+        <div class="relative overflow-hidden" style="height:140px;background:linear-gradient(135deg,#000615 0%,#1a2340 100%);">
+          <div class="p-4">
+            <div style="background:#835410;display:inline-block;padding:2px 8px;font-size:10px;font-weight:700;color:white;letter-spacing:0.1em;margin-bottom:8px;">VERSIONES</div>
+            <div class="space-y-1">
+              <div style="background:rgba(220,252,231,0.2);border-left:2px solid #16a34a;padding:3px 6px;font-size:9px;color:#4ade80;">+ El plazo será de 24 meses...</div>
+              <div style="background:rgba(254,226,226,0.2);border-left:2px solid #dc2626;padding:3px 6px;font-size:9px;color:#f87171;">- El plazo será de 18 meses...</div>
+            </div>
+          </div>
+          <div class="card-overlay absolute inset-0 flex items-center justify-center" style="background:rgba(131,84,16,0.9);">
+            <span style="color:white;font-weight:700;font-size:14px;">Ver pantalla →</span>
+          </div>
+        </div>
+        <div class="p-3">
+          <p style="font-weight:700;font-size:13px;color:#191c20;">Control de Versiones / Diff</p>
+          <p style="font-size:11px;color:#75777d;margin-top:2px;">Comparador de revisiones contractuales</p>
+          <span class="badge-new" style="display:inline-block;font-size:10px;padding:2px 6px;margin-top:6px;">NUEVO</span>
+        </div>
+      </a>
+
+      <a href="stitch_preview/stitch_docubot_ai_document_control/docubot_obligations_deadlines/code.html" target="_blank" class="card block border-2 border-yellow-400 bg-white" style="border-top:3px solid #835410;">
+        <div class="relative overflow-hidden" style="height:140px;background:linear-gradient(135deg,#000615 0%,#1a2340 100%);">
+          <div class="p-4">
+            <div style="background:#835410;display:inline-block;padding:2px 8px;font-size:10px;font-weight:700;color:white;letter-spacing:0.1em;margin-bottom:8px;">OBLIGACIONES</div>
+            <div class="space-y-1">
+              <div style="background:rgba(186,26,26,0.3);border-left:2px solid #ba1a1a;padding:3px 6px;font-size:9px;color:rgba(255,200,200,0.9);">VENCIDA — Entregable 12.3</div>
+              <div style="background:rgba(131,84,16,0.3);border-left:2px solid #835410;padding:3px 6px;font-size:9px;color:rgba(255,200,150,0.9);">PRÓXIMA — Pago Estado N°4</div>
+              <div style="background:rgba(255,255,255,0.05);padding:3px 6px;font-size:9px;color:rgba(255,255,255,0.5);">Informe Mensual Mayo</div>
+            </div>
+          </div>
+          <div class="card-overlay absolute inset-0 flex items-center justify-center" style="background:rgba(131,84,16,0.9);">
+            <span style="color:white;font-weight:700;font-size:14px;">Ver pantalla →</span>
+          </div>
+        </div>
+        <div class="p-3">
+          <p style="font-weight:700;font-size:13px;color:#191c20;">Obligaciones y Plazos</p>
+          <p style="font-size:11px;color:#75777d;margin-top:2px;">Extracción IA de compromisos contractuales</p>
+          <span class="badge-new" style="display:inline-block;font-size:10px;padding:2px 6px;margin-top:6px;">NUEVO</span>
+        </div>
+      </a>
+
+      <a href="stitch_preview/stitch_docubot_ai_document_control/docubot_executive_summary/code.html" target="_blank" class="card block border-2 border-yellow-400 bg-white" style="border-top:3px solid #835410;">
+        <div class="relative overflow-hidden" style="height:140px;background:linear-gradient(135deg,#000615 0%,#1a2340 100%);">
+          <div class="p-4">
+            <div style="background:#835410;display:inline-block;padding:2px 8px;font-size:10px;font-weight:700;color:white;letter-spacing:0.1em;margin-bottom:8px;">RESÚMENES</div>
+            <div style="background:rgba(255,255,255,0.05);border-left:2px solid #835410;padding:6px;">
+              <div style="color:rgba(255,255,255,0.8);font-size:9px;margin-bottom:4px;font-weight:700;">Contrato EPC — USD 48.5M</div>
+              <div style="background:rgba(255,255,255,0.07);height:6px;margin-bottom:3px;"></div>
+              <div style="background:rgba(255,255,255,0.07);height:6px;width:75%;"></div>
+            </div>
+          </div>
+          <div class="card-overlay absolute inset-0 flex items-center justify-center" style="background:rgba(131,84,16,0.9);">
+            <span style="color:white;font-weight:700;font-size:14px;">Ver pantalla →</span>
+          </div>
+        </div>
+        <div class="p-3">
+          <p style="font-weight:700;font-size:13px;color:#191c20;">Resúmenes Ejecutivos</p>
+          <p style="font-size:11px;color:#75777d;margin-top:2px;">Síntesis IA con cláusulas clave</p>
+          <span class="badge-new" style="display:inline-block;font-size:10px;padding:2px 6px;margin-top:6px;">NUEVO</span>
+        </div>
+      </a>
+
+      <a href="stitch_preview/stitch_docubot_ai_document_control/docubot_metrics_panel/code.html" target="_blank" class="card block border-2 border-yellow-400 bg-white" style="border-top:3px solid #835410;">
+        <div class="relative overflow-hidden" style="height:140px;background:linear-gradient(135deg,#000615 0%,#1a2340 100%);">
+          <div class="p-4">
+            <div style="background:#835410;display:inline-block;padding:2px 8px;font-size:10px;font-weight:700;color:white;letter-spacing:0.1em;margin-bottom:8px;">MÉTRICAS IA</div>
+            <div style="display:flex;align-items:flex-end;gap:3px;height:40px;margin-top:4px;">
+              <div style="flex:1;background:rgba(131,84,16,0.6);height:50%;"></div>
+              <div style="flex:1;background:rgba(131,84,16,0.6);height:70%;"></div>
+              <div style="flex:1;background:rgba(131,84,16,0.9);height:95%;"></div>
+              <div style="flex:1;background:rgba(131,84,16,0.6);height:65%;"></div>
+              <div style="flex:1;background:rgba(131,84,16,0.7);height:80%;"></div>
+              <div style="flex:1;background:rgba(131,84,16,0.5);height:40%;"></div>
+              <div style="flex:1;background:#835410;height:58%;"></div>
+            </div>
+          </div>
+          <div class="card-overlay absolute inset-0 flex items-center justify-center" style="background:rgba(131,84,16,0.9);">
+            <span style="color:white;font-weight:700;font-size:14px;">Ver pantalla →</span>
+          </div>
+        </div>
+        <div class="p-3">
+          <p style="font-weight:700;font-size:13px;color:#191c20;">Panel de Métricas IA</p>
+          <p style="font-size:11px;color:#75777d;margin-top:2px;">Costos, tokens, latencias y salud</p>
+          <span class="badge-new" style="display:inline-block;font-size:10px;padding:2px 6px;margin-top:6px;">NUEVO</span>
+        </div>
+      </a>
+
+      <a href="stitch_preview/stitch_docubot_ai_document_control/docubot_classification_review/code.html" target="_blank" class="card block border-2 border-yellow-400 bg-white" style="border-top:3px solid #835410;">
+        <div class="relative overflow-hidden" style="height:140px;background:linear-gradient(135deg,#000615 0%,#1a2340 100%);">
+          <div class="p-4">
+            <div style="background:#835410;display:inline-block;padding:2px 8px;font-size:10px;font-weight:700;color:white;letter-spacing:0.1em;margin-bottom:8px;">CLASIFICACIÓN</div>
+            <div class="space-y-1">
+              <div style="background:rgba(131,84,16,0.2);border:1px solid rgba(131,84,16,0.4);padding:4px 6px;font-size:9px;color:rgba(255,255,255,0.8);">RFI-043 · <span style="color:#835410;font-weight:700;">82% conf.</span> · Pendiente</div>
+              <div style="background:rgba(131,84,16,0.2);border:1px solid rgba(131,84,16,0.4);padding:4px 6px;font-size:9px;color:rgba(255,255,255,0.8);">Acta 050625 · <span style="color:#835410;font-weight:700;">68% conf.</span> · Pendiente</div>
+            </div>
+          </div>
+          <div class="card-overlay absolute inset-0 flex items-center justify-center" style="background:rgba(131,84,16,0.9);">
+            <span style="color:white;font-weight:700;font-size:14px;">Ver pantalla →</span>
+          </div>
+        </div>
+        <div class="p-3">
+          <p style="font-weight:700;font-size:13px;color:#191c20;">Clasificación con Validación Humana</p>
+          <p style="font-size:11px;color:#75777d;margin-top:2px;">Revisión de clasificaciones de baja confianza</p>
+          <span class="badge-new" style="display:inline-block;font-size:10px;padding:2px 6px;margin-top:6px;">NUEVO</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</main>
+
+<footer style="background:#000615;border-top:1px solid rgba(131,84,16,0.3);" class="px-8 py-4 mt-10">
+  <p style="color:rgba(255,255,255,0.4);font-size:11px;">DocuBot · Aurenza IA · Tarea 2 completada — 13/13 pantallas diseñadas</p>
+</footer>
+
+</body>
+</html>

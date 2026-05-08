@@ -1,0 +1,64 @@
+version: "3.9"
+
+services:
+
+  # ── PostgreSQL + pgvector ──────────────────────────────────────────────────
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: docubot_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: docubot
+      POSTGRES_USER: docubot
+      POSTGRES_PASSWORD: docubot_dev_2025
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./FASE0_SQL_Schema_DocuBot.sql:/docker-entrypoint-initdb.d/01_schema.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U docubot -d docubot"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ── Backend FastAPI ────────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./docubot-backend
+      dockerfile: Dockerfile.demo
+    container_name: docubot_backend
+    restart: unless-stopped
+    env_file:
+      - .env.demo
+    environment:
+      DATABASE_URL: postgresql+asyncpg://docubot:docubot_dev_2025@db:5432/docubot
+      ENVIRONMENT: demo
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./docubot-backend:/app
+      - uploads_data:/tmp/uploads
+
+  # ── Frontend React (Vite dev server) ──────────────────────────────────────
+  frontend:
+    image: node:20-alpine
+    container_name: docubot_frontend
+    working_dir: /app
+    command: sh -c "npm install --legacy-peer-deps && npm run dev -- --host 0.0.0.0 --port 5173"
+    environment:
+      VITE_API_URL: http://localhost:8000
+      VITE_DEMO_MODE: "true"
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./docubot-frontend:/app
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+  uploads_data:

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DocuBot - Document Viewer</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Noto+Serif:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#835410",
+                        "primary-fixed-dim": "#bdc7dd",
+                        "error-container": "#ffdad6",
+                        "surface-dim": "#d8dae0",
+                        "on-primary-container": "#7a8498",
+                        "inverse-on-surface": "#eff0f6",
+                        "outline-variant": "#c5c6cd",
+                        "surface-container": "#eceef3",
+                        "on-background": "#191c20",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#a3eeff",
+                        "on-surface": "#191c20",
+                        "on-surface-variant": "#45474c",
+                        "primary": "#000000",
+                        "outline": "#75777d",
+                        "inverse-primary": "#bdc7dd",
+                        "on-tertiary-fixed-variant": "#004e5a",
+                        "background": "#f8f9ff",
+                        "on-tertiary-fixed": "#001f25",
+                        "tertiary": "#000000",
+                        "secondary-fixed-dim": "#faba6f",
+                        "surface-container-low": "#f2f3f9",
+                        "surface-container-highest": "#e1e2e8",
+                        "on-secondary-fixed": "#2b1700",
+                        "on-tertiary-container": "#418e9d",
+                        "surface-container-high": "#e7e8ee",
+                        "surface": "#f8f9ff",
+                        "tertiary-container": "#001f25",
+                        "surface-variant": "#e1e2e8",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed-variant": "#663e00",
+                        "on-secondary-container": "#774a04",
+                        "error": "#ba1a1a",
+                        "inverse-surface": "#2e3135",
+                        "primary-fixed": "#d9e3f9",
+                        "secondary-container": "#fdbd71",
+                        "surface-tint": "#555f71",
+                        "surface-bright": "#f8f9ff",
+                        "on-primary-fixed-variant": "#3d4759",
+                        "on-primary-fixed": "#121c2c",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed": "#ffddb9",
+                        "tertiary-fixed-dim": "#87d2e2",
+                        "primary-container": "#121c2c",
+                        "on-primary": "#ffffff",
+                        "on-error": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "0px"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "gutter": "16px",
+                        "lg": "24px",
+                        "md": "16px",
+                        "xs": "4px",
+                        "unit": "8px",
+                        "xl": "40px",
+                        "margin": "32px"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["Inter"],
+                        "h2": ["Noto Serif"],
+                        "h3": ["Noto Serif"],
+                        "mono": ["monospace"],
+                        "body-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "h1": ["Noto Serif"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["12px", { "lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700" }],
+                        "h2": ["32px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "h3": ["24px", { "lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "600" }],
+                        "mono": ["13px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                        "h1": ["40px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex overflow-hidden">
+<!-- SideNavBar -->
+<nav class="bg-primary dark:bg-primary text-on-primary dark:text-on-primary w-[280px] h-full fixed left-0 top-0 border-r border-on-surface/10 flex flex-col overflow-y-auto px-md py-lg z-20">
+<div class="mb-xl">
+<h1 class="font-h3 text-h3 font-bold text-on-primary">DocuBot</h1>
+<p class="font-label-caps text-label-caps text-on-primary/70 mt-xs">Control Documental IA</p>
+</div>
+<ul class="flex flex-col gap-sm flex-1 font-body-md text-body-md transition-colors duration-200">
+<li>
+<a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container" href="#">
+<span class="material-symbols-outlined" data-icon="folder_open">folder_open</span>
+                    Projects
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm bg-secondary text-on-secondary font-bold hover:bg-primary-container" href="#">
+<span class="material-symbols-outlined icon-fill" data-icon="description">description</span>
+                    Contracts
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container" href="#">
+<span class="material-symbols-outlined" data-icon="assignment_late">assignment_late</span>
+                    RFIs
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container" href="#">
+<span class="material-symbols-outlined" data-icon="architecture">architecture</span>
+                    Technical Specs
+                </a>
+</li>
+<li class="mt-auto">
+<a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                    Settings
+                </a>
+</li>
+</ul>
+</nav>
+<!-- Main Content Area -->
+<main class="ml-[280px] flex-1 flex flex-col h-screen w-[calc(100%-280px)]">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface border-b border-on-surface/10 flex justify-between items-center h-16 px-lg shrink-0 z-10">
+<div class="flex items-center gap-md w-1/3">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-container-low border border-primary/10 pl-xl pr-sm py-xs font-body-sm text-body-sm focus:border-secondary focus:ring-0 focus:outline-none placeholder:text-on-surface-variant/50" placeholder="Search within document..." type="text"/>
+</div>
+</div>
+<div class="font-h3 text-h3 text-primary uppercase tracking-tighter">
+                Aurenza Group
+            </div>
+<div class="flex items-center gap-md font-label-caps text-label-caps text-on-surface-variant w-1/3 justify-end">
+<button class="hover:text-primary transition-colors scale-95 active:scale-90">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="hover:text-primary transition-colors scale-95 active:scale-90">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Document Viewer Split Layout -->
+<div class="flex-1 flex overflow-hidden">
+<!-- LEFT PANE: Document Viewer (70%) -->
+<section class="w-[70%] flex flex-col bg-surface-container-highest border-r border-primary/10 relative">
+<!-- Viewer Toolbar -->
+<div class="bg-primary text-on-primary h-12 flex items-center justify-between px-md shrink-0">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-primary/70">description</span>
+<span class="font-label-caps text-label-caps truncate max-w-md">CONT-2024-089-AURENZA-PRINCIPAL.PDF</span>
+</div>
+<div class="flex items-center gap-md font-mono text-mono text-on-primary/70">
+<button class="hover:text-on-primary"><span class="material-symbols-outlined">zoom_out</span></button>
+<span>100%</span>
+<button class="hover:text-on-primary"><span class="material-symbols-outlined">zoom_in</span></button>
+<div class="w-px h-4 bg-on-primary/30 mx-xs"></div>
+<span>Page 4 of 42</span>
+</div>
+</div>
+<!-- Document Canvas -->
+<div class="flex-1 overflow-y-auto p-lg flex justify-center">
+<!-- Paper Representation -->
+<div class="bg-surface-container-lowest w-[850px] min-h-[1100px] border border-primary/20 shadow-[4px_4px_0px_rgba(0,0,0,0.05)] p-xl font-body-md text-body-md text-on-surface leading-relaxed">
+<h2 class="font-h2 text-h2 mb-lg border-b border-primary/10 pb-sm">4. Obligaciones del Contratista</h2>
+<p class="mb-md text-on-surface-variant">4.1 El Contratista ejecutará los Servicios de conformidad con las especificaciones detalladas en el Anexo A, asegurando que todos los hitos sean cumplidos dentro del plazo acordado.</p>
+<!-- AI Highlighted Paragraph -->
+<div class="relative mb-md group cursor-pointer">
+<div class="absolute -left-xl top-0 bottom-0 w-1 bg-on-tertiary-container"></div>
+<p class="bg-on-tertiary-container/10 p-sm border border-on-tertiary-container/30">
+                                4.2 <strong class="font-bold">Cláusula de Indemnización:</strong> The Contractor agrees to indemnify, defend, and hold harmless the Owner, its affiliates, and their respective officers, directors, and employees from any claims, damages, liabilities, costs, and expenses arising out of or related to the Contractor's breach of this Agreement or gross negligence.
+                            </p>
+<div class="absolute right-xs top-xs opacity-0 group-hover:opacity-100 transition-opacity bg-primary text-on-primary font-label-caps text-[10px] px-xs py-[2px]">OBLIGACIÓN IDENTIFICADA POR IA</div>
+</div>
+<p class="mb-md text-on-surface-variant">4.3 Previo al inicio de cualquier modificación estructural, el Contratista deberá obtener aprobación escrita del Arquitecto Principal y del equipo de ingeniería estructural.</p>
+<!-- Another Highlight -->
+<div class="relative mb-md group cursor-pointer">
+<div class="absolute -left-xl top-0 bottom-0 w-1 bg-on-tertiary-container"></div>
+<p class="bg-on-tertiary-container/10 p-sm border border-on-tertiary-container/30">
+                                4.4 <strong class="font-bold">Requisitos de Seguros:</strong> The Contractor shall maintain Comprehensive General Seguro de Responsabilidad Civil with a minimum limit of $5,000,000 per occurrence. Proof of such insurance must be provided to the Owner within ten (10) days of execution of this Agreement.
+                            </p>
+</div>
+<p class="mb-md text-on-surface-variant">4.5 Subcontracting any portion of the main excavation works is strictly prohibited without prior executive consent documented in the project ledger.</p>
+</div>
+</div>
+</section>
+<!-- RIGHT PANE: AI Insights (30%) -->
+<aside class="w-[30%] flex flex-col bg-surface-container-lowest">
+<!-- Insights Header -->
+<div class="bg-primary text-on-primary h-12 flex items-center justify-between px-md shrink-0">
+<span class="font-label-caps text-label-caps flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">psychology</span>
+                        AI INSIGHTS &amp; EXTRACTION
+                    </span>
+<span class="font-mono text-[10px] bg-secondary px-xs py-[2px] text-on-secondary">CONFIDENCE: HIGH</span>
+</div>
+<div class="flex-1 overflow-y-auto p-md flex flex-col gap-lg">
+<!-- Metadatos Block -->
+<div class="border border-primary/10">
+<div class="bg-surface-container-high px-sm py-xs font-label-caps text-label-caps border-b border-primary/10 flex justify-between items-center">
+<span>EXTRACTED METADATA</span>
+<button class="text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined text-[14px]">edit</span></button>
+</div>
+<div class="p-sm grid grid-cols-1 gap-sm font-body-sm text-body-sm">
+<div class="flex justify-between border-b border-primary/5 pb-xs">
+<span class="text-on-surface-variant">Entity (Owner)</span>
+<span class="font-bold">Aurenza Group</span>
+</div>
+<div class="flex justify-between border-b border-primary/5 pb-xs">
+<span class="text-on-surface-variant">Contractor</span>
+<span class="font-bold">Vulcan Heavy Ind.</span>
+</div>
+<div class="flex justify-between border-b border-primary/5 pb-xs">
+<span class="text-on-surface-variant">Fecha de Vigencia</span>
+<span class="font-mono">2023-10-15</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Jurisdiction</span>
+<span class="font-bold">Región de Antofagasta</span>
+</div>
+</div>
+</div>
+<!-- Extracted Obligations List -->
+<div class="flex-1">
+<div class="font-label-caps text-label-caps border-b-2 border-primary pb-xs mb-sm flex justify-between items-end">
+<span>IDENTIFIED OBLIGATIONS (2)</span>
+<span class="text-on-tertiary-container">PAGE 4</span>
+</div>
+<!-- Obligation Card 1 -->
+<div class="border border-primary/10 mb-sm hover:border-on-tertiary-container transition-colors relative">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-on-tertiary-container"></div>
+<div class="p-sm pl-md">
+<div class="flex items-start gap-sm">
+<input class="mt-1 border-primary/30 text-secondary focus:ring-0 rounded-none w-4 h-4 cursor-pointer" type="checkbox"/>
+<div>
+<h4 class="font-bold text-body-sm mb-xs">Indemnification</h4>
+<p class="font-body-sm text-on-surface-variant text-[13px] leading-snug">Contractor must indemnify Aurenza Group against claims arising from breach or gross negligence.</p>
+<div class="mt-sm flex gap-xs">
+<button class="bg-primary text-on-primary font-label-caps text-[10px] px-sm py-[4px] hover:bg-primary/90">VALIDATE</button>
+<button class="border border-primary/20 text-on-surface-variant font-label-caps text-[10px] px-sm py-[4px] hover:bg-surface-container-high">FLAG ISSUE</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Obligation Card 2 -->
+<div class="border border-primary/10 hover:border-on-tertiary-container transition-colors relative">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-on-tertiary-container"></div>
+<div class="p-sm pl-md">
+<div class="flex items-start gap-sm">
+<input class="mt-1 border-primary/30 text-secondary focus:ring-0 rounded-none w-4 h-4 cursor-pointer" type="checkbox"/>
+<div>
+<h4 class="font-bold text-body-sm mb-xs">Seguro de Responsabilidad Civil</h4>
+<p class="font-body-sm text-on-surface-variant text-[13px] leading-snug">Maintain $5M minimum liability insurance. Proof required within 10 days of execution.</p>
+<div class="mt-sm flex gap-xs">
+<button class="bg-primary text-on-primary font-label-caps text-[10px] px-sm py-[4px] hover:bg-primary/90">VALIDATE</button>
+<button class="border border-primary/20 text-on-surface-variant font-label-caps text-[10px] px-sm py-[4px] hover:bg-surface-container-high">FLAG ISSUE</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Version Timeline -->
+<div class="mt-auto pt-md border-t border-primary/10">
+<div class="font-label-caps text-label-caps mb-sm">VERSION HISTORY</div>
+<div class="relative pl-sm">
+<div class="absolute left-[11px] top-2 bottom-2 w-[2px] bg-primary/10"></div>
+<!-- Current Rev -->
+<div class="relative flex items-start gap-sm mb-md">
+<div class="w-[6px] h-[6px] bg-primary mt-1.5 z-10 shrink-0"></div>
+<div>
+<div class="font-bold text-body-sm flex items-center gap-xs">Rev.1 (Current) <span class="bg-secondary/10 text-secondary text-[10px] px-1">ACTIVE</span></div>
+<div class="font-mono text-[11px] text-on-surface-variant mt-xs">2023-10-15 09:42 AM</div>
+<div class="font-body-sm text-[12px] text-on-surface-variant mt-xs">Final execution copy uploaded by Legal.</div>
+</div>
+</div>
+<!-- Old Rev -->
+<div class="relative flex items-start gap-sm">
+<div class="w-[6px] h-[6px] bg-primary/30 mt-1.5 z-10 shrink-0"></div>
+<div>
+<div class="font-bold text-body-sm text-on-surface-variant">Rev.0</div>
+<div class="font-mono text-[11px] text-on-surface-variant/70 mt-xs">2023-10-01 14:20 PM</div>
+<div class="font-body-sm text-[12px] text-on-surface-variant/70 mt-xs">Initial draft for review.</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+</body></html>

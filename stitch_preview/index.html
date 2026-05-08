@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DocuBot — Maquetas UX/UI Stitch</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #F8F9FF; color: #000615; }
+  header { background: #000615; color: white; padding: 28px 40px; display: flex; align-items: center; gap: 16px; }
+  header .logo { width: 40px; height: 40px; background: #835410; border-radius: 0; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 18px; color: white; }
+  header h1 { font-size: 20px; font-weight: 700; }
+  header p { font-size: 13px; color: #8899bb; margin-top: 2px; }
+  .badge { background: #835410; color: white; font-size: 11px; font-weight: 700; padding: 3px 10px; margin-left: 12px; letter-spacing: 0.5px; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+  .section-title { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #835410; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 1px solid #e0e4f0; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; margin-bottom: 48px; }
+  .card { background: white; border: 1px solid #dde3f0; transition: box-shadow 0.2s, transform 0.15s; overflow: hidden; }
+  .card:hover { box-shadow: 0 8px 24px rgba(0,6,21,0.12); transform: translateY(-2px); }
+  .card-thumb { position: relative; background: #000615; overflow: hidden; }
+  .card-thumb img { width: 100%; height: 220px; object-fit: cover; object-position: top; display: block; }
+  .card-thumb .overlay { position: absolute; inset: 0; background: rgba(0,6,21,0); transition: background 0.2s; display: flex; align-items: center; justify-content: center; }
+  .card:hover .overlay { background: rgba(0,6,21,0.3); }
+  .card:hover .overlay .btn { opacity: 1; }
+  .overlay .btn { background: #835410; color: white; padding: 10px 22px; font-size: 13px; font-weight: 700; text-decoration: none; opacity: 0; transition: opacity 0.2s; letter-spacing: 0.5px; }
+  .card-body { padding: 16px 20px; }
+  .card-body h3 { font-size: 14px; font-weight: 700; color: #000615; margin-bottom: 4px; }
+  .card-body p { font-size: 12px; color: #667; line-height: 1.5; }
+  .card-footer { padding: 10px 20px 14px; display: flex; gap: 8px; align-items: center; }
+  .tag { font-size: 10px; font-weight: 600; padding: 2px 8px; background: #f0f4ff; color: #4491A0; letter-spacing: 0.3px; }
+  .tag-copper { background: #fff3e8; color: #835410; }
+  .status { font-size: 11px; color: #22b55a; font-weight: 600; margin-left: auto; }
+  .missing-section { background: #fffbf5; border: 1px dashed #835410; padding: 20px 24px; margin-bottom: 48px; }
+  .missing-section h3 { font-size: 13px; font-weight: 700; color: #835410; margin-bottom: 12px; }
+  .missing-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+  .missing-item { background: white; border: 1px solid #f0d5b0; padding: 12px 14px; }
+  .missing-item .name { font-size: 12px; font-weight: 700; color: #000615; }
+  .missing-item .desc { font-size: 11px; color: #999; margin-top: 3px; }
+  .summary-bar { background: #000615; color: white; padding: 20px 24px; display: flex; gap: 40px; margin-bottom: 48px; }
+  .summary-bar .stat { text-align: center; }
+  .summary-bar .stat .n { font-size: 28px; font-weight: 900; color: #835410; }
+  .summary-bar .stat .l { font-size: 11px; color: #8899bb; margin-top: 2px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">D</div>
+  <div>
+    <h1>DocuBot — Maquetas UX/UI <span class="badge">STITCH</span></h1>
+    <p>Aurenza IA — Módulo 02 · Revisión de pantallas diseñadas</p>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="summary-bar">
+    <div class="stat"><div class="n">8</div><div class="l">Pantallas diseñadas</div></div>
+    <div class="stat"><div class="n">5</div><div class="l">Pendientes de Stitch</div></div>
+    <div class="stat"><div class="n">13</div><div class="l">Total requeridas</div></div>
+    <div class="stat"><div class="n">62%</div><div class="l">Avance maqueta</div></div>
+  </div>
+
+  <div class="section-title">Pantallas completadas — haz clic para ver el HTML interactivo</div>
+  <div class="grid">
+
+    <div class="card">
+      <div class="card-thumb">
+        <img src="stitch_docubot_ai_document_control/docubot_dashboard/screen.png" alt="Dashboard">
+        <div class="overlay"><a href="stitch_docubot_ai_document_control/docubot_dashboard/code.html" class="btn" target="_blank">Ver pantalla →</a></div>
+      </div>
+      <div class="card-body">
+        <h3>01 · Dashboard ejecutivo</h3>
+        <p>KPIs totales, documentos procesados, alertas activas, últimas actividades RAG.</p>
+      </div>
+      <div class="card-footer">
+        <span class="tag">Dashboard</span>
+        <span class="tag tag-copper">Principal</span>
+        <span class="status">✓ Lista</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-thumb">
+        <img src="stitch_docubot_ai_document_control/docubot_semantic_search/screen.png" alt="Búsqueda Semántica">
+        <div class="overlay"><a href="stitch_docubot_ai_document_control/docubot_semantic_search/code.html" class="btn" target="_blank">Ver pantalla →</a></div>
+      </div>
+      <div class="card-body">
+        <h3>02 · Búsqueda semántica RAG</h3>
+        <p>Interfaz copiloto con barra de búsqueda prominente, resultados con citas exactas y badge de confianza.</p>
+      </div>
+      <div class="card-footer">
+        <span class="tag">RAG</span>
+        <span class="tag tag-copper">IA Core</span>
+        <span class="status">✓ Lista</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-thumb">
+        <img src="stitch_docubot_ai_document_control/docubot_document_uploader/screen.png" alt="Carga de Documentos">
+        <div class="overlay"><a href="stitch_docubot_ai_document_control/docubot_document_uploader/code.html" class="btn" target="_blank">Ver pantalla →</a></div>
+      </div>
+      <div class="card-body">
+        <h3>03 · Carga de documentos</h3>
+        <p>Drag-and-drop con barras de progreso OCR en tiempo real y clasificación IA automática.</p>
+      </div>
+      <div class="card-footer">
+        <span class="tag">Upload</span>
+        <span class="status">✓ Lista</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-thumb">
+        <img src="stitch_docubot_ai_document_control/docubot_document_viewer/screen.png" alt="Visor de Documentos">
+        <div class="overlay"><a href="stitch_docubot_ai_document_control/docubot_document_viewer/code.html" class="btn" target="_blank">Ver pantalla →</a></div>
+      </div>
+      <div class="card-body">
+        <h3>04 · Visor de documentos</h3>
+        <p>Vista dividida: preview del documento a la izquierda, metadata y obligaciones extraídas a la derecha.</p>
+      </div>
+      <div class="card-footer">
+        <span class="tag">Viewer</span>
+        <span class="tag tag-copper">Split view</span>
+        <span class="status">✓ Lista</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-thumb">
+        <img src="stitch_docubot_ai_document_control/docubot_alerts_panel/screen.png" alt="Panel de Alertas">
+        <div class="overlay"><a href="stitch_docubot_ai_document_control/docubot_alerts_panel/code.html" class="btn" target="_blank">Ver pantalla →</a></div>
+      </div>
+      <div class="card-body">
+        <h3>05 · Panel de alertas</h3>
+        <p>Plazos críticos, RFIs pendientes e inconsistencias contractuales detectadas por IA.</p>
+      </div>
+      <div class="card-footer">
+        <span class="tag">Alertas</span>
+        <span class="tag tag-copper">Crítico</span>
+        <span class="status">✓ Lista</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-thumb">
+        <img src="stitch_docubot_ai_document_control/docubot_query_history/screen.png" alt="Historial de Consultas">
+        <div class="overlay"><a href="stitch_docubot_ai_document_control/docubot_query_history/code.html" class="btn" target="_blank">Ver pantalla →</a></div>
+      </div>
+      <div class="card-body">
+        <h3>06 · Historial de consultas RAG</h3>
+        <p>Log auditable de interacciones usuario-IA con nivel de confianza y trazabilidad completa.</p>
+      </div>
+      <div class="card-footer">
+        <span class="tag">Auditoría</span>
+        <span class="status">✓ Lista</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-thumb">
+        <img src="stitch_docubot_ai_document_control/docubot_projects_overview/screen.png" alt="Vista de Proyectos">
+        <div class="overlay"><a href="stitch_docubot_ai_document_control/docubot_projects_overview/code.html" class="btn" target="_blank">Ver pantalla →</a></div>
+      </div>
+      <div class="card-body">
+        <h3>07 · Vista general de proyectos</h3>
+        <p>Cards por proyecto con estado, conteo de documentos, alertas abiertas y progreso.</p>
+      </div>
+      <div class="card-footer">
+        <span class="tag">Proyectos</span>
+        <span class="status">✓ Lista</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-thumb">
+        <img src="stitch_docubot_ai_document_control/docubot_corporate_login/screen.png" alt="Login Corporativo">
+        <div class="overlay"><a href="stitch_docubot_ai_document_control/docubot_corporate_login/code.html" class="btn" target="_blank">Ver pantalla →</a></div>
+      </div>
+      <div class="card-body">
+        <h3>08 · Login corporativo Azure B2C</h3>
+        <p>Pantalla de acceso corporativo con identidad visual industrial y SSO Azure AD.</p>
+      </div>
+      <div class="card-footer">
+        <span class="tag">Auth</span>
+        <span class="tag tag-copper">Azure B2C</span>
+        <span class="status">✓ Lista</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-title">Pantallas pendientes de diseño — aún no tienen maqueta en Stitch</div>
+  <div class="missing-section">
+    <h3>5 pantallas sin maqueta — a definir en próxima sesión</h3>
+    <div class="missing-grid">
+      <div class="missing-item">
+        <div class="name">09 · Control de versiones</div>
+        <div class="desc">Timeline + diff semántico entre revisiones</div>
+      </div>
+      <div class="missing-item">
+        <div class="name">10 · Extracción de obligaciones</div>
+        <div class="desc">Lista de plazos y obligaciones con urgency badges</div>
+      </div>
+      <div class="missing-item">
+        <div class="name">11 · Resúmenes ejecutivos</div>
+        <div class="desc">Selector de audiencia + secciones del resumen</div>
+      </div>
+      <div class="missing-item">
+        <div class="name">12 · Panel de métricas IA</div>
+        <div class="desc">Costos de tokens, performance RAG, presupuesto</div>
+      </div>
+      <div class="missing-item">
+        <div class="name">13 · Clasificación documental</div>
+        <div class="desc">Resultado de clasificación IA con validación humana</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

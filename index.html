@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DocuBot — Aurenza IA · Prototipo</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+tailwind.config={darkMode:"class",theme:{extend:{colors:{
+  "secondary":"#835410","error-container":"#ffdad6","surface-container":"#eceef3",
+  "surface-container-lowest":"#ffffff","on-surface":"#191c20","on-surface-variant":"#45474c",
+  "primary":"#000615","background":"#f8f9ff","on-secondary":"#ffffff","error":"#ba1a1a",
+  "secondary-container":"#fdbd71","surface":"#f8f9ff","primary-container":"#121c2c",
+  "on-primary":"#ffffff","surface-container-high":"#e7e8ee","on-primary-container":"#bdc7dd"
+},fontFamily:{
+  "label-caps":["Inter"],"h2":["Noto Serif"],"h3":["Noto Serif"],
+  "mono":["monospace"],"body-sm":["Inter"],"body-md":["Inter"],"h1":["Noto Serif"]
+},fontSize:{
+  "label-caps":["11px",{"lineHeight":"1","letterSpacing":"0.1em","fontWeight":"700"}],
+  "h2":["28px",{"lineHeight":"1.3","letterSpacing":"-0.01em","fontWeight":"600"}],
+  "h3":["22px",{"lineHeight":"1.4","letterSpacing":"0","fontWeight":"600"}],
+  "mono":["12px",{"lineHeight":"1.5","letterSpacing":"0","fontWeight":"400"}],
+  "body-sm":["13px",{"lineHeight":"1.5","letterSpacing":"0","fontWeight":"400"}],
+  "body-md":["15px",{"lineHeight":"1.5","letterSpacing":"0","fontWeight":"400"}],
+  "h1":["36px",{"lineHeight":"1.2","letterSpacing":"-0.02em","fontWeight":"700"}]
+},spacing:{
+  "sm":"8px","gutter":"16px","lg":"24px","md":"16px","xs":"4px",
+  "unit":"8px","xl":"40px","margin":"28px"
+}}}}
+</script>
+<style>
+  .bb{border:1px solid rgba(0,6,21,0.1)}
+  .bs{box-shadow:2px 2px 0px 0px rgba(0,0,0,0.05)}
+  .screen{display:none}
+  .screen.active{display:flex;flex-direction:column}
+  .nav-item.active{background:#121c2c;color:#fff;font-weight:700}
+  .nav-item.active span.label{font-weight:700}
+  /* Chart bars */
+  .bar-wrap{display:flex;align-items:flex-end;gap:6px;height:80px}
+  .bar{border-radius:0;background:#835410;min-width:22px;transition:height .3s}
+  .bar.lo{background:#d8dae0}
+  /* Diff colors */
+  .diff-add{background:#dcfce7;border-left:3px solid #16a34a}
+  .diff-del{background:#fee2e2;border-left:3px solid #dc2626;text-decoration:line-through;opacity:.7}
+  .diff-mod{background:#fef9c3;border-left:3px solid #ca8a04}
+</style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased overflow-x-hidden">
+
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!-- SIDEBAR                                                             -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<nav id="sidebar" class="w-[260px] h-full fixed left-0 top-0 border-r border-on-surface/10 bg-primary text-on-primary flex flex-col overflow-y-auto z-20" style="padding:24px 0">
+  <div style="padding:0 16px 24px">
+    <div class="flex items-center gap-sm mb-xs">
+      <div class="w-8 h-8 bg-secondary flex items-center justify-center font-bold text-on-primary text-sm">D</div>
+      <h1 class="font-h3 text-h3 font-bold text-on-primary">DocuBot</h1>
+    </div>
+    <p class="font-label-caps text-label-caps text-on-primary/50" style="padding-left:40px">AI Document Control</p>
+  </div>
+
+  <!-- Proyecto activo -->
+  <div style="padding:8px 12px;margin:0 8px 16px;background:#1e2a3a;border:1px solid rgba(255,255,255,0.08)">
+    <p class="font-label-caps text-label-caps text-on-primary/50 mb-xs">PROYECTO ACTIVO</p>
+    <p class="font-body-sm text-body-sm text-on-primary font-bold">Planta Concentradora Cobre</p>
+    <p class="font-mono text-mono text-on-primary/50">PROY-001 · EPC · Activo</p>
+  </div>
+
+  <ul class="flex flex-col flex-grow" style="padding:0 8px;gap:2px">
+    <li><button onclick="go('inicio')" class="nav-item active w-full flex items-center gap-sm px-sm py-sm text-on-primary/80 hover:text-on-primary hover:bg-primary-container transition-colors" data-screen="inicio" style="border-radius:0;text-align:left">
+      <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 1">home</span>
+      <span class="label font-body-sm text-body-sm">Inicio</span>
+    </button></li>
+    <li><button onclick="go('proyectos')" class="nav-item w-full flex items-center gap-sm px-sm py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" data-screen="proyectos" style="border-radius:0;text-align:left">
+      <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 0">folder_open</span>
+      <span class="label font-body-sm text-body-sm">Proyectos</span>
+    </button></li>
+    <li><button onclick="go('documentos')" class="nav-item w-full flex items-center gap-sm px-sm py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" data-screen="documentos" style="border-radius:0;text-align:left">
+      <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 0">description</span>
+      <span class="label font-body-sm text-body-sm">Documentos</span>
+    </button></li>
+    <li><button onclick="go('carga')" class="nav-item w-full flex items-center gap-sm px-sm py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" data-screen="carga" style="border-radius:0;text-align:left">
+      <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 0">cloud_upload</span>
+      <span class="label font-body-sm text-body-sm">Cargar documento</span>
+    </button></li>
+    <li><button onclick="go('rag')" class="nav-item w-full flex items-center gap-sm px-sm py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" data-screen="rag" style="border-radius:0;text-align:left">
+      <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 0">search</span>
+      <span class="label font-body-sm text-body-sm">Búsqueda IA</span>
+    </button></li>
+    <li><button onclick="go('alertas')" class="nav-item w-full flex items-center gap-sm px-sm py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" data-screen="alertas" style="border-radius:0;text-align:left">
+      <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 0">notifications</span>
+      <span class="label font-body-sm text-body-sm">Alertas</span>
+      <span class="ml-auto bg-error text-on-primary font-label-caps text-label-caps px-xs" style="font-size:10px">4</span>
+    </button></li>
+    <li><button onclick="go('obligaciones')" class="nav-item w-full flex items-center gap-sm px-sm py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" data-screen="obligaciones" style="border-radius:0;text-align:left">
+      <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 0">task_alt</span>
+      <span class="label font-body-sm text-body-sm">Obligaciones</span>
+    </button></li>
+    <li><button onclick="go('versiones')" class="nav-item w-full flex items-center gap-sm px-sm py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" data-screen="versiones" style="border-radius:0;text-align:left">
+      <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 0">difference</span>
+      <span class="label font-body-sm text-body-sm">Control de versiones</span>
+    </button></li>
+    <li><button onclick="go('resumenes')" class="nav-item w-full flex items-center gap-sm px-sm py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" data-screen="resumenes" style="border-radius:0;text-align:left">
+      <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 0">summarize</span>
+      <span class="label font-body-sm text-body-sm">Resúmenes ejecutivos</span>
+    </button></li>
+    <li><button onclick="go('auditoria')" class="nav-item w-full flex items-center gap-sm px-sm py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" data-screen="auditoria" style="border-radius:0;text-align:left">
+      <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 0">history</span>
+      <span class="label font-body-sm text-body-sm">Auditoría IA</span>
+    </button></li>
+    <li><button onclick="go('metricas')" class="nav-item w-full flex items-center gap-sm px-sm py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" data-screen="metricas" style="border-radius:0;text-align:left">
+      <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 0">bar_chart</span>
+      <span class="label font-body-sm text-body-sm">Métricas IA</span>
+    </button></li>
+    <li><button onclick="go('clasificacion')" class="nav-item w-full flex items-center gap-sm px-sm py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" data-screen="clasificacion" style="border-radius:0;text-align:left">
+      <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 0">category</span>
+      <span class="label font-body-sm text-body-sm">Clasificación</span>
+    </button></li>
+  </ul>
+
+  <div style="padding:12px 8px 0;border-top:1px solid rgba(255,255,255,0.1);margin-top:12px">
+    <div class="flex items-center gap-sm px-sm py-sm">
+      <div class="w-7 h-7 bg-secondary rounded-full flex items-center justify-center text-on-primary font-bold text-xs">CJ</div>
+      <div><p class="font-body-sm text-body-sm text-on-primary font-bold">Christian Díaz</p><p class="font-mono text-mono text-on-primary/50">Gerente de Proyecto</p></div>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!-- MAIN                                                                -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<div class="ml-[260px] min-h-screen flex flex-col">
+
+  <!-- Top bar -->
+  <header class="bg-surface flex justify-between items-center h-14 px-lg w-full border-b border-on-surface/10 sticky top-0 z-10">
+    <div id="breadcrumb" class="flex items-center gap-sm">
+      <span class="font-body-sm text-body-sm font-bold text-primary uppercase tracking-wide">Aurenza Group</span>
+      <span class="text-on-surface-variant">/</span>
+      <span id="bc-label" class="font-body-sm text-body-sm text-on-surface-variant">Inicio</span>
+    </div>
+    <div class="flex items-center gap-sm">
+      <span class="font-mono text-mono text-on-surface-variant">08 May 2026</span>
+      <button class="relative p-xs hover:bg-surface-container transition-colors" style="border-radius:0">
+        <span class="material-symbols-outlined text-[20px] text-on-surface-variant">notifications</span>
+        <span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ─── PANTALLAS ────────────────────────────────────────────────── -->
+  <div class="flex-1 overflow-y-auto bg-background">
+
+<!-- ════════════════════════════════════════════════════════════════════
+     INICIO — Dashboard principal
+════════════════════════════════════════════════════════════════════ -->
+<div id="screen-inicio" class="screen active p-lg gap-lg">
+
+  <div class="flex items-end justify-between">
+    <div>
+      <h1 class="font-h1 text-h1 text-primary">Buenos días, Christian 👋</h1>
+      <p class="font-body-md text-body-md text-on-surface-variant mt-xs">Resumen ejecutivo del proyecto — Planta Concentradora de Cobre</p>
+    </div>
+    <button onclick="go('resumenes')" class="bg-secondary text-on-primary px-md py-sm font-label-caps text-label-caps flex items-center gap-xs hover:bg-secondary/90 transition-colors" style="border-radius:0">
+      <span class="material-symbols-outlined text-[16px]">auto_awesome</span> Generar resumen IA
+    </button>
+  </div>
+
+  <!-- KPIs -->
+  <div class="grid grid-cols-4 gap-md">
+    <div class="bg-surface-container-lowest bb bs p-md border-t-4 border-t-secondary">
+      <p class="font-label-caps text-label-caps text-on-surface-variant mb-sm">DOCUMENTOS INDEXADOS</p>
+      <p class="font-h2 text-h2 text-primary">847</p>
+      <p class="font-body-sm text-body-sm text-on-surface-variant mt-xs flex items-center gap-xs"><span class="material-symbols-outlined text-[13px] text-secondary">arrow_upward</span>+23 esta semana</p>
+    </div>
+    <div class="bg-surface-container-lowest bb bs p-md border-t-4 border-t-error">
+      <p class="font-label-caps text-label-caps text-on-surface-variant mb-sm">ALERTAS ABIERTAS</p>
+      <p class="font-h2 text-h2 text-error">12</p>
+      <p class="font-body-sm text-body-sm text-error mt-xs">4 críticas · 5 altas · 3 medias</p>
+    </div>
+    <div class="bg-surface-container-lowest bb bs p-md border-t-4 border-t-primary">
+      <p class="font-label-caps text-label-caps text-on-surface-variant mb-sm">CONSULTAS IA HOY</p>
+      <p class="font-h2 text-h2 text-primary">38</p>
+      <p class="font-body-sm text-body-sm text-on-surface-variant mt-xs">Confianza promedio 89%</p>
+    </div>
+    <div class="bg-surface-container-lowest bb bs p-md border-t-4 border-t-primary">
+      <p class="font-label-caps text-label-caps text-on-surface-variant mb-sm">AVANCE CONTRACTUAL</p>
+      <p class="font-h2 text-h2 text-primary">68%</p>
+      <p class="font-body-sm text-body-sm text-on-surface-variant mt-xs">Fase 1 · 847 docs · USD 42.5M</p>
+    </div>
+  </div>
+
+  <!-- Gráficas + actividad -->
+  <div class="grid grid-cols-12 gap-md">
+
+    <!-- Gráfica de barras: documentos por mes -->
+    <div class="col-span-5 bg-surface-container-lowest bb bs p-md">
+      <div class="flex justify-between items-center mb-md">
+        <p class="font-label-caps text-label-caps text-on-surface-variant">DOCUMENTOS PROCESADOS / MES</p>
+        <span class="font-mono text-mono text-on-surface-variant">2026</span>
+      </div>
+      <div class="flex items-end justify-between gap-xs" style="height:90px;padding-bottom:4px">
+        <div class="flex flex-col items-center gap-xs flex-1">
+          <div class="w-full bg-surface-container-high" style="height:38px"></div>
+          <span class="font-mono text-mono text-on-surface-variant">E</span>
+        </div>
+        <div class="flex flex-col items-center gap-xs flex-1">
+          <div class="w-full bg-surface-container-high" style="height:52px"></div>
+          <span class="font-mono text-mono text-on-surface-variant">F</span>
+        </div>
+        <div class="flex flex-col items-center gap-xs flex-1">
+          <div class="w-full" style="height:64px;background:#835410"></div>
+          <span class="font-mono text-mono text-on-surface-variant">M</span>
+        </div>
+        <div class="flex flex-col items-center gap-xs flex-1">
+          <div class="w-full" style="height:48px;background:#835410"></div>
+          <span class="font-mono text-mono text-on-surface-variant">A</span>
+        </div>
+        <div class="flex flex-col items-center gap-xs flex-1">
+          <div class="w-full" style="height:72px;background:#000615"></div>
+          <span class="font-mono text-mono text-secondary font-bold">M</span>
+        </div>
+      </div>
+      <div class="flex justify-between mt-xs">
+        <span class="font-mono text-mono text-on-surface-variant">48</span>
+        <span class="font-mono text-mono text-on-surface-variant">66</span>
+        <span class="font-mono text-mono text-on-surface-variant">82</span>
+        <span class="font-mono text-mono text-on-surface-variant">61</span>
+        <span class="font-mono text-mono text-primary font-bold">92</span>
+      </div>
+    </div>
+
+    <!-- Distribución por tipo (donut SVG) -->
+    <div class="col-span-4 bg-surface-container-lowest bb bs p-md">
+      <p class="font-label-caps text-label-caps text-on-surface-variant mb-md">DOCUMENTOS POR TIPO</p>
+      <div class="flex items-center gap-md">
+        <svg viewBox="0 0 80 80" width="80" height="80">
+          <!-- Contrato 35% -->
+          <circle cx="40" cy="40" r="28" fill="none" stroke="#000615" stroke-width="14" stroke-dasharray="61.6 98.4" stroke-dashoffset="0"/>
+          <!-- Esp Técnica 28% -->
+          <circle cx="40" cy="40" r="28" fill="none" stroke="#835410" stroke-width="14" stroke-dasharray="49.3 110.7" stroke-dashoffset="-61.6"/>
+          <!-- RFI 20% -->
+          <circle cx="40" cy="40" r="28" fill="none" stroke="#bdc7dd" stroke-width="14" stroke-dasharray="35.2 124.8" stroke-dashoffset="-110.9"/>
+          <!-- Adenda 17% -->
+          <circle cx="40" cy="40" r="28" fill="none" stroke="#e1e2e8" stroke-width="14" stroke-dasharray="29.9 130.1" stroke-dashoffset="-146.1"/>
+        </svg>
+        <div class="flex flex-col gap-xs">
+          <div class="flex items-center gap-xs"><div class="w-3 h-3" style="background:#000615"></div><span class="font-body-sm text-body-sm text-on-surface-variant">Contratos 35%</span></div>
+          <div class="flex items-center gap-xs"><div class="w-3 h-3" style="background:#835410"></div><span class="font-body-sm text-body-sm text-on-surface-variant">Esp. Técnicas 28%</span></div>
+          <div class="flex items-center gap-xs"><div class="w-3 h-3" style="background:#bdc7dd"></div><span class="font-body-sm text-body-sm text-on-surface-variant">RFIs 20%</span></div>
+          <div class="flex items-center gap-xs"><div class="w-3 h-3" style="background:#e1e2e8"></div><span class="font-body-sm text-body-sm text-on-surface-variant">Adendas 17%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Estado OCR -->
+    <div class="col-span-3 bg-surface-container-lowest bb bs p-md">
+      <p class="font-label-caps text-label-caps text-on-surface-variant mb-md">ESTADO DE PROCESAMIENTO</p>
+      <div class="flex flex-col gap-sm">
+        <div>
+          <div class="flex justify-between mb-xs"><span class="font-body-sm text-body-sm text-primary">OCR completado</span><span class="font-mono text-mono text-primary font-bold">94%</span></div>
+          <div class="w-full bg-surface-container h-1.5 bb"><div style="width:94%;height:100%;background:#000615"></div></div>
+        </div>
+        <div>
+          <div class="flex justify-between mb-xs"><span class="font-body-sm text-body-sm text-primary">Embeddings</span><span class="font-mono text-mono text-secondary font-bold">91%</span></div>
+          <div class="w-full bg-surface-container h-1.5 bb"><div style="width:91%;height:100%;background:#835410"></div></div>
+        </div>
+        <div>
+          <div class="flex justify-between mb-xs"><span class="font-body-sm text-body-sm text-primary">Obligaciones</span><span class="font-mono text-mono text-on-surface-variant font-bold">78%</span></div>
+          <div class="w-full bg-surface-container h-1.5 bb"><div style="width:78%;height:100%;background:#bdc7dd"></div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Alertas + actividad reciente -->
+  <div class="grid grid-cols-12 gap-md">
+
+    <!-- Alertas críticas -->
+    <div class="col-span-5 bg-surface-container-lowest bb bs">
+      <div class="p-md border-b border-on-surface/10 flex justify-between items-center">
+        <p class="font-label-caps text-label-caps text-on-surface-variant">ALERTAS PRIORITARIAS</p>
+        <button onclick="go('alertas')" class="font-label-caps text-label-caps text-secondary hover:text-secondary/80">VER TODAS →</button>
+      </div>
+      <div class="flex flex-col">
+        <div class="p-md border-b border-on-surface/5 flex items-start gap-sm bg-error-container/30">
+          <span class="material-symbols-outlined text-error text-[18px] mt-0.5" style="font-variation-settings:'FILL' 1">priority_high</span>
+          <div class="flex-1"><p class="font-body-sm text-body-sm font-bold text-primary">Informe Avance Fase 1 — VENCIDO</p><p class="font-mono text-mono text-on-surface-variant">EPC-2023-001 · Penalidad activa ~USD 42.500</p></div>
+          <span class="px-xs py-[1px] bg-error text-on-primary font-label-caps text-label-caps" style="font-size:9px">VENCIDO</span>
+        </div>
+        <div class="p-md border-b border-on-surface/5 flex items-start gap-sm">
+          <span class="material-symbols-outlined text-error text-[18px] mt-0.5" style="font-variation-settings:'FILL' 1">warning</span>
+          <div class="flex-1"><p class="font-body-sm text-body-sm font-bold text-primary">Inconsistencia Rev. C vs D — Cláusula 22.1</p><p class="font-mono text-mono text-on-surface-variant">Exposición contractual aumentada</p></div>
+          <span class="px-xs py-[1px] bg-error text-on-primary font-label-caps text-label-caps" style="font-size:9px">CRÍTICO</span>
+        </div>
+        <div class="p-md border-b border-on-surface/5 flex items-start gap-sm">
+          <span class="material-symbols-outlined text-secondary text-[18px] mt-0.5" style="font-variation-settings:'FILL' 1">schedule</span>
+          <div class="flex-1"><p class="font-body-sm text-body-sm font-bold text-primary">Plan de Calidad ISO 9001 — 3 días</p><p class="font-mono text-mono text-on-surface-variant">Vence 11 May 2026 · Cláusula 12.1</p></div>
+          <span class="px-xs py-[1px] bg-secondary text-on-secondary font-label-caps text-label-caps" style="font-size:9px">ALTA</span>
+        </div>
+        <div class="p-md flex items-start gap-sm">
+          <span class="material-symbols-outlined text-secondary text-[18px] mt-0.5" style="font-variation-settings:'FILL' 1">schedule</span>
+          <div class="flex-1"><p class="font-body-sm text-body-sm font-bold text-primary">Boleta de Fidelidad — 10 días</p><p class="font-mono text-mono text-on-surface-variant">Renovación · USD 2.125.000</p></div>
+          <span class="px-xs py-[1px] bg-secondary text-on-secondary font-label-caps text-label-caps" style="font-size:9px">ALTA</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actividad reciente -->
+    <div class="col-span-7 bg-surface-container-lowest bb bs">
+      <div class="p-md border-b border-on-surface/10 flex justify-between items-center">
+        <p class="font-label-caps text-label-caps text-on-surface-variant">ACTIVIDAD RECIENTE</p>
+        <button onclick="go('auditoria')" class="font-label-caps text-label-caps text-secondary hover:text-secondary/80">VER HISTORIAL →</button>
+      </div>
+      <table class="w-full">
+        <thead><tr class="border-b border-on-surface/10 bg-surface-container">
+          <th class="p-sm pl-md font-label-caps text-label-caps text-on-surface-variant text-left">ACCIÓN</th>
+          <th class="p-sm font-label-caps text-label-caps text-on-surface-variant text-left">DOCUMENTO</th>
+          <th class="p-sm font-label-caps text-label-caps text-on-surface-variant text-left">USUARIO</th>
+          <th class="p-sm pr-md font-label-caps text-label-caps text-on-surface-variant text-left">HORA</th>
+        </tr></thead>
+        <tbody class="font-body-sm text-body-sm">
+          <tr class="border-b border-on-surface/5 hover:bg-surface-container transition-colors">
+            <td class="p-sm pl-md"><span class="flex items-center gap-xs"><span class="material-symbols-outlined text-[14px] text-secondary">search</span>Consulta IA</span></td>
+            <td class="p-sm font-mono text-mono text-primary">EPC-2023-001</td>
+            <td class="p-sm text-on-surface-variant">C. Díaz</td>
+            <td class="p-sm pr-md font-mono text-mono text-on-surface-variant">14:32</td>
+          </tr>
+          <tr class="border-b border-on-surface/5 hover:bg-surface-container transition-colors">
+            <td class="p-sm pl-md"><span class="flex items-center gap-xs"><span class="material-symbols-outlined text-[14px] text-primary">cloud_upload</span>Carga doc.</span></td>
+            <td class="p-sm font-mono text-mono text-primary">ET-HVAC-Vol2.docx</td>
+            <td class="p-sm text-on-surface-variant">M. Torres</td>
+            <td class="p-sm pr-md font-mono text-mono text-on-surface-variant">13:48</td>
+          </tr>
+          <tr class="border-b border-on-surface/5 hover:bg-surface-container transition-colors">
+            <td class="p-sm pl-md"><span class="flex items-center gap-xs"><span class="material-symbols-outlined text-[14px] text-error">notifications</span>Alerta creada</span></td>
+            <td class="p-sm font-mono text-mono text-primary">Obligación vencida</td>
+            <td class="p-sm text-on-surface-variant">Sistema IA</td>
+            <td class="p-sm pr-md font-mono text-mono text-on-surface-variant">12:00</td>
+          </tr>
+          <tr class="hover:bg-surface-container transition-colors">
+            <td class="p-sm pl-md"><span class="flex items-center gap-xs"><span class="material-symbols-outlined text-[14px]" style="color:#835410">difference</span>Diff versiones</span></td>
+            <td class="p-sm font-mono text-mono text-primary">Rev. C vs Rev. D</td>
+            <td class="p-sm text-on-surface-variant">A. Muñoz</td>
+            <td class="p-sm pr-md font-mono text-mono text-on-surface-variant">10:15</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- Consulta rápida IA -->
+  <div class="bg-primary-container bb p-md flex items-center gap-md">
+    <span class="material-symbols-outlined text-on-primary text-[22px]" style="font-variation-settings:'FILL' 1">auto_awesome</span>
+    <div class="flex-1 bg-primary/30 flex items-center px-md py-sm">
+      <span class="font-body-sm text-body-sm text-on-primary/60">Hazle una pregunta a DocuBot sobre este proyecto…</span>
+    </div>
+    <button onclick="go('rag')" class="bg-secondary text-on-primary px-md py-sm font-label-caps text-label-caps hover:bg-secondary/90 transition-colors" style="border-radius:0">Ir a Búsqueda IA →</button>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     PROYECTOS
+════════════════════════════════════════════════════════════════════ -->
+<div id="screen-proyectos" class="screen p-lg gap-lg">
+  <div class="flex justify-between items-center">
+    <h1 class="font-h1 text-h1 text-primary">Proyectos</h1>
+    <button class="bg-secondary text-on-primary px-md py-sm font-label-caps text-label-caps flex items-center gap-xs" style="border-radius:0"><span class="material-symbols-outlined text-[16px]">add</span> Nuevo proyecto</button>
+  </div>
+  <div class="grid grid-cols-3 gap-md">
+    <div class="bg-surface-container-lowest bb bs flex flex-col cursor-pointer hover:bs transition-shadow" onclick="go('inicio')">
+      <div class="bg-primary-container p-md">
+        <div class="flex justify-between mb-xs"><span class="font-mono text-mono text-on-primary/60">PROY-001</span><span class="px-xs py-[1px] bg-error text-on-primary font-label-caps text-label-caps" style="font-size:9px">ALERTA CRÍTICA</span></div>
+        <p class="font-h3 text-h3 text-on-primary">Planta Concentradora de Cobre</p>
+        <p class="font-body-sm text-body-sm text-on-primary/60 mt-xs">Minera Andes Sur · Contrato EPC</p>
+      </div>
+      <div class="p-md flex-1">
+        <div class="grid grid-cols-3 gap-xs text-center mb-sm">
+          <div class="bg-surface-container p-xs"><p class="font-h3 text-h3 text-primary" style="font-size:18px">847</p><p class="font-label-caps text-label-caps text-on-surface-variant" style="font-size:9px">DOCS</p></div>
+          <div class="bg-error-container p-xs"><p class="font-h3 text-h3 text-error" style="font-size:18px">12</p><p class="font-label-caps text-label-caps text-on-surface-variant" style="font-size:9px">ALERTAS</p></div>
+          <div class="bg-surface-container p-xs"><p class="font-h3 text-h3 text-primary" style="font-size:18px">94%</p><p class="font-label-caps text-label-caps text-on-surface-variant" style="font-size:9px">OCR</p></div>
+        </div>
+        <div class="w-full bg-surface-container h-1.5 bb"><div style="width:68%;height:100%;background:#835410"></div></div>
+        <p class="font-mono text-mono text-on-surface-variant mt-xs">Avance 68% · USD 42.5M</p>
+      </div>
+    </div>
+    <div class="bg-surface-container-lowest bb bs flex flex-col">
+      <div class="bg-primary-container p-md">
+        <div class="flex justify-between mb-xs"><span class="font-mono text-mono text-on-primary/60">PROY-002</span><span class="px-xs py-[1px] bg-secondary text-on-secondary font-label-caps text-label-caps" style="font-size:9px">ACTIVO</span></div>
+        <p class="font-h3 text-h3 text-on-primary">Edificio Corporativo Aurenza</p>
+        <p class="font-body-sm text-body-sm text-on-primary/60 mt-xs">Aurenza Group · Llave en Mano</p>
+      </div>
+      <div class="p-md flex-1">
+        <div class="grid grid-cols-3 gap-xs text-center mb-sm">
+          <div class="bg-surface-container p-xs"><p class="font-h3 text-h3 text-primary" style="font-size:18px">312</p><p class="font-label-caps text-label-caps text-on-surface-variant" style="font-size:9px">DOCS</p></div>
+          <div class="bg-surface-container p-xs"><p class="font-h3 text-h3 text-primary" style="font-size:18px">2</p><p class="font-label-caps text-label-caps text-on-surface-variant" style="font-size:9px">ALERTAS</p></div>
+          <div class="bg-surface-container p-xs"><p class="font-h3 text-h3 text-primary" style="font-size:18px">100%</p><p class="font-label-caps text-label-caps text-on-surface-variant" style="font-size:9px">OCR</p></div>
+        </div>
+        <div class="w-full bg-surface-container h-1.5 bb"><div style="width:45%;height:100%;background:#835410"></div></div>
+        <p class="font-mono text-mono text-on-surface-variant mt-xs">Avance 45% · USD 12.8M</p>
+      </div>
+    </div>
+    <div class="bg-surface-container-lowest bb bs flex flex-col">
+      <div class="bg-primary-container p-md">
+        <div class="flex justify-between mb-xs"><span class="font-mono text-mono text-on-primary/60">PROY-003</span><span class="px-xs py-[1px] bg-secondary text-on-secondary font-label-caps text-label-caps" style="font-size:9px">ACTIVO</span></div>
+        <p class="font-h3 text-h3 text-on-primary">Terminal Puerto Angamos</p>
+        <p class="font-body-sm text-body-sm text-on-primary/60 mt-xs">Puerto Angamos S.A. · EPCM</p>
+      </div>
+      <div class="p-md flex-1">
+        <div class="grid grid-cols-3 gap-xs text-center mb-sm">
+          <div class="bg-surface-container p-xs"><p class="font-h3 text-h3 text-primary" style="font-size:18px">524</p><p class="font-label-caps text-label-caps text-on-surface-variant" style="font-size:9px">DOCS</p></div>
+          <div class="bg-surface-container p-xs"><p class="font-h3 text-h3 text-primary" style="font-size:18px">4</p><p class="font-label-caps text-label-caps text-on-surface-variant" style="font-size:9px">ALERTAS</p></div>
+          <div class="bg-surface-container p-xs"><p class="font-h3 text-h3 text-primary" style="font-size:18px">88%</p><p class="font-label-caps text-label-caps text-on-surface-variant" style="font-size:9px">OCR</p></div>
+        </div>
+        <div class="w-full bg-surface-container h-1.5 bb"><div style="width:82%;height:100%;background:#835410"></div></div>
+        <p class="font-mono text-mono text-on-surface-variant mt-xs">Avance 82% · USD 28.3M</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     DOCUMENTOS
+════════════════════════════════════════════════════════════════════ -->
+<div id="screen-documentos" class="screen p-lg gap-lg">
+  <h1 class="font-h1 text-h1 text-primary">Documentos — Planta Concentradora</h1>
+  <div class="flex gap-md">
+    <div class="flex-1 bb bg-surface-container-lowest flex items-center gap-sm px-md py-sm"><span class="material-symbols-outlined text-on-surface-variant text-[18px]">search</span><span class="font-body-sm text-body-sm text-on-surface-variant">Buscar documento por nombre, código, tipo…</span></div>
+    <select class="bb bg-surface-container-lowest px-md py-sm font-body-sm text-body-sm" style="border-radius:0;outline:none"><option>Todos los tipos</option><option>Contrato</option><option>Esp. Técnica</option><option>RFI</option><option>Adenda</option></select>
+    <button onclick="go('carga')" class="bg-secondary text-on-primary px-md py-sm font-label-caps text-label-caps flex items-center gap-xs" style="border-radius:0"><span class="material-symbols-outlined text-[15px]">upload</span> Cargar</button>
+  </div>
+  <div class="bg-surface-container-lowest bb bs">
+    <table class="w-full">
+      <thead><tr class="border-b border-on-surface/10 bg-surface-container">
+        <th class="p-sm pl-md font-label-caps text-label-caps text-on-surface-variant text-left">DOCUMENTO</th>
+        <th class="p-sm font-label-caps text-label-caps text-on-surface-variant text-left">TIPO</th>
+        <th class="p-sm font-label-caps text-label-caps text-on-surface-variant text-left">REVISIÓN</th>
+        <th class="p-sm font-label-caps text-label-caps text-on-surface-variant text-left">PÁGINAS</th>
+        <th class="p-sm font-label-caps text-label-caps text-on-surface-variant text-left">ESTADO IA</th>
+        <th class="p-sm pr-md font-label-caps text-label-caps text-on-surface-variant text-left">FECHA</th>
+      </tr></thead>
+      <tbody class="font-body-sm text-body-sm">
+        <tr class="border-b border-on-surface/5 hover:bg-surface-container transition-colors cursor-pointer">
+          <td class="p-sm pl-md font-mono text-mono text-primary">EPC-2023-001.pdf</td>
+          <td class="p-sm text-on-surface-variant">Contrato EPC</td>
+          <td class="p-sm"><span class="px-xs py-[1px] bg-secondary text-on-secondary font-label-caps text-label-caps">Rev. D</span></td>
+          <td class="p-sm text-on-surface-variant">142</td>
+          <td class="p-sm"><span class="px-xs py-[1px] bg-primary-container text-on-primary font-label-caps text-label-caps" style="font-size:9px">PROCESADO</span></td>
+          <td class="p-sm pr-md font-mono text-mono text-on-surface-variant">15 Oct 2023</td>
+        </tr>
+        <tr class="border-b border-on-surface/5 hover:bg-surface-container transition-colors cursor-pointer">
+          <td class="p-sm pl-md font-mono text-mono text-primary">ET-HVAC-Vol2.docx</td>
+          <td class="p-sm text-on-surface-variant">Esp. Técnica</td>
+          <td class="p-sm"><span class="px-xs py-[1px] bg-surface-container-high text-on-surface-variant border border-on-surface/20 font-label-caps text-label-caps">Rev. B</span></td>
+          <td class="p-sm text-on-surface-variant">68</td>
+          <td class="p-sm"><span class="px-xs py-[1px] bg-secondary text-on-secondary font-label-caps text-label-caps" style="font-size:9px">CLASIFICANDO</span></td>
+          <td class="p-sm pr-md font-mono text-mono text-on-surface-variant">07 May 2026</td>
+        </tr>
+        <tr class="border-b border-on-surface/5 hover:bg-surface-container transition-colors cursor-pointer">
+          <td class="p-sm pl-md font-mono text-mono text-primary">RFI-104-Iluminacion.pdf</td>
+          <td class="p-sm text-on-surface-variant">RFI</td>
+          <td class="p-sm"><span class="px-xs py-[1px] bg-surface-container-high text-on-surface-variant border border-on-surface/20 font-label-caps text-label-caps">v1</span></td>
+          <td class="p-sm text-on-surface-variant">4</td>
+          <td class="p-sm"><span class="px-xs py-[1px] bg-primary-container text-on-primary font-label-caps text-label-caps" style="font-size:9px">PROCESADO</span></td>
+          <td class="p-sm pr-md font-mono text-mono text-on-surface-variant">03 May 2026</td>
+        </tr>
+        <tr class="hover:bg-surface-container transition-colors cursor-pointer">
+          <td class="p-sm pl-md font-mono text-mono text-primary">ADENDA-03-RevA.pdf</td>
+          <td class="p-sm text-on-surface-variant">Adenda</td>
+          <td class="p-sm"><span class="px-xs py-[1px] bg-surface-container-high text-on-surface-variant border border-on-surface/20 font-label-caps text-label-caps">Rev. A</span></td>
+          <td class="p-sm text-on-surface-variant">28</td>
+          <td class="p-sm"><span class="px-xs py-[1px] bg-surface-container-high text-on-surface-variant border border-on-surface/20 font-label-caps text-label-caps" style="font-size:9px">EN COLA</span></td>
+          <td class="p-sm pr-md font-mono text-mono text-on-surface-variant">06 May 2026</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     CARGA
+════════════════════════════════════════════════════════════════════ -->
+<div id="screen-carga" class="screen p-lg gap-lg">
+  <h1 class="font-h1 text-h1 text-primary">Cargar documentos</h1>
+  <div class="grid grid-cols-12 gap-lg">
+    <div class="col-span-7 flex flex-col gap-md">
+      <div class="bg-surface-container-lowest p-xl flex flex-col items-center justify-center gap-md" style="border:2px dashed rgba(131,84,16,0.4);min-height:200px">
+        <span class="material-symbols-outlined text-secondary text-[44px]" style="font-variation-settings:'FILL' 0">cloud_upload</span>
+        <div class="text-center"><p class="font-h3 text-h3 text-primary">Arrastra documentos aquí</p><p class="font-body-sm text-body-sm text-on-surface-variant mt-xs">PDF, DOCX, XLSX, DWG · Máx. 50 MB</p></div>
+        <button class="bg-secondary text-on-primary px-lg py-sm font-label-caps text-label-caps" style="border-radius:0">Seleccionar archivos</button>
+      </div>
+      <div class="bg-surface-container-lowest bb p-md flex flex-col gap-xs">
+        <p class="font-label-caps text-label-caps text-on-surface-variant mb-xs">EN PROCESAMIENTO</p>
+        <div class="p-sm bg-surface-container flex items-center gap-md">
+          <span class="material-symbols-outlined text-secondary text-[18px]" style="font-variation-settings:'FILL' 1">check_circle</span>
+          <div class="flex-1">
+            <div class="flex justify-between mb-xs"><p class="font-body-sm text-body-sm font-bold text-primary">EPC-2023-001-RevD.pdf</p><span class="font-mono text-mono text-on-surface-variant">142 págs</span></div>
+            <div class="w-full bg-surface-container-high h-1.5"><div style="width:100%;height:100%;background:#835410"></div></div>
+            <p class="font-mono text-mono text-on-surface-variant mt-xs">Completado · Contrato EPC · 847 chunks</p>
+          </div>
+        </div>
+        <div class="p-sm bg-surface-container flex items-center gap-md">
+          <span class="material-symbols-outlined text-secondary text-[18px]" style="font-variation-settings:'FILL' 0">progress_activity</span>
+          <div class="flex-1">
+            <div class="flex justify-between mb-xs"><p class="font-body-sm text-body-sm font-bold text-primary">ET-HVAC-Vol2.docx</p><span class="font-mono text-mono text-on-surface-variant">68 págs</span></div>
+            <div class="w-full bg-surface-container-high h-1.5"><div style="width:63%;height:100%;background:#835410"></div></div>
+            <p class="font-mono text-mono text-secondary mt-xs">OCR en progreso 63%…</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-span-5">
+      <div class="bg-surface-container-lowest bb bs p-lg flex flex-col gap-md">
+        <h3 class="font-h3 text-h3 text-primary">Metadatos</h3>
+        <div><p class="font-label-caps text-label-caps text-on-surface-variant mb-xs">PROYECTO</p><div class="bb p-sm bg-surface-container font-body-sm text-body-sm">Planta Concentradora — PROY-001</div></div>
+        <div><p class="font-label-caps text-label-caps text-on-surface-variant mb-xs">TIPO</p><select class="w-full bb p-sm bg-surface-container-lowest font-body-sm text-body-sm" style="border-radius:0;outline:none"><option>Contrato EPC</option><option>Adenda</option><option>Esp. Técnica</option><option>RFI</option></select></div>
+        <div><p class="font-label-caps text-label-caps text-on-surface-variant mb-xs">CÓDIGO</p><input class="w-full bb p-sm bg-surface-container-lowest font-body-sm text-body-sm" style="border-radius:0;outline:none" value="EPC-2023-001"/></div>
+        <div><p class="font-label-caps text-label-caps text-on-surface-variant mb-xs">REVISIÓN</p><input class="w-full bb p-sm bg-surface-container-lowest font-body-sm text-body-sm" style="border-radius:0;outline:none" value="Rev. D"/></div>
+        <div class="bg-secondary-container/30 bb p-sm flex gap-sm"><span class="material-symbols-outlined text-secondary text-[16px] mt-0.5" style="font-variation-settings:'FILL' 1">auto_awesome</span><p class="font-body-sm text-body-sm text-on-surface">La IA clasificará y extraerá obligaciones automáticamente.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     BÚSQUEDA IA — RAG
+════════════════════════════════════════════════════════════════════ -->
+<div id="screen-rag" class="screen p-lg gap-lg">
+  <h1 class="font-h1 text-h1 text-primary">Búsqueda IA — RAG Contractual</h1>
+  <div class="flex flex-col gap-sm max-w-3xl">
+    <div class="flex gap-md">
+      <select class="bb bg-surface-container-lowest px-md py-sm font-body-sm text-body-sm" style="border-radius:0;outline:none;min-width:200px"><option>Planta Concentradora de Cobre</option><option>Todos los proyectos</option></select>
+      <select class="bb bg-surface-container-lowest px-md py-sm font-body-sm text-body-sm" style="border-radius:0;outline:none"><option>Solo revisión vigente</option><option>Todas las revisiones</option></select>
+    </div>
+    <div class="bb bg-surface-container-lowest flex items-center gap-md px-md py-sm bs">
+      <span class="material-symbols-outlined text-secondary text-[20px]" style="font-variation-settings:'FILL' 1">auto_awesome</span>
+      <span class="font-body-md text-body-md text-primary flex-1">¿Cuáles son las penalidades por incumplimiento de plazo?</span>
+      <button class="bg-secondary text-on-primary px-md py-sm font-label-caps text-label-caps" style="border-radius:0">Consultar</button>
+    </div>
+    <p class="font-mono text-mono text-on-surface-variant">Sugerencias: "plazo de garantía" · "condiciones de pago" · "subcontratistas" · "fuerza mayor"</p>
+  </div>
+  <div class="bg-primary-container bb p-md flex items-start gap-sm max-w-3xl">
+    <span class="material-symbols-outlined text-on-primary text-[20px] mt-0.5" style="font-variation-settings:'FILL' 1">auto_awesome</span>
+    <div><p class="font-body-md text-body-md text-on-primary leading-relaxed">Según <strong>EPC-2023-001 Rev. D, Cláusula 4.1</strong>: multa de <strong>0,1% por día calendario</strong> de atraso, tope máximo 10% (USD 4.250.000). A la fecha, con el Informe Fase 1 vencido, la penalidad acumulada asciende a ~USD 42.500.</p>
+    <div class="flex gap-md mt-sm"><span class="font-mono text-mono text-on-primary/60">Confianza: 94%</span><span class="font-mono text-mono text-on-primary/60">Latencia: 1.2s</span><span class="font-label-caps text-label-caps text-secondary-container">Revisar con asesor legal</span></div></div>
+  </div>
+  <div class="max-w-3xl flex flex-col gap-sm">
+    <p class="font-label-caps text-label-caps text-on-surface-variant">FRAGMENTOS FUENTE — 3 chunks</p>
+    <div class="bg-surface-container-lowest bb bs p-md">
+      <div class="flex justify-between mb-sm"><div><p class="font-body-sm text-body-sm font-bold text-primary">EPC-2023-001 Rev. D — Cláusula 4.1</p><p class="font-mono text-mono text-on-surface-variant">Pág. 18 · Contrato EPC</p></div><span class="px-xs py-[1px] bg-secondary text-on-secondary font-label-caps text-label-caps">97%</span></div>
+      <p class="font-body-sm text-body-sm text-on-surface bg-surface-container p-sm border-l-2 border-secondary">"…el Contratista pagará una multa de 0,1% del Precio del Contrato por cada día calendario de atraso, con un tope máximo de 10%…"</p>
+    </div>
+    <div class="bg-surface-container-lowest bb bs p-md">
+      <div class="flex justify-between mb-sm"><div><p class="font-body-sm text-body-sm font-bold text-primary">ADENDA-03 Rev. A — Cláusula 2</p><p class="font-mono text-mono text-on-surface-variant">Pág. 3 · Adenda</p></div><span class="px-xs py-[1px] bg-surface-container-high text-on-surface-variant bb font-label-caps text-label-caps">74%</span></div>
+      <p class="font-body-sm text-body-sm text-on-surface bg-surface-container p-sm border-l-2 border-on-surface/20">"…la Rev. D modifica el plazo de la Fase 1 reduciéndolo en 15 días, quedando en 5 meses y 15 días…"</p>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     ALERTAS
+════════════════════════════════════════════════════════════════════ -->
+<div id="screen-alertas" class="screen p-lg gap-lg">
+  <h1 class="font-h1 text-h1 text-primary">Panel de Alertas</h1>
+  <div class="grid grid-cols-4 gap-md">
+    <div class="bg-surface-container-lowest bb bs p-md border-l-4 border-l-error"><p class="font-label-caps text-label-caps text-on-surface-variant mb-xs">CRÍTICAS</p><p class="font-h2 text-h2 text-error">4</p><p class="font-mono text-mono text-on-surface-variant">Acción inmediata</p></div>
+    <div class="bg-surface-container-lowest bb bs p-md border-l-4 border-l-secondary"><p class="font-label-caps text-label-caps text-on-surface-variant mb-xs">ALTAS</p><p class="font-h2 text-h2 text-secondary">5</p><p class="font-mono text-mono text-on-surface-variant">Próximos 14 días</p></div>
+    <div class="bg-surface-container-lowest bb bs p-md"><p class="font-label-caps text-label-caps text-on-surface-variant mb-xs">MEDIAS</p><p class="font-h2 text-h2 text-primary">3</p><p class="font-mono text-mono text-on-surface-variant">Próximos 30 días</p></div>
+    <div class="bg-surface-container-lowest bb bs p-md"><p class="font-label-caps text-label-caps text-on-surface-variant mb-xs">RESUELTAS HOY</p><p class="font-h2 text-h2 text-primary">2</p><p class="font-mono text-mono text-on-surface-variant">Acuse recibido</p></div>
+  </div>
+  <div class="flex flex-col gap-sm">
+    <div class="bg-surface-container-lowest bb bs p-md flex items-start gap-md border-l-4 border-l-error">
+      <span class="material-symbols-outlined text-error text-[20px] mt-0.5" style="font-variation-settings:'FILL' 1">priority_high</span>
+      <div class="flex-1"><p class="font-body-md text-body-md font-bold text-primary">Informe de Avance Fase 1 — VENCIDO</p><p class="font-body-sm text-body-sm text-on-surface-variant">Debió entregarse 15 Oct 2023 · Penalidad activa ~USD 42.500 · 0.1%/día</p><p class="font-mono text-mono text-on-surface-variant mt-xs">Planta Concentradora · Cláusula 7.3 · EPC-2023-001</p></div>
+      <button class="px-md py-sm border border-error text-error font-label-caps text-label-caps hover:bg-error-container transition-colors" style="border-radius:0">Acusar</button>
+    </div>
+    <div class="bg-surface-container-lowest bb bs p-md flex items-start gap-md border-l-4 border-l-error">
+      <span class="material-symbols-outlined text-error text-[20px] mt-0.5" style="font-variation-settings:'FILL' 1">warning</span>
+      <div class="flex-1"><p class="font-body-md text-body-md font-bold text-primary">Inconsistencia Rev. C vs D — Cláusulas 22.1 y 23.5 eliminadas</p><p class="font-body-sm text-body-sm text-on-surface-variant">Exposición contractual aumentada ante eventos climáticos y laborales</p><p class="font-mono text-mono text-on-surface-variant mt-xs">Planta Concentradora · Detectado por IA · EPC-2023-001</p></div>
+      <button class="px-md py-sm border border-error text-error font-label-caps text-label-caps hover:bg-error-container transition-colors" style="border-radius:0">Revisar</button>
+    </div>
+    <div class="bg-surface-container-lowest bb bs p-md flex items-start gap-md border-l-4 border-l-secondary">
+      <span class="material-symbols-outlined text-secondary text-[20px] mt-0.5" style="font-variation-settings:'FILL' 1">schedule</span>
+      <div class="flex-1"><p class="font-body-md text-body-md font-bold text-primary">Plan de Calidad ISO 9001 — 3 días</p><p class="font-body-sm text-body-sm text-on-surface-variant">Vence 11 May 2026 · Aprobación inspección técnica requerida</p><p class="font-mono text-mono text-on-surface-variant mt-xs">Planta Concentradora · Cláusula 12.1</p></div>
+      <button class="px-md py-sm border border-secondary text-secondary font-label-caps text-label-caps" style="border-radius:0">Acusar</button>
+    </div>
+    <div class="bg-surface-container-lowest bb bs p-md flex items-start gap-md border-l-4 border-l-secondary">
+      <span class="material-symbols-outlined text-secondary text-[20px] mt-0.5" style="font-variation-settings:'FILL' 1">schedule</span>
+      <div class="flex-1"><p class="font-body-md text-body-md font-bold text-primary">Boleta de Fidelidad — renovación 10 días</p><p class="font-body-sm text-body-sm text-on-surface-variant">Vence 18 May 2026 · USD 2.125.000 (5% del contrato)</p><p class="font-mono text-mono text-on-surface-variant mt-xs">Planta Concentradora · Cláusula 9.1</p></div>
+      <button class="px-md py-sm border border-secondary text-secondary font-label-caps text-label-caps" style="border-radius:0">Acusar</button>
+    </div>
+    <div class="bg-surface-container-lowest bb p-md flex items-start gap-md opacity-70">
+      <span class="material-symbols-outlined text-on-surface-variant text-[20px] mt-0.5" style="font-variation-settings:'FILL' 1">task_alt</span>
+      <div class="flex-1"><p class="font-body-md text-body-md font-bold text-primary">Nómina de Subcontratistas — 14 días</p><p class="font-body-sm text-body-sm text-on-surface-variant">Vence 22 May 2026 · Validación IA requerida · Cláusula 8.4</p></div>
+      <span class="px-xs py-[1px] bg-surface-container-high text-on-surface-variant bb font-label-caps text-label-caps">MEDIA</span>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     OBLIGACIONES
+════════════════════════════════════════════════════════════════════ -->
+<div id="screen-obligaciones" class="screen p-lg gap-lg">
+  <h1 class="font-h1 text-h1 text-primary">Obligaciones y Plazos</h1>
+  <div class="grid grid-cols-4 gap-md">
+    <div class="bg-surface-container-lowest bb bs p-md"><p class="font-label-caps text-label-caps text-on-surface-variant mb-xs">TOTAL EXTRAÍDAS</p><p class="font-h2 text-h2 text-primary">38</p></div>
+    <div class="bg-surface-container-lowest bb bs p-md border-l-4 border-l-error"><p class="font-label-caps text-label-caps text-on-surface-variant mb-xs">VENCEN EN 7 DÍAS</p><p class="font-h2 text-h2 text-error">4</p></div>
+    <div class="bg-surface-container-lowest bb bs p-md border-l-4 border-l-secondary"><p class="font-label-caps text-label-caps text-on-surface-variant mb-xs">VENCEN EN 30 DÍAS</p><p class="font-h2 text-h2 text-secondary">11</p></div>
+    <div class="bg-surface-container-lowest bb bs p-md"><p class="font-label-caps text-label-caps text-on-surface-variant mb-xs">REQUIEREN VALIDACIÓN</p><p class="font-h2 text-h2 text-primary">6</p></div>
+  </div>
+  <div class="flex flex-col gap-sm">
+    <div class="p-md bg-surface-container-lowest bb bs flex items-start gap-md border-l-4 border-l-error">
+      <span class="material-symbols-outlined text-error text-[20px] mt-0.5" style="font-variation-settings:'FILL' 1">priority_high</span>
+      <div class="flex-1"><div class="flex justify-between"><p class="font-body-md text-body-md font-bold text-primary">Informe de Avance Fase 1</p><span class="font-mono text-mono text-error font-bold">VENCIDO</span></div><p class="font-body-sm text-body-sm text-on-surface-variant">Debió entregarse 15 Oct 2023 · Penalidad activa · Cláusula 7.3</p><div class="flex gap-md mt-xs"><span class="font-mono text-mono text-on-surface-variant">Contratista</span><span class="font-mono text-mono text-on-surface-variant">EPC-2023-001</span></div></div>
+    </div>
+    <div class="p-md bg-surface-container-lowest bb bs flex items-start gap-md border-l-4 border-l-error">
+      <span class="material-symbols-outlined text-secondary text-[20px] mt-0.5" style="font-variation-settings:'FILL' 1">schedule</span>
+      <div class="flex-1"><div class="flex justify-between"><p class="font-body-md text-body-md font-bold text-primary">Plan de Calidad ISO 9001</p><span class="font-mono text-mono text-error font-bold">11 May — 3 días</span></div><p class="font-body-sm text-body-sm text-on-surface-variant">Aprobación por inspección técnica requerida · Cláusula 12.1</p></div>
+    </div>
+    <div class="p-md bg-surface-container-lowest bb bs flex items-start gap-md">
+      <span class="material-symbols-outlined text-secondary text-[20px] mt-0.5" style="font-variation-settings:'FILL' 1">schedule</span>
+      <div class="flex-1"><div class="flex justify-between"><p class="font-body-md text-body-md font-bold text-primary">Boleta de Fidelidad — Renovación</p><span class="font-mono text-mono text-secondary font-bold">18 May — 10 días</span></div><p class="font-body-sm text-body-sm text-on-surface-variant">USD 2.125.000 · Banco Santander · Cláusula 9.1</p></div>
+    </div>
+    <div class="p-md bg-surface-container-lowest bb bs flex items-start gap-md">
+      <span class="material-symbols-outlined text-on-surface-variant text-[20px] mt-0.5" style="font-variation-settings:'FILL' 1">task_alt</span>
+      <div class="flex-1"><div class="flex justify-between"><p class="font-body-md text-body-md font-bold text-primary">Nómina de Subcontratistas</p><span class="font-mono text-mono text-on-surface-variant">22 May — 14 días</span></div><p class="font-body-sm text-body-sm text-on-surface-variant">Validación IA de cada subcontratista · Cláusula 8.4</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     VERSIONES / DIFF
+════════════════════════════════════════════════════════════════════ -->
+<div id="screen-versiones" class="screen p-lg gap-lg">
+  <h1 class="font-h1 text-h1 text-primary">Control de Versiones — EPC-2023-001</h1>
+  <div class="grid grid-cols-12 gap-lg">
+    <div class="col-span-3 flex flex-col gap-sm">
+      <p class="font-label-caps text-label-caps text-on-surface-variant">REVISIONES</p>
+      <div class="p-sm bg-primary-container flex justify-between bb"><span class="font-body-sm text-body-sm text-on-primary font-bold">Rev. D — actual</span><span class="font-mono text-mono text-on-primary/60">15 Oct</span></div>
+      <div class="p-sm hover:bg-surface-container bb cursor-pointer flex justify-between"><span class="font-body-sm text-body-sm text-primary">Rev. C</span><span class="font-mono text-mono text-on-surface-variant">02 Sep</span></div>
+      <div class="p-sm hover:bg-surface-container bb cursor-pointer flex justify-between"><span class="font-body-sm text-body-sm text-primary">Rev. B</span><span class="font-mono text-mono text-on-surface-variant">14 Jul</span></div>
+      <div class="p-sm hover:bg-surface-container bb cursor-pointer flex justify-between"><span class="font-body-sm text-body-sm text-primary">Rev. A</span><span class="font-mono text-mono text-on-surface-variant">01 Jun</span></div>
+      <div class="mt-md bg-primary-container bb p-sm">
+        <p class="font-label-caps text-label-caps text-on-primary/60 mb-xs">COMPARANDO</p>
+        <p class="font-body-sm text-body-sm text-on-primary font-bold">Rev. C → Rev. D</p>
+        <div class="flex flex-col gap-xs mt-sm">
+          <div class="flex items-center gap-xs"><div class="w-3 h-3 bg-error"></div><span class="font-mono text-mono text-on-primary/70">3 cambios críticos</span></div>
+          <div class="flex items-center gap-xs"><div class="w-3 h-3" style="background:#ca8a04"></div><span class="font-mono text-mono text-on-primary/70">4 cláusulas modificadas</span></div>
+          <div class="flex items-center gap-xs"><div class="w-3 h-3" style="background:#16a34a"></div><span class="font-mono text-mono text-on-primary/70">2 cláusulas nuevas</span></div>
+          <div class="flex items-center gap-xs"><div class="w-3 h-3 bg-surface-container-high"></div><span class="font-mono text-mono text-on-primary/70">2 eliminadas</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-span-9 flex flex-col gap-md">
+      <div class="bg-secondary-container/20 bb p-sm flex items-center gap-sm">
+        <span class="material-symbols-outlined text-secondary text-[18px]" style="font-variation-settings:'FILL' 1">auto_awesome</span>
+        <p class="font-body-sm text-body-sm text-on-surface"><strong>IA detectó 3 cambios críticos:</strong> Reducción plazo Fase 1 en 15 días · Eliminación cláusulas de exención (22.1, 23.5) · Modificación tope penalidades.</p>
+      </div>
+      <div class="grid grid-cols-2 gap-md">
+        <div class="bb bs"><div class="p-sm bg-surface-container border-b border-on-surface/10"><p class="font-label-caps text-label-caps text-on-surface-variant">REV. C — ORIGINAL</p></div>
+          <div class="p-md font-mono text-mono text-on-surface flex flex-col gap-sm" style="font-size:12px">
+            <div class="diff-del p-xs">3.1 Plazo Fase 1: <strong>seis (6) meses</strong></div>
+            <div class="p-xs bg-surface-container">3.2 Precio total: USD 42.500.000 fijo.</div>
+            <div class="diff-del p-xs">22.1 Prórroga por acuerdo mutuo permitida en Fase 1.</div>
+            <div class="diff-del p-xs">23.5 Exención por eventos climáticos y laborales.</div>
+            <div class="p-xs bg-surface-container">4.1 Penalidad: 0,1%/día, tope 10%.</div>
+          </div>
+        </div>
+        <div class="bb bs"><div class="p-sm bg-surface-container border-b border-on-surface/10"><p class="font-label-caps text-label-caps text-on-surface-variant">REV. D — VIGENTE</p></div>
+          <div class="p-md font-mono text-mono text-on-surface flex flex-col gap-sm" style="font-size:12px">
+            <div class="diff-mod p-xs">3.1 Plazo Fase 1: <strong>cinco (5) meses y 15 días</strong></div>
+            <div class="p-xs bg-surface-container">3.2 Precio total: USD 42.500.000 fijo.</div>
+            <div class="diff-del p-xs" style="opacity:.4">22.1 <em>[cláusula eliminada]</em></div>
+            <div class="diff-del p-xs" style="opacity:.4">23.5 <em>[cláusula eliminada]</em></div>
+            <div class="p-xs bg-surface-container">4.1 Penalidad: 0,1%/día, tope 10%.</div>
+            <div class="diff-add p-xs">15.3 Garantía técnica equipos principales: 24 meses.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     RESÚMENES EJECUTIVOS
+════════════════════════════════════════════════════════════════════ -->
+<div id="screen-resumenes" class="screen p-lg gap-lg">
+  <h1 class="font-h1 text-h1 text-primary">Resúmenes Ejecutivos IA</h1>
+  <div class="grid grid-cols-12 gap-lg">
+    <div class="col-span-4 flex flex-col gap-md">
+      <div class="bg-surface-container-lowest bb bs p-lg">
+        <h3 class="font-h3 text-h3 text-primary mb-md">Generar resumen</h3>
+        <div class="mb-md"><p class="font-label-caps text-label-caps text-on-surface-variant mb-sm">DOCUMENTO</p><div class="bb p-sm flex items-center gap-sm bg-surface-container"><span class="material-symbols-outlined text-secondary text-[18px]">description</span><div><p class="font-body-sm text-body-sm font-bold text-primary">Contrato EPC-2023-001</p><p class="font-mono text-mono text-on-surface-variant">Rev. D · 142 páginas</p></div></div></div>
+        <div class="mb-md"><p class="font-label-caps text-label-caps text-on-surface-variant mb-sm">AUDIENCIA</p>
+          <div class="flex flex-col gap-xs">
+            <label class="flex items-center gap-sm cursor-pointer p-sm bg-primary text-on-primary bb"><input type="radio" name="aud" checked class="accent-secondary"/><span class="font-body-sm text-body-sm font-bold">Gerente de Proyecto</span></label>
+            <label class="flex items-center gap-sm cursor-pointer p-sm hover:bg-surface-container bb"><input type="radio" name="aud" class="accent-secondary"/><span class="font-body-sm text-body-sm">Contract Manager</span></label>
+            <label class="flex items-center gap-sm cursor-pointer p-sm hover:bg-surface-container bb"><input type="radio" name="aud" class="accent-secondary"/><span class="font-body-sm text-body-sm">Asesor Legal</span></label>
+            <label class="flex items-center gap-sm cursor-pointer p-sm hover:bg-surface-container bb"><input type="radio" name="aud" class="accent-secondary"/><span class="font-body-sm text-body-sm">Auditor Externo</span></label>
+          </div>
+        </div>
+        <button class="w-full bg-secondary text-on-primary py-sm font-label-caps text-label-caps flex items-center justify-center gap-sm" style="border-radius:0"><span class="material-symbols-outlined text-[16px]">auto_awesome</span> Generar con IA</button>
+      </div>
+    </div>
+    <div class="col-span-8 flex flex-col gap-md">
+      <div class="bg-primary-container bb p-sm flex items-center justify-between"><div class="flex items-center gap-sm"><span class="material-symbols-outlined text-on-primary text-[18px]" style="font-variation-settings:'FILL' 1">auto_awesome</span><p class="font-body-sm text-body-sm text-on-primary">Resumen para <strong>Gerente de Proyecto</strong> · EPC-2023-001 Rev. D · 08 May 2026</p></div><div class="flex gap-sm"><button class="text-on-primary/70 hover:text-on-primary"><span class="material-symbols-outlined text-[18px]">download</span></button></div></div>
+      <div class="bg-surface-container-lowest bb bs p-lg flex flex-col gap-lg">
+        <div><p class="font-label-caps text-label-caps text-secondary mb-sm border-b border-on-surface/10 pb-sm">VISIÓN GENERAL</p><p class="font-body-md text-body-md text-on-surface leading-relaxed">Contrato EPC a precio fijo por USD 42.5M para Planta Concentradora de Cobre (15.000 t/día). La Rev. D redujo el plazo de Fase 1 en 15 días y eliminó cláusulas de exención relevantes (22.1, 23.5).</p></div>
+        <div><p class="font-label-caps text-label-caps text-secondary mb-sm border-b border-on-surface/10 pb-sm">OBLIGACIONES CRÍTICAS VIGENTES</p>
+          <div class="flex flex-col gap-sm">
+            <div class="flex items-start gap-sm p-sm bg-error-container"><span class="material-symbols-outlined text-error text-[16px] mt-0.5" style="font-variation-settings:'FILL' 1">priority_high</span><div><p class="font-body-sm text-body-sm font-bold text-primary">Informe Avance Fase 1 — VENCIDO</p><p class="font-body-sm text-body-sm text-on-surface-variant">Penalidad activa 0.1%/día · ~USD 42.500 acumulado</p></div></div>
+            <div class="flex items-start gap-sm p-sm bg-secondary-container/20"><span class="material-symbols-outlined text-secondary text-[16px] mt-0.5" style="font-variation-settings:'FILL' 1">schedule</span><div><p class="font-body-sm text-body-sm font-bold text-primary">Plan de Calidad — 3 días</p><p class="font-body-sm text-body-sm text-on-surface-variant">Vence 11 May 2026 · ISO 9001:2015</p></div></div>
+          </div>
+        </div>
+        <div><p class="font-label-caps text-label-caps text-secondary mb-sm border-b border-on-surface/10 pb-sm">RIESGOS IDENTIFICADOS</p>
+          <div class="flex flex-col gap-sm">
+            <div class="flex items-start gap-sm"><span class="text-error font-bold mt-0.5">1.</span><p class="font-body-md text-body-md text-on-surface"><strong>Penalidad activa:</strong> Multa acumulada ~USD 42.500. Requiere acción inmediata.</p></div>
+            <div class="flex items-start gap-sm"><span class="text-secondary font-bold mt-0.5">2.</span><p class="font-body-md text-body-md text-on-surface"><strong>Sin prórroga posible:</strong> Rev. D eliminó la posibilidad de extensión por acuerdo mutuo en Fase 1.</p></div>
+          </div>
+        </div>
+        <div class="bg-surface-container p-sm flex justify-between"><p class="font-mono text-mono text-on-surface-variant">DocuBot IA · Confianza 91% · 14 fragmentos</p><p class="font-label-caps text-label-caps text-error">Requiere revisión legal</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     AUDITORÍA
+════════════════════════════════════════════════════════════════════ -->
+<div id="screen-auditoria" class="screen p-lg gap-lg">
+  <h1 class="font-h1 text-h1 text-primary">Historial de Consultas IA</h1>
+  <div class="flex gap-md">
+    <div class="flex-1 bb bg-surface-container-lowest flex items-center gap-sm px-md py-sm"><span class="material-symbols-outlined text-on-surface-variant text-[18px]">search</span><span class="font-body-sm text-body-sm text-on-surface-variant">Buscar en historial…</span></div>
+    <select class="bb bg-surface-container-lowest px-md py-sm font-body-sm text-body-sm" style="border-radius:0;outline:none"><option>Últimos 7 días</option><option>Últimos 30 días</option></select>
+    <button class="border border-on-surface/20 px-md py-sm font-label-caps text-label-caps text-on-surface-variant flex items-center gap-xs hover:bg-surface-container" style="border-radius:0"><span class="material-symbols-outlined text-[15px]">download</span> Exportar</button>
+  </div>
+  <div class="bg-surface-container-lowest bb bs">
+    <div class="p-md border-b border-on-surface/10 bg-surface-container flex justify-between"><p class="font-label-caps text-label-caps text-on-surface-variant">38 CONSULTAS HOY</p><p class="font-mono text-mono text-on-surface-variant">Confianza promedio: 89%</p></div>
+    <table class="w-full">
+      <thead><tr class="border-b border-on-surface/10"><th class="p-sm pl-md font-label-caps text-label-caps text-on-surface-variant text-left">PREGUNTA</th><th class="p-sm font-label-caps text-label-caps text-on-surface-variant text-left">PROYECTO</th><th class="p-sm font-label-caps text-label-caps text-on-surface-variant text-left">USUARIO</th><th class="p-sm font-label-caps text-label-caps text-on-surface-variant text-left">CONFIANZA</th><th class="p-sm pr-md font-label-caps text-label-caps text-on-surface-variant text-left">HORA</th></tr></thead>
+      <tbody class="font-body-sm text-body-sm">
+        <tr class="border-b border-on-surface/5 hover:bg-surface-container"><td class="p-sm pl-md text-primary" style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">¿Penalidades por incumplimiento de plazo?</td><td class="p-sm text-on-surface-variant">Planta Concentradora</td><td class="p-sm text-on-surface-variant">C. Díaz</td><td class="p-sm"><span class="px-xs py-[1px] bg-secondary text-on-secondary font-label-caps text-label-caps">94%</span></td><td class="p-sm pr-md font-mono text-mono text-on-surface-variant">14:32</td></tr>
+        <tr class="border-b border-on-surface/5 hover:bg-surface-container"><td class="p-sm pl-md text-primary" style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">¿Cláusula de fuerza mayor?</td><td class="p-sm text-on-surface-variant">Planta Concentradora</td><td class="p-sm text-on-surface-variant">A. Torres</td><td class="p-sm"><span class="px-xs py-[1px] bg-secondary text-on-secondary font-label-caps text-label-caps">88%</span></td><td class="p-sm pr-md font-mono text-mono text-on-surface-variant">13:15</td></tr>
+        <tr class="border-b border-on-surface/5 hover:bg-surface-container"><td class="p-sm pl-md text-primary" style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Obligaciones de subcontratistas</td><td class="p-sm text-on-surface-variant">Puerto Angamos</td><td class="p-sm text-on-surface-variant">M. Vargas</td><td class="p-sm"><span class="px-xs py-[1px] bg-surface-container-high text-on-surface-variant bb font-label-caps text-label-caps">79%</span></td><td class="p-sm pr-md font-mono text-mono text-on-surface-variant">11:47</td></tr>
+        <tr class="hover:bg-surface-container"><td class="p-sm pl-md text-primary" style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Diferencias Rev. C vs Rev. D</td><td class="p-sm text-on-surface-variant">Planta Concentradora</td><td class="p-sm text-on-surface-variant">L. Soto</td><td class="p-sm"><span class="px-xs py-[1px] bg-error-container text-error bb font-label-caps text-label-caps">61%</span></td><td class="p-sm pr-md font-mono text-mono text-on-surface-variant">09:21</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     MÉTRICAS IA
+════════════════════════════════════════════════════════════════════ -->
+<div id="screen-metricas" class="screen p-lg gap-lg">
+  <h1 class="font-h1 text-h1 text-primary">Métricas IA — Mayo 2026</h1>
+  <div class="grid grid-cols-4 gap-md">
+    <div class="bg-surface-container-lowest bb bs p-md border-t-4 border-t-secondary"><p class="font-label-caps text-label-caps text-on-surface-variant mb-xs">COSTO TOKENS MES</p><p class="font-h2 text-h2 text-secondary">USD 127</p><p class="font-mono text-mono text-on-surface-variant">Presupuesto: USD 200</p></div>
+    <div class="bg-surface-container-lowest bb bs p-md"><p class="font-label-caps text-label-caps text-on-surface-variant mb-xs">LATENCIA PROMEDIO</p><p class="font-h2 text-h2 text-primary">1.4s</p><p class="font-mono text-mono text-on-surface-variant">P95: 3.2s</p></div>
+    <div class="bg-surface-container-lowest bb bs p-md"><p class="font-label-caps text-label-caps text-on-surface-variant mb-xs">CONSULTAS RAG</p><p class="font-h2 text-h2 text-primary">342</p><p class="font-mono text-mono text-on-surface-variant">+12% vs mes anterior</p></div>
+    <div class="bg-surface-container-lowest bb bs p-md"><p class="font-label-caps text-label-caps text-on-surface-variant mb-xs">CONFIANZA PROMEDIO</p><p class="font-h2 text-h2 text-primary">89%</p><p class="font-mono text-mono text-on-surface-variant">Target: ≥85%</p></div>
+  </div>
+  <div class="grid grid-cols-2 gap-lg">
+    <div class="bg-surface-container-lowest bb bs p-md">
+      <p class="font-label-caps text-label-caps text-on-surface-variant mb-md">PRESUPUESTO DE TOKENS — MAY 2026</p>
+      <div class="mb-xs flex justify-between"><span class="font-body-sm text-body-sm text-primary">Utilizado</span><span class="font-mono text-mono text-secondary font-bold">USD 127 / 200</span></div>
+      <div class="w-full bg-surface-container h-3 bb mb-md"><div style="width:63%;height:100%;background:#835410"></div></div>
+      <div class="flex flex-col gap-xs">
+        <div class="flex justify-between font-body-sm text-body-sm"><span class="text-on-surface-variant">GPT-4o (consultas)</span><span class="font-mono text-mono text-primary">USD 89</span></div>
+        <div class="flex justify-between font-body-sm text-body-sm"><span class="text-on-surface-variant">Embeddings</span><span class="font-mono text-mono text-primary">USD 23</span></div>
+        <div class="flex justify-between font-body-sm text-body-sm"><span class="text-on-surface-variant">Resúmenes ejecutivos</span><span class="font-mono text-mono text-primary">USD 15</span></div>
+      </div>
+    </div>
+    <div class="bg-surface-container-lowest bb bs p-md">
+      <p class="font-label-caps text-label-caps text-on-surface-variant mb-md">DISTRIBUCIÓN DE CONFIANZA</p>
+      <div class="flex flex-col gap-xs">
+        <div class="flex items-center gap-md"><span class="font-mono text-mono text-on-surface-variant w-16">&gt; 90%</span><div class="flex-1 bg-surface-container h-2 bb"><div style="width:52%;height:100%;background:#000615"></div></div><span class="font-mono text-mono text-primary w-8">52%</span></div>
+        <div class="flex items-center gap-md"><span class="font-mono text-mono text-on-surface-variant w-16">75-90%</span><div class="flex-1 bg-surface-container h-2 bb"><div style="width:31%;height:100%;background:#835410"></div></div><span class="font-mono text-mono text-primary w-8">31%</span></div>
+        <div class="flex items-center gap-md"><span class="font-mono text-mono text-on-surface-variant w-16">50-75%</span><div class="flex-1 bg-surface-container h-2 bb"><div style="width:14%;height:100%;background:#bdc7dd"></div></div><span class="font-mono text-mono text-primary w-8">14%</span></div>
+        <div class="flex items-center gap-md"><span class="font-mono text-mono text-on-surface-variant w-16">&lt; 50%</span><div class="flex-1 bg-surface-container h-2 bb"><div style="width:3%;height:100%;background:#ba1a1a"></div></div><span class="font-mono text-mono text-error w-8">3%</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     CLASIFICACIÓN
+════════════════════════════════════════════════════════════════════ -->
+<div id="screen-clasificacion" class="screen p-lg gap-lg">
+  <h1 class="font-h1 text-h1 text-primary">Clasificación Documental</h1>
+  <div class="grid grid-cols-12 gap-lg">
+    <div class="col-span-8 flex flex-col gap-md">
+      <div class="bg-primary-container bb p-md flex items-center gap-sm">
+        <span class="material-symbols-outlined text-on-primary text-[20px]" style="font-variation-settings:'FILL' 1">auto_awesome</span>
+        <p class="font-body-sm text-body-sm text-on-primary">Clasificación automática completada con <strong>93% de confianza</strong>. Requiere validación humana para continuar el procesamiento.</p>
+      </div>
+      <div class="bg-surface-container-lowest bb bs p-lg">
+        <h3 class="font-h3 text-h3 text-primary mb-md">ET-HVAC-Vol2.docx</h3>
+        <div class="grid grid-cols-2 gap-md mb-md">
+          <div class="bb p-md">
+            <p class="font-label-caps text-label-caps text-on-surface-variant mb-sm">TIPO DETECTADO</p>
+            <div class="flex items-center justify-between mb-xs"><span class="font-h3 text-h3 text-primary">Especificación Técnica</span><span class="px-xs py-[1px] bg-secondary text-on-secondary font-label-caps text-label-caps">93%</span></div>
+            <div class="w-full bg-surface-container h-1.5 bb"><div style="width:93%;height:100%;background:#835410"></div></div>
+          </div>
+          <div class="bb p-md">
+            <p class="font-label-caps text-label-caps text-on-surface-variant mb-sm">DISCIPLINA DETECTADA</p>
+            <div class="flex items-center justify-between mb-xs"><span class="font-h3 text-h3 text-primary">HVAC / MEP</span><span class="px-xs py-[1px] bg-secondary text-on-secondary font-label-caps text-label-caps">87%</span></div>
+            <div class="w-full bg-surface-container h-1.5 bb"><div style="width:87%;height:100%;background:#835410"></div></div>
+          </div>
+        </div>
+        <div class="mb-md bb p-sm bg-surface-container"><p class="font-label-caps text-label-caps text-on-surface-variant mb-xs">EVIDENCIA IA</p><p class="font-body-sm text-body-sm text-on-surface italic">"Documento contiene especificaciones de sistemas de ventilación, climatización y extracción mecánica. Referencias a normativas ASHRAE 62.1 y NCh 2897."</p></div>
+        <div class="grid grid-cols-2 gap-md">
+          <div><p class="font-label-caps text-label-caps text-on-surface-variant mb-xs">CONFIRMAR TIPO</p><select class="w-full bb p-sm bg-surface-container-lowest font-body-sm text-body-sm" style="border-radius:0;outline:none"><option>Especificación Técnica</option><option>Contrato</option><option>RFI</option><option>Adenda</option></select></div>
+          <div><p class="font-label-caps text-label-caps text-on-surface-variant mb-xs">CONFIRMAR DISCIPLINA</p><select class="w-full bb p-sm bg-surface-container-lowest font-body-sm text-body-sm" style="border-radius:0;outline:none"><option>HVAC / MEP</option><option>Estructura</option><option>Civil</option><option>Eléctrico</option></select></div>
+        </div>
+        <div class="flex gap-md mt-md">
+          <button class="flex-1 bg-secondary text-on-primary py-sm font-label-caps text-label-caps flex items-center justify-center gap-xs" style="border-radius:0"><span class="material-symbols-outlined text-[15px]">check_circle</span> Confirmar y procesar</button>
+          <button class="px-lg py-sm border border-on-surface/20 font-label-caps text-label-caps text-on-surface-variant hover:bg-surface-container" style="border-radius:0">Rechazar</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-span-4 flex flex-col gap-md">
+      <div class="bg-surface-container-lowest bb bs p-md"><p class="font-label-caps text-label-caps text-on-surface-variant mb-sm">COLA DE VALIDACIÓN</p>
+        <div class="flex flex-col gap-xs">
+          <div class="p-sm bg-primary-container flex justify-between bb"><span class="font-body-sm text-body-sm text-on-primary font-bold">ET-HVAC-Vol2.docx</span><span class="font-mono text-mono text-on-primary/60">actual</span></div>
+          <div class="p-sm hover:bg-surface-container bb cursor-pointer flex justify-between"><span class="font-body-sm text-body-sm text-primary">ADENDA-03-RevA.pdf</span><span class="font-mono text-mono text-on-surface-variant">en cola</span></div>
+          <div class="p-sm hover:bg-surface-container bb cursor-pointer flex justify-between opacity-50"><span class="font-body-sm text-body-sm text-primary">RFI-105-Bombas.pdf</span><span class="font-mono text-mono text-on-surface-variant">en cola</span></div>
+        </div>
+      </div>
+      <div class="bg-surface-container-lowest bb bs p-md"><p class="font-label-caps text-label-caps text-on-surface-variant mb-sm">ESTADÍSTICAS</p>
+        <div class="flex flex-col gap-xs font-body-sm text-body-sm">
+          <div class="flex justify-between"><span class="text-on-surface-variant">Clasificados hoy</span><span class="font-bold text-primary">23</span></div>
+          <div class="flex justify-between"><span class="text-on-surface-variant">Pendientes validación</span><span class="font-bold text-secondary">3</span></div>
+          <div class="flex justify-between"><span class="text-on-surface-variant">Rechazados</span><span class="font-bold text-primary">1</span></div>
+          <div class="flex justify-between"><span class="text-on-surface-variant">Precisión IA</span><span class="font-bold text-primary">93.2%</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  </div><!-- /pantallas -->
+</div><!-- /main -->
+
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!-- JAVASCRIPT NAVEGACIÓN                                               -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<script>
+const labels = {
+  inicio: 'Inicio',
+  proyectos: 'Proyectos',
+  documentos: 'Documentos',
+  carga: 'Cargar documento',
+  rag: 'Búsqueda IA',
+  alertas: 'Alertas',
+  obligaciones: 'Obligaciones y Plazos',
+  versiones: 'Control de Versiones',
+  resumenes: 'Resúmenes Ejecutivos',
+  auditoria: 'Auditoría IA',
+  metricas: 'Métricas IA',
+  clasificacion: 'Clasificación'
+};
+
+function go(id) {
+  // Ocultar todas las pantallas
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  // Mostrar la seleccionada
+  document.getElementById('screen-' + id).classList.add('active');
+  // Actualizar nav
+  document.querySelectorAll('.nav-item').forEach(b => {
+    b.classList.remove('active');
+    if (b.dataset.screen === id) b.classList.add('active');
+  });
+  // Actualizar breadcrumb
+  document.getElementById('bc-label').textContent = labels[id] || id;
+  // Scroll al top
+  document.querySelector('.overflow-y-auto.bg-background').scrollTop = 0;
+}
+</script>
+</body>
+</html>

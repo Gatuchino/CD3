@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DocuBot — Control de Versiones & Diff</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "secondary": "#835410",
+        "primary": "#000000",
+        "background": "#f8f9ff",
+        "surface": "#f8f9ff",
+        "surface-container": "#eceef3",
+        "surface-container-lowest": "#ffffff",
+        "surface-container-low": "#f2f3f9",
+        "surface-container-high": "#e7e8ee",
+        "surface-container-highest": "#e1e2e8",
+        "on-background": "#191c20",
+        "on-surface": "#191c20",
+        "on-surface-variant": "#45474c",
+        "on-primary": "#ffffff",
+        "on-secondary": "#ffffff",
+        "secondary-container": "#fdbd71",
+        "on-secondary-container": "#774a04",
+        "primary-container": "#121c2c",
+        "outline": "#75777d",
+        "outline-variant": "#c5c6cd",
+        "error": "#ba1a1a",
+        "error-container": "#ffdad6",
+        "tertiary-container": "#001f25",
+        "on-tertiary-container": "#418e9d",
+        "diff-add": "#dcfce7",
+        "diff-add-text": "#166534",
+        "diff-remove": "#fee2e2",
+        "diff-remove-text": "#991b1b",
+        "diff-change": "#fef9c3",
+        "diff-change-text": "#854d0e",
+      },
+      borderRadius: { "DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "0px" },
+      fontFamily: {
+        "h1": ["Noto Serif"], "h2": ["Noto Serif"], "h3": ["Noto Serif"],
+        "body-md": ["Inter"], "body-sm": ["Inter"], "label-caps": ["Inter"], "mono": ["monospace"]
+      },
+      fontSize: {
+        "h1": ["40px", { lineHeight: "1.2", letterSpacing: "-0.02em", fontWeight: "700" }],
+        "h2": ["32px", { lineHeight: "1.3", letterSpacing: "-0.01em", fontWeight: "600" }],
+        "h3": ["24px", { lineHeight: "1.4", fontWeight: "600" }],
+        "body-md": ["16px", { lineHeight: "1.5", fontWeight: "400" }],
+        "body-sm": ["14px", { lineHeight: "1.5", fontWeight: "400" }],
+        "label-caps": ["12px", { lineHeight: "1", letterSpacing: "0.1em", fontWeight: "700" }],
+        "mono": ["13px", { lineHeight: "1.5", fontWeight: "400" }],
+      }
+    }
+  }
+}
+</script>
+<style>
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+.diff-line-add { background: #dcfce7; border-left: 3px solid #16a34a; }
+.diff-line-remove { background: #fee2e2; border-left: 3px solid #dc2626; }
+.diff-line-neutral { background: #f8f9ff; border-left: 3px solid transparent; }
+.diff-line-context { background: #f2f3f9; border-left: 3px solid #c5c6cd; }
+.timeline-dot-active { box-shadow: 0 0 0 3px rgba(131,84,16,0.3); }
+</style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex antialiased">
+
+<!-- Sidebar -->
+<nav class="hidden md:flex w-[280px] h-full fixed left-0 top-0 bg-primary flex-col overflow-y-auto px-4 py-6 z-20">
+  <div class="mb-10">
+    <h1 class="font-h3 text-h3 font-bold text-on-primary">DocuBot</h1>
+    <p class="text-on-primary/70 text-sm mt-1">AI Document Control</p>
+  </div>
+  <ul class="flex flex-col space-y-1 flex-1">
+    <li><a href="#" class="flex items-center space-x-3 px-3 py-2 text-on-primary/70 hover:bg-primary-container text-sm">
+      <span class="material-symbols-outlined text-xl">dashboard</span><span>Dashboard</span></a></li>
+    <li><a href="#" class="flex items-center space-x-3 px-3 py-2 text-on-primary/70 hover:bg-primary-container text-sm">
+      <span class="material-symbols-outlined text-xl">folder_open</span><span>Proyectos</span></a></li>
+    <li><a href="#" class="flex items-center space-x-3 px-3 py-2 text-on-primary/70 hover:bg-primary-container text-sm">
+      <span class="material-symbols-outlined text-xl">description</span><span>Documentos</span></a></li>
+    <li><a href="#" class="flex items-center space-x-3 px-3 py-2 text-on-primary/70 hover:bg-primary-container text-sm">
+      <span class="material-symbols-outlined text-xl">search</span><span>Búsqueda IA</span></a></li>
+    <li><a href="#" class="flex items-center space-x-3 px-3 py-2 bg-secondary text-on-secondary font-bold text-sm">
+      <span class="material-symbols-outlined text-xl">compare_arrows</span><span>Versiones</span></a></li>
+    <li><a href="#" class="flex items-center space-x-3 px-3 py-2 text-on-primary/70 hover:bg-primary-container text-sm">
+      <span class="material-symbols-outlined text-xl">schedule</span><span>Obligaciones</span></a></li>
+    <li><a href="#" class="flex items-center space-x-3 px-3 py-2 text-on-primary/70 hover:bg-primary-container text-sm">
+      <span class="material-symbols-outlined text-xl">summarize</span><span>Resúmenes</span></a></li>
+    <li><a href="#" class="flex items-center space-x-3 px-3 py-2 text-on-primary/70 hover:bg-primary-container text-sm">
+      <span class="material-symbols-outlined text-xl">bar_chart</span><span>Métricas IA</span></a></li>
+  </ul>
+  <div class="mt-auto pt-4 border-t border-on-primary/20">
+    <a href="#" class="flex items-center space-x-3 px-3 py-2 text-on-primary/70 hover:bg-primary-container text-sm">
+      <span class="material-symbols-outlined text-xl">account_circle</span><span>C. Díaz</span></a>
+  </div>
+</nav>
+
+<!-- Main -->
+<div class="flex-1 md:ml-[280px] flex flex-col min-h-screen">
+  <!-- TopBar -->
+  <header class="bg-surface border-b border-on-surface/10 h-16 px-6 flex justify-between items-center sticky top-0 z-10">
+    <div class="flex items-center space-x-3">
+      <h2 class="font-h3 text-h3 text-primary uppercase tracking-tighter">Aurenza Group</h2>
+      <span class="text-outline text-sm">/</span>
+      <span class="text-on-surface-variant text-sm">Control de Versiones</span>
+    </div>
+    <div class="flex items-center space-x-2 text-on-surface-variant">
+      <button class="hover:bg-surface-container p-2"><span class="material-symbols-outlined">notifications</span></button>
+      <button class="hover:bg-surface-container p-2"><span class="material-symbols-outlined">account_circle</span></button>
+    </div>
+  </header>
+
+  <main class="flex-1 p-6 md:p-8 overflow-y-auto bg-background">
+    <!-- Page Header -->
+    <div class="mb-6 flex items-end justify-between">
+      <div>
+        <p class="font-label-caps text-label-caps text-secondary tracking-widest mb-1">CONTROL DE VERSIONES</p>
+        <h1 class="font-h2 text-h2 text-on-background">Comparador de Revisiones</h1>
+        <p class="text-on-surface-variant text-sm mt-1">Contrato EPC — Planta Concentradora Norte</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <button class="border border-outline px-4 py-2 text-sm font-bold text-on-background hover:bg-surface-container flex items-center gap-2">
+          <span class="material-symbols-outlined text-base">download</span> Exportar Diff
+        </button>
+        <button class="bg-primary text-on-primary px-4 py-2 text-sm font-bold hover:bg-primary-container hover:text-on-primary-container flex items-center gap-2">
+          <span class="material-symbols-outlined text-base">add</span> Nueva Revisión
+        </button>
+      </div>
+    </div>
+
+    <!-- Version Selector Bar -->
+    <div class="bg-surface-container-lowest border border-on-surface/10 p-4 mb-6 flex flex-wrap items-center gap-4">
+      <div class="flex-1 min-w-[200px]">
+        <label class="font-label-caps text-label-caps text-on-surface-variant block mb-1">VERSIÓN BASE</label>
+        <select class="w-full border border-outline-variant bg-surface-container-low px-3 py-2 text-sm focus:outline-none focus:border-secondary">
+          <option selected>Rev. 3 — 15 Feb 2025</option>
+          <option>Rev. 2 — 12 Ene 2025</option>
+          <option>Rev. 1 — 03 Dic 2024</option>
+        </select>
+      </div>
+      <div class="flex items-end pb-1">
+        <span class="material-symbols-outlined text-secondary text-2xl">compare_arrows</span>
+      </div>
+      <div class="flex-1 min-w-[200px]">
+        <label class="font-label-caps text-label-caps text-on-surface-variant block mb-1">VERSIÓN COMPARAR</label>
+        <select class="w-full border border-outline-variant bg-surface-container-low px-3 py-2 text-sm focus:outline-none focus:border-secondary">
+          <option>Rev. 3 — 15 Feb 2025</option>
+          <option selected>Rev. 4 — 28 Mar 2025</option>
+          <option>Rev. 5 — 10 Abr 2025</option>
+        </select>
+      </div>
+      <div class="flex items-end gap-2">
+        <button class="bg-secondary text-on-secondary px-4 py-2 text-sm font-bold hover:opacity-90">Comparar</button>
+      </div>
+      <div class="flex items-center gap-4 ml-auto">
+        <label class="flex items-center gap-2 text-sm text-on-surface-variant cursor-pointer">
+          <input type="checkbox" class="accent-secondary" checked> Solo cambios
+        </label>
+        <label class="flex items-center gap-2 text-sm text-on-surface-variant cursor-pointer">
+          <input type="checkbox" class="accent-secondary"> Vista lado a lado
+        </label>
+      </div>
+    </div>
+
+    <!-- Main Diff Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6">
+
+      <!-- Left: Timeline + Change Summary -->
+      <div class="space-y-4">
+        <!-- Change Stats -->
+        <div class="bg-surface-container-lowest border border-on-surface/10 p-4">
+          <p class="font-label-caps text-label-caps text-on-surface-variant mb-3">RESUMEN DE CAMBIOS</p>
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2"><span class="w-3 h-3 bg-green-500 inline-block"></span><span class="text-sm">Cláusulas añadidas</span></div>
+              <span class="font-bold text-sm text-green-700">+7</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2"><span class="w-3 h-3 bg-red-500 inline-block"></span><span class="text-sm">Cláusulas eliminadas</span></div>
+              <span class="font-bold text-sm text-red-700">-3</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2"><span class="w-3 h-3 bg-yellow-400 inline-block"></span><span class="text-sm">Cláusulas modificadas</span></div>
+              <span class="font-bold text-sm text-yellow-700">~12</span>
+            </div>
+            <div class="border-t border-outline-variant pt-2 mt-2 flex items-center justify-between">
+              <span class="text-sm font-bold">Impacto contractual</span>
+              <span class="bg-error-container text-error text-xs font-bold px-2 py-0.5">ALTO</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI Analysis -->
+        <div class="bg-surface-container-lowest border border-secondary/40 border-l-4 border-l-secondary p-4">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="material-symbols-outlined text-secondary text-lg">auto_awesome</span>
+            <p class="font-label-caps text-label-caps text-secondary">ANÁLISIS IA</p>
+          </div>
+          <p class="text-sm text-on-surface-variant leading-relaxed">
+            Rev. 4 incorpora <strong class="text-on-background">3 cambios críticos</strong>: modificación del plazo de entrega (Cláusula 8.2), ampliación de garantías (Cláusula 15) y nuevo régimen de multas por atraso (Cláusula 22.1). Se recomienda revisión legal antes de firmar.
+          </p>
+          <button class="mt-3 text-secondary text-sm font-bold hover:underline flex items-center gap-1">
+            Ver análisis completo <span class="material-symbols-outlined text-sm">arrow_forward</span>
+          </button>
+        </div>
+
+        <!-- Version Timeline -->
+        <div class="bg-surface-container-lowest border border-on-surface/10 p-4">
+          <p class="font-label-caps text-label-caps text-on-surface-variant mb-4">HISTORIAL DE REVISIONES</p>
+          <div class="relative">
+            <div class="absolute left-3 top-0 bottom-0 w-px bg-outline-variant"></div>
+            <div class="space-y-4">
+              <!-- Rev 5 -->
+              <div class="flex items-start gap-3 pl-0">
+                <div class="w-6 h-6 rounded-full bg-surface-container border-2 border-outline-variant flex items-center justify-center z-10 flex-shrink-0">
+                  <span class="text-xs text-outline">5</span>
+                </div>
+                <div>
+                  <p class="text-sm font-bold text-on-background">Rev. 5</p>
+                  <p class="text-xs text-on-surface-variant">10 Abr 2025</p>
+                  <p class="text-xs text-on-surface-variant">J. Martínez</p>
+                </div>
+              </div>
+              <!-- Rev 4 (selected) -->
+              <div class="flex items-start gap-3 pl-0">
+                <div class="w-6 h-6 rounded-full bg-secondary border-2 border-secondary flex items-center justify-center z-10 flex-shrink-0 timeline-dot-active">
+                  <span class="text-xs text-on-secondary font-bold">4</span>
+                </div>
+                <div class="bg-secondary/10 border border-secondary/30 px-2 py-1 flex-1">
+                  <p class="text-sm font-bold text-secondary">Rev. 4 ← actual</p>
+                  <p class="text-xs text-on-surface-variant">28 Mar 2025</p>
+                  <p class="text-xs text-on-surface-variant">Adenda N°2 incorporada</p>
+                </div>
+              </div>
+              <!-- Rev 3 (base) -->
+              <div class="flex items-start gap-3 pl-0">
+                <div class="w-6 h-6 rounded-full bg-primary border-2 border-primary flex items-center justify-center z-10 flex-shrink-0">
+                  <span class="text-xs text-on-primary font-bold">3</span>
+                </div>
+                <div class="bg-primary/5 border border-primary/20 px-2 py-1 flex-1">
+                  <p class="text-sm font-bold text-primary">Rev. 3 ← base</p>
+                  <p class="text-xs text-on-surface-variant">15 Feb 2025</p>
+                  <p class="text-xs text-on-surface-variant">Aprobado mandante</p>
+                </div>
+              </div>
+              <!-- Rev 2 -->
+              <div class="flex items-start gap-3 pl-0">
+                <div class="w-6 h-6 rounded-full bg-surface-container border-2 border-outline-variant flex items-center justify-center z-10 flex-shrink-0">
+                  <span class="text-xs text-outline">2</span>
+                </div>
+                <div>
+                  <p class="text-sm font-bold text-on-background">Rev. 2</p>
+                  <p class="text-xs text-on-surface-variant">12 Ene 2025</p>
+                </div>
+              </div>
+              <!-- Rev 1 -->
+              <div class="flex items-start gap-3 pl-0">
+                <div class="w-6 h-6 rounded-full bg-surface-container border-2 border-outline-variant flex items-center justify-center z-10 flex-shrink-0">
+                  <span class="text-xs text-outline">1</span>
+                </div>
+                <div>
+                  <p class="text-sm font-bold text-on-background">Rev. 1</p>
+                  <p class="text-xs text-on-surface-variant">03 Dic 2024 — Emisión</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Diff Viewer -->
+      <div class="bg-surface-container-lowest border border-on-surface/10">
+        <!-- Diff Header -->
+        <div class="bg-surface-container-high px-4 py-3 flex items-center justify-between border-b border-on-surface/10">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-on-surface-variant">article</span>
+            <span class="text-sm font-bold">Contrato_EPC_PlantaConcentradora_Norte.pdf</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button class="text-xs border border-outline-variant px-2 py-1 hover:bg-surface-container text-on-surface-variant">Anterior cambio</button>
+            <span class="text-xs text-on-surface-variant">3 / 22</span>
+            <button class="text-xs border border-outline-variant px-2 py-1 hover:bg-surface-container text-on-surface-variant">Siguiente cambio</button>
+          </div>
+        </div>
+
+        <!-- Section Tabs -->
+        <div class="flex border-b border-on-surface/10 overflow-x-auto">
+          <button class="px-4 py-2 text-xs font-bold text-secondary border-b-2 border-secondary whitespace-nowrap">CLÁUSULA 8.2 — Plazos</button>
+          <button class="px-4 py-2 text-xs text-on-surface-variant hover:bg-surface-container whitespace-nowrap">CLÁUSULA 15 — Garantías</button>
+          <button class="px-4 py-2 text-xs text-on-surface-variant hover:bg-surface-container whitespace-nowrap">CLÁUSULA 22.1 — Multas</button>
+          <button class="px-4 py-2 text-xs text-on-surface-variant hover:bg-surface-container whitespace-nowrap">+ 9 más</button>
+        </div>
+
+        <!-- Diff Content -->
+        <div class="font-mono text-mono overflow-x-auto">
+          <!-- Context -->
+          <div class="diff-line-context flex">
+            <span class="w-10 text-outline text-right pr-2 select-none flex-shrink-0 py-0.5 pl-1 text-xs">...</span>
+            <span class="w-10 text-outline text-right pr-2 select-none flex-shrink-0 py-0.5 text-xs">...</span>
+            <span class="flex-1 px-3 py-0.5 text-on-surface-variant text-xs italic">@@ Cláusula 8.2 — Plazos de Entrega @@</span>
+          </div>
+          <!-- Neutral line -->
+          <div class="diff-line-neutral flex hover:bg-surface-container-low">
+            <span class="w-10 text-outline text-right pr-2 select-none flex-shrink-0 py-0.5 pl-1 text-xs">42</span>
+            <span class="w-10 text-outline text-right pr-2 select-none flex-shrink-0 py-0.5 text-xs">42</span>
+            <span class="flex-1 px-3 py-0.5 text-on-background text-xs">8.2 El Contratista deberá ejecutar las Obras en conformidad con el Programa de Trabajo aprobado.</span>
+          </div>
+          <!-- Removed line -->
+          <div class="diff-line-remove flex hover:bg-red-100">
+            <span class="w-10 text-red-400 text-right pr-2 select-none flex-shrink-0 py-0.5 pl-1 text-xs">43</span>
+            <span class="w-10 text-outline text-right pr-2 select-none flex-shrink-0 py-0.5 text-xs"></span>
+            <span class="flex-1 px-3 py-0.5 text-red-800 text-xs">- El plazo total de ejecución será de <strong>18 meses</strong> contados desde la Orden de Proceder.</span>
+          </div>
+          <!-- Added line -->
+          <div class="diff-line-add flex hover:bg-green-100">
+            <span class="w-10 text-outline text-right pr-2 select-none flex-shrink-0 py-0.5 pl-1 text-xs"></span>
+            <span class="w-10 text-green-500 text-right pr-2 select-none flex-shrink-0 py-0.5 text-xs">43</span>
+            <span class="flex-1 px-3 py-0.5 text-green-800 text-xs">+ El plazo total de ejecución será de <strong>24 meses</strong> contados desde la Orden de Proceder.</span>
+          </div>
+          <!-- Added line -->
+          <div class="diff-line-add flex hover:bg-green-100">
+            <span class="w-10 text-outline text-right pr-2 select-none flex-shrink-0 py-0.5 pl-1 text-xs"></span>
+            <span class="w-10 text-green-500 text-right pr-2 select-none flex-shrink-0 py-0.5 text-xs">44</span>
+            <span class="flex-1 px-3 py-0.5 text-green-800 text-xs">+ Este plazo incluye 30 días de holgura para contingencias climáticas según Adenda N°2.</span>
+          </div>
+          <!-- Neutral -->
+          <div class="diff-line-neutral flex hover:bg-surface-container-low">
+            <span class="w-10 text-outline text-right pr-2 select-none flex-shrink-0 py-0.5 pl-1 text-xs">44</span>
+            <span class="w-10 text-outline text-right pr-2 select-none flex-shrink-0 py-0.5 text-xs">45</span>
+            <span class="flex-1 px-3 py-0.5 text-on-background text-xs">8.2.1 El Contratista presentará un Programa de Trabajo detallado dentro de los 15 días hábiles.</span>
+          </div>
+          <!-- Context separator -->
+          <div class="diff-line-context flex">
+            <span class="w-10 text-outline text-right pr-2 select-none flex-shrink-0 py-0.5 pl-1 text-xs">...</span>
+            <span class="w-10 text-outline text-right pr-2 select-none flex-shrink-0 py-0.5 text-xs">...</span>
+            <span class="flex-1 px-3 py-0.5 text-on-surface-variant text-xs italic">@@ Cláusula 8.4 — Penalidades por Atraso @@</span>
+          </div>
+          <!-- Neutral -->
+          <div class="diff-line-neutral flex hover:bg-surface-container-low">
+            <span class="w-10 text-outline text-right pr-2 select-none flex-shrink-0 py-0.5 pl-1 text-xs">67</span>
+            <span class="w-10 text-outline text-right pr-2 select-none flex-shrink-0 py-0.5 text-xs">68</span>
+            <span class="flex-1 px-3 py-0.5 text-on-background text-xs">8.4 Las penalidades por incumplimiento de plazo se calcularán sobre el monto del contrato.</span>
+          </div>
+          <!-- Removed -->
+          <div class="diff-line-remove flex hover:bg-red-100">
+            <span class="w-10 text-red-400 text-right pr-2 select-none flex-shrink-0 py-0.5 pl-1 text-xs">68</span>
+            <span class="w-10 text-outline text-right pr-2 select-none flex-shrink-0 py-0.5 text-xs"></span>
+            <span class="flex-1 px-3 py-0.5 text-red-800 text-xs">- La multa máxima aplicable será del <strong>5%</strong> del valor total del Contrato.</span>
+          </div>
+          <!-- Added -->
+          <div class="diff-line-add flex hover:bg-green-100">
+            <span class="w-10 text-outline text-right pr-2 select-none flex-shrink-0 py-0.5 pl-1 text-xs"></span>
+            <span class="w-10 text-green-500 text-right pr-2 select-none flex-shrink-0 py-0.5 text-xs">69</span>
+            <span class="flex-1 px-3 py-0.5 text-green-800 text-xs">+ La multa máxima aplicable será del <strong>10%</strong> del valor total del Contrato.</span>
+          </div>
+          <!-- Added -->
+          <div class="diff-line-add flex hover:bg-green-100">
+            <span class="w-10 text-outline text-right pr-2 select-none flex-shrink-0 py-0.5 pl-1 text-xs"></span>
+            <span class="w-10 text-green-500 text-right pr-2 select-none flex-shrink-0 py-0.5 text-xs">70</span>
+            <span class="flex-1 px-3 py-0.5 text-green-800 text-xs">+ Dicha multa podrá ser descontada directamente de los estados de pago pendientes, sin necesidad de notificación previa.</span>
+          </div>
+          <!-- Neutral -->
+          <div class="diff-line-neutral flex hover:bg-surface-container-low">
+            <span class="w-10 text-outline text-right pr-2 select-none flex-shrink-0 py-0.5 pl-1 text-xs">69</span>
+            <span class="w-10 text-outline text-right pr-2 select-none flex-shrink-0 py-0.5 text-xs">71</span>
+            <span class="flex-1 px-3 py-0.5 text-on-background text-xs">8.4.1 Las penalidades se aplicarán por cada día corrido de atraso, a razón de 0,1% por día.</span>
+          </div>
+          <!-- Context separator -->
+          <div class="diff-line-context flex">
+            <span class="w-10 text-outline text-right pr-2 select-none flex-shrink-0 py-0.5 pl-1 text-xs">...</span>
+            <span class="w-10 text-outline text-right pr-2 select-none flex-shrink-0 py-0.5 text-xs">...</span>
+            <span class="flex-1 px-3 py-0.5 text-on-surface-variant text-xs italic">@@ 18 secciones sin cambios ocultadas @@</span>
+          </div>
+        </div>
+
+        <!-- Diff Footer -->
+        <div class="bg-surface-container-low px-4 py-3 border-t border-on-surface/10 flex items-center justify-between">
+          <div class="flex items-center gap-4 text-xs text-on-surface-variant">
+            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 bg-green-500 inline-block"></span> +7 líneas añadidas</span>
+            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 bg-red-500 inline-block"></span> -3 líneas eliminadas</span>
+            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 bg-yellow-400 inline-block"></span> ~12 modificadas</span>
+          </div>
+          <button class="bg-secondary text-on-secondary text-xs font-bold px-3 py-1.5 hover:opacity-90 flex items-center gap-1">
+            <span class="material-symbols-outlined text-sm">approval</span> Aprobar Revisión
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

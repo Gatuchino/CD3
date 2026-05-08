@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Historial de Consultas &amp; Audit Log - DocuBot</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Noto+Serif:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#835410",
+                        "primary-fixed-dim": "#bdc7dd",
+                        "error-container": "#ffdad6",
+                        "surface-dim": "#d8dae0",
+                        "on-primary-container": "#7a8498",
+                        "inverse-on-surface": "#eff0f6",
+                        "outline-variant": "#c5c6cd",
+                        "surface-container": "#eceef3",
+                        "on-background": "#191c20",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#a3eeff",
+                        "on-surface": "#191c20",
+                        "on-surface-variant": "#45474c",
+                        "primary": "#000000",
+                        "outline": "#75777d",
+                        "inverse-primary": "#bdc7dd",
+                        "on-tertiary-fixed-variant": "#004e5a",
+                        "background": "#f8f9ff",
+                        "on-tertiary-fixed": "#001f25",
+                        "tertiary": "#000000",
+                        "secondary-fixed-dim": "#faba6f",
+                        "surface-container-low": "#f2f3f9",
+                        "surface-container-highest": "#e1e2e8",
+                        "on-secondary-fixed": "#2b1700",
+                        "on-tertiary-container": "#418e9d",
+                        "surface-container-high": "#e7e8ee",
+                        "surface": "#f8f9ff",
+                        "tertiary-container": "#001f25",
+                        "surface-variant": "#e1e2e8",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed-variant": "#663e00",
+                        "on-secondary-container": "#774a04",
+                        "error": "#ba1a1a",
+                        "inverse-surface": "#2e3135",
+                        "primary-fixed": "#d9e3f9",
+                        "secondary-container": "#fdbd71",
+                        "surface-tint": "#555f71",
+                        "surface-bright": "#f8f9ff",
+                        "on-primary-fixed-variant": "#3d4759",
+                        "on-primary-fixed": "#121c2c",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed": "#ffddb9",
+                        "tertiary-fixed-dim": "#87d2e2",
+                        "primary-container": "#121c2c",
+                        "on-primary": "#ffffff",
+                        "on-error": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "0px"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "gutter": "16px",
+                        "lg": "24px",
+                        "md": "16px",
+                        "xs": "4px",
+                        "unit": "8px",
+                        "xl": "40px",
+                        "margin": "32px"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["Inter"],
+                        "h2": ["Noto Serif"],
+                        "h3": ["Noto Serif"],
+                        "mono": ["monospace"],
+                        "body-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "h1": ["Noto Serif"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["12px", { "lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700" }],
+                        "h2": ["32px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "h3": ["24px", { "lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "600" }],
+                        "mono": ["13px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400" }],
+                        "h1": ["40px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface flex min-h-screen">
+<!-- SideNavBar -->
+<nav class="bg-primary dark:bg-primary text-on-primary dark:text-on-primary font-body-md text-body-md w-[280px] h-full fixed left-0 top-0 border-r border-on-surface/10 flat no shadows flex flex-col h-full overflow-y-auto px-md py-lg z-20">
+<div class="mb-xl">
+<h1 class="font-h3 text-h3 font-bold text-on-primary mb-xs">DocuBot</h1>
+<p class="font-label-caps text-label-caps text-on-primary/70">Control Documental IA</p>
+</div>
+<ul class="space-y-sm flex-grow">
+<li>
+<a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="folder_open">folder_open</span>
+                    Projects
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+                    Contracts
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="assignment_late">assignment_late</span>
+                    RFIs
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="architecture">architecture</span>
+                    Technical Specs
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm bg-secondary text-on-secondary font-bold hover:bg-primary-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                    Settings
+                </a>
+</li>
+</ul>
+<div class="mt-auto pt-lg border-t border-on-surface/10 flex items-center gap-md">
+<div class="w-10 h-10 bg-primary-container rounded-none flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary" data-icon="business">business</span>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-primary">Aurenza Group</p>
+</div>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="flex-1 ml-[280px] flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface text-primary dark:text-primary-fixed-dim font-label-caps text-label-caps docked full-width top-0 ml-[280px] border-b border-on-surface/10 flat no shadows flex justify-between items-center h-16 px-lg w-full sticky z-10">
+<div class="flex items-center gap-lg">
+<div class="font-h3 text-h3 text-primary uppercase tracking-tighter">Aurenza Group</div>
+</div>
+<div class="flex-1 max-w-md mx-lg hidden md:block">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="w-full bg-surface-container border border-outline-variant text-on-surface px-xl py-xs focus:border-secondary focus:ring-0 focus:border-b-2 transition-all outline-none font-body-sm h-10" placeholder="Search logs..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<button class="p-sm text-on-surface-variant hover:text-primary transition-colors scale-95 active:scale-90 flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-sm text-on-surface-variant hover:text-primary transition-colors scale-95 active:scale-90 flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Canvas -->
+<main class="p-xl flex-grow flex flex-col gap-lg bg-surface">
+<!-- Page Header & Acciones -->
+<div class="flex justify-between items-end border-b border-outline-variant pb-md">
+<div>
+<h2 class="font-h2 text-h2 text-on-surface mb-xs">Historial de Consultas &amp; Audit Log</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Registro inmutable de interacciones en lenguaje natural y extrapolaciones IA.</p>
+</div>
+<div class="flex gap-md">
+<button class="bg-surface border border-primary text-primary font-label-caps text-label-caps px-md py-sm flex items-center gap-sm hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="filter_list">filter_list</span>
+                        Filters
+                    </button>
+<button class="bg-primary text-on-primary font-label-caps text-label-caps px-md py-sm flex items-center gap-sm hover:bg-primary/90 transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="download">download</span>
+                        Exportar CSV
+                    </button>
+</div>
+</div>
+<!-- Filters Bar (Simulated Active State) -->
+<div class="bg-surface-container border border-outline-variant p-md flex gap-lg items-center">
+<span class="font-label-caps text-label-caps text-on-surface-variant shrink-0">FILTROS ACTIVOS:</span>
+<div class="flex gap-md flex-wrap">
+<span class="bg-surface border border-outline-variant px-sm py-xs font-body-sm text-body-sm flex items-center gap-xs">
+                        Project: AZ-Minería-09
+                        <span class="material-symbols-outlined text-[14px] cursor-pointer hover:text-error" data-icon="close">close</span>
+</span>
+<span class="bg-surface border border-outline-variant px-sm py-xs font-body-sm text-body-sm flex items-center gap-xs">
+                        Date: Last 7 Days
+                        <span class="material-symbols-outlined text-[14px] cursor-pointer hover:text-error" data-icon="close">close</span>
+</span>
+</div>
+<button class="ml-auto font-label-caps text-label-caps text-secondary hover:text-primary transition-colors">Limpiar Todo</button>
+</div>
+<!-- Data Table / Log List -->
+<div class="bg-surface-container-lowest border border-on-surface/10 flex-grow flex flex-col">
+<!-- Table Header -->
+<div class="grid grid-cols-12 gap-sm p-md border-b border-outline-variant bg-surface-container-low font-label-caps text-label-caps text-on-surface-variant">
+<div class="col-span-2">Fecha y Hora</div>
+<div class="col-span-2">Usuario / Proyecto</div>
+<div class="col-span-4">Consulta / Resolución</div>
+<div class="col-span-2">Confidence</div>
+<div class="col-span-2 text-right">Acciones</div>
+</div>
+<!-- Log Entry 1 -->
+<div class="grid grid-cols-12 gap-sm p-md border-b border-outline-variant hover:bg-surface-container-low transition-colors group">
+<div class="col-span-2 flex flex-col justify-center">
+<span class="font-mono text-mono text-on-surface">2023-10-27 14:32:01</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">UTC-4</span>
+</div>
+<div class="col-span-2 flex flex-col justify-center">
+<span class="font-label-caps text-label-caps text-on-surface">E. HERNÁNDEZ</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">AZ-Minería-09</span>
+</div>
+<div class="col-span-4 flex flex-col gap-xs py-sm">
+<p class="font-h3 text-[18px] leading-tight text-on-surface">"¿Cuáles son los requisitos de carga para las vigas de soporte del eje secundario?"</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant border-l-2 border-primary pl-sm mt-xs">IA extrajo especificación 4.2.1 que requiere acero con resistencia 450MPa, verificado contra RFI-082.</p>
+</div>
+<div class="col-span-2 flex items-center">
+<span class="bg-[#004e5a] text-white px-sm py-xs font-label-caps text-[10px]">ALTA CONFIANZA</span>
+</div>
+<div class="col-span-2 flex justify-end items-center">
+<button class="border border-outline-variant text-on-surface hover:border-primary px-md py-sm font-label-caps text-label-caps transition-colors">
+                            TRACE
+                        </button>
+</div>
+</div>
+<!-- Log Entry 2 -->
+<div class="grid grid-cols-12 gap-sm p-md border-b border-outline-variant hover:bg-surface-container-low transition-colors group">
+<div class="col-span-2 flex flex-col justify-center">
+<span class="font-mono text-mono text-on-surface">2023-10-27 11:15:44</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">UTC-4</span>
+</div>
+<div class="col-span-2 flex flex-col justify-center">
+<span class="font-label-caps text-label-caps text-on-surface">M. CHEN</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">AZ-Minería-09</span>
+</div>
+<div class="col-span-4 flex flex-col gap-xs py-sm">
+<p class="font-h3 text-[18px] leading-tight text-on-surface">"Summarize the environmental impact delays logged last quarter."</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant border-l-2 border-primary pl-sm mt-xs">Aggregated 3 delay logs related to water table monitoring; suggested review of compliance schedule.</p>
+</div>
+<div class="col-span-2 flex items-center">
+<span class="bg-secondary text-white px-sm py-xs font-label-caps text-[10px]">CONFIANZA MEDIA</span>
+</div>
+<div class="col-span-2 flex justify-end items-center">
+<button class="border border-outline-variant text-on-surface hover:border-primary px-md py-sm font-label-caps text-label-caps transition-colors">
+                            TRACE
+                        </button>
+</div>
+</div>
+<!-- Log Entry 3 -->
+<div class="grid grid-cols-12 gap-sm p-md border-b border-outline-variant hover:bg-surface-container-low transition-colors group">
+<div class="col-span-2 flex flex-col justify-center">
+<span class="font-mono text-mono text-on-surface">2023-10-26 09:05:12</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">UTC-4</span>
+</div>
+<div class="col-span-2 flex flex-col justify-center">
+<span class="font-label-caps text-label-caps text-on-surface">SYSTEM_AUTO</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">AZ-Minería-09</span>
+</div>
+<div class="col-span-4 flex flex-col gap-xs py-sm">
+<p class="font-h3 text-[18px] leading-tight text-on-surface">"Cross-reference new structural drawing v4 against existing MEP plans."</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant border-l-2 border-primary pl-sm mt-xs">Identified 2 potential clash points in Sector B ventilation routing. Flagged for review.</p>
+</div>
+<div class="col-span-2 flex items-center">
+<span class="bg-surface-tint text-white px-sm py-xs font-label-caps text-[10px]">BAJA CONFIANZA</span>
+</div>
+<div class="col-span-2 flex justify-end items-center">
+<button class="border border-outline-variant text-on-surface hover:border-primary px-md py-sm font-label-caps text-label-caps transition-colors">
+                            TRACE
+                        </button>
+</div>
+</div>
+</div>
+<!-- Pagination (Simple Brutalist) -->
+<div class="flex justify-between items-center mt-auto border-t border-outline-variant pt-md">
+<span class="font-mono text-mono text-on-surface-variant">Showing 1-3 of 245 records</span>
+<div class="flex gap-xs">
+<button class="border border-outline-variant px-sm py-xs text-on-surface-variant hover:text-primary hover:border-primary disabled:opacity-50" disabled="">PREV</button>
+<button class="border border-primary bg-primary text-white px-sm py-xs font-label-caps">1</button>
+<button class="border border-outline-variant px-sm py-xs text-on-surface hover:border-primary font-label-caps">2</button>
+<button class="border border-outline-variant px-sm py-xs text-on-surface hover:border-primary font-label-caps">3</button>
+<button class="border border-outline-variant px-sm py-xs text-on-surface hover:border-primary font-label-caps">NEXT</button>
+</div>
+</div>
+</main>
+</div>
+</body></html>

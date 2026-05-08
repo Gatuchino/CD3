@@ -1,0 +1,47 @@
+# DocuBot Backend — FastAPI
+# Python 3.12
+# Stack: OpenAI directo + almacenamiento local (Railway/Render compatible)
+
+# Web framework
+fastapi==0.115.5
+uvicorn[standard]==0.32.1
+
+# Async PostgreSQL + pgvector
+asyncpg==0.30.0
+sqlalchemy[asyncio]==2.0.36
+pgvector==0.3.6
+alembic==1.14.0
+
+# OpenAI
+openai==1.58.1
+
+# Document processing
+pdfplumber==0.11.4
+pdf2image==1.17.0
+python-docx==1.1.2
+openpyxl==3.1.5
+Pillow==11.1.0
+pytesseract==0.3.13
+
+# Auth JWT simple
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+httpx==0.28.1
+
+# Validation
+pydantic==2.10.4
+pydantic-settings==2.7.0
+python-multipart==0.0.20
+
+# Utils
+python-dotenv==1.0.1
+loguru==0.7.3
+tenacity==9.0.0
+python-magic==0.4.27
+bleach==6.2.0
+numpy==2.2.1
+
+# Testing
+pytest==8.3.4
+pytest-asyncio==0.24.0
+pytest-cov==6.0.0

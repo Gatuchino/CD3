@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Carga de Documentos — DocuBot</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+tailwind.config={darkMode:"class",theme:{extend:{colors:{"secondary":"#835410","error-container":"#ffdad6","surface-container":"#eceef3","surface-container-lowest":"#ffffff","on-surface":"#191c20","on-surface-variant":"#45474c","primary":"#000000","background":"#f8f9ff","on-secondary":"#ffffff","error":"#ba1a1a","secondary-container":"#fdbd71","surface":"#f8f9ff","primary-container":"#121c2c","on-primary":"#ffffff","surface-container-high":"#e7e8ee"},fontFamily:{"label-caps":["Inter"],"h2":["Noto Serif"],"h3":["Noto Serif"],"mono":["monospace"],"body-sm":["Inter"],"body-md":["Inter"]},fontSize:{"label-caps":["12px",{"lineHeight":"1","letterSpacing":"0.1em","fontWeight":"700"}],"h2":["32px",{"lineHeight":"1.3","letterSpacing":"-0.01em","fontWeight":"600"}],"h3":["24px",{"lineHeight":"1.4","letterSpacing":"0","fontWeight":"600"}],"mono":["13px",{"lineHeight":"1.5","letterSpacing":"0","fontWeight":"400"}],"body-sm":["14px",{"lineHeight":"1.5","letterSpacing":"0","fontWeight":"400"}],"body-md":["16px",{"lineHeight":"1.5","letterSpacing":"0","fontWeight":"400"}]},spacing:{"sm":"8px","gutter":"16px","lg":"24px","md":"16px","xs":"4px","unit":"8px","xl":"40px","margin":"32px"}}}}
+</script>
+<style>.brutalist-border{border:1px solid rgba(0,6,21,0.1)}.brutalist-shadow{box-shadow:2px 2px 0px 0px rgba(0,0,0,0.05)}</style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased overflow-x-hidden">
+
+<nav class="w-[280px] h-full fixed left-0 top-0 border-r border-on-surface/10 bg-primary text-on-primary flex flex-col overflow-y-auto px-md py-lg z-20">
+  <div class="mb-xl"><h1 class="font-h3 text-h3 font-bold mb-xs">DocuBot</h1><p class="font-label-caps text-label-caps text-on-primary/70">AI Document Control</p></div>
+  <ul class="flex flex-col gap-sm flex-grow">
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 0">dashboard</span><span class="font-body-md text-body-md">Dashboard</span></a></li>
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 0">folder_open</span><span class="font-body-md text-body-md">Proyectos</span></a></li>
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary bg-primary-container" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">description</span><span class="font-body-md text-body-md font-bold">Documentos</span></a></li>
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 0">search</span><span class="font-body-md text-body-md">Búsqueda IA</span></a></li>
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 0">notifications</span><span class="font-body-md text-body-md">Alertas</span></a></li>
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 0">history</span><span class="font-body-md text-body-md">Auditoría</span></a></li>
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 0">bar_chart</span><span class="font-body-md text-body-md">Métricas</span></a></li>
+  </ul>
+</nav>
+
+<div class="ml-[280px] min-h-screen flex flex-col">
+  <header class="bg-surface flex justify-between items-center h-16 px-lg w-full border-b border-on-surface/10 sticky top-0 z-10">
+    <div class="flex items-center gap-md">
+      <span class="font-h3 text-h3 text-primary uppercase tracking-tighter">Aurenza Group</span>
+      <span class="text-on-surface-variant">/</span>
+      <span class="text-on-surface-variant font-body-md">Planta Concentradora de Cobre</span>
+      <span class="text-on-surface-variant">/</span>
+      <span class="font-body-md text-body-md text-on-surface-variant">Cargar documentos</span>
+    </div>
+    <div class="w-8 h-8 bg-secondary rounded-full flex items-center justify-center text-on-primary font-bold text-sm">CJ</div>
+  </header>
+
+  <main class="flex-1 p-lg grid grid-cols-12 gap-lg">
+
+    <!-- Upload zone -->
+    <div class="col-span-7 flex flex-col gap-md">
+      <!-- Drag & drop -->
+      <div class="bg-surface-container-lowest brutalist-border brutalist-shadow p-xl flex flex-col items-center justify-center gap-md" style="border:2px dashed rgba(131,84,16,0.4); min-height:220px">
+        <span class="material-symbols-outlined text-secondary text-[48px]" style="font-variation-settings:'FILL' 0">cloud_upload</span>
+        <div class="text-center">
+          <p class="font-h3 text-h3 text-primary">Arrastra documentos aquí</p>
+          <p class="font-body-sm text-body-sm text-on-surface-variant mt-xs">PDF, DOCX, XLSX, DWG · Máx. 50 MB por archivo</p>
+        </div>
+        <button class="bg-secondary text-on-primary px-lg py-sm font-label-caps text-label-caps hover:bg-secondary/90 transition-colors" style="border-radius:0">Seleccionar archivos</button>
+      </div>
+
+      <!-- En proceso -->
+      <div class="bg-surface-container-lowest brutalist-border p-md flex flex-col gap-sm">
+        <p class="font-label-caps text-label-caps text-on-surface-variant">EN PROCESAMIENTO</p>
+
+        <div class="flex flex-col gap-xs">
+          <!-- Archivo 1: completado -->
+          <div class="p-sm bg-surface-container flex items-center gap-md">
+            <span class="material-symbols-outlined text-secondary text-[20px]" style="font-variation-settings:'FILL' 1">check_circle</span>
+            <div class="flex-1">
+              <div class="flex justify-between items-center mb-xs">
+                <p class="font-body-sm text-body-sm font-bold text-primary">EPC-2023-001-RevD.pdf</p>
+                <span class="font-mono text-mono text-on-surface-variant">142 págs · 8.4 MB</span>
+              </div>
+              <div class="w-full bg-surface-container-high h-1.5"><div class="bg-secondary h-full" style="width:100%"></div></div>
+              <p class="font-mono text-mono text-on-surface-variant mt-xs">OCR completado · Clasificado: Contrato EPC · 847 chunks generados</p>
+            </div>
+          </div>
+
+          <!-- Archivo 2: en progreso -->
+          <div class="p-sm bg-surface-container flex items-center gap-md">
+            <span class="material-symbols-outlined text-secondary text-[20px] animate-spin" style="font-variation-settings:'FILL' 0">progress_activity</span>
+            <div class="flex-1">
+              <div class="flex justify-between items-center mb-xs">
+                <p class="font-body-sm text-body-sm font-bold text-primary">ET-HVAC-Vol2.docx</p>
+                <span class="font-mono text-mono text-on-surface-variant">68 págs · 3.1 MB</span>
+              </div>
+              <div class="w-full bg-surface-container-high h-1.5"><div class="bg-secondary h-full" style="width:63%"></div></div>
+              <p class="font-mono text-mono text-secondary mt-xs">Extrayendo texto... 63% · OCR Azure Document Intelligence</p>
+            </div>
+          </div>
+
+          <!-- Archivo 3: en cola -->
+          <div class="p-sm bg-surface-container flex items-center gap-md opacity-60">
+            <span class="material-symbols-outlined text-on-surface-variant text-[20px]" style="font-variation-settings:'FILL' 0">schedule</span>
+            <div class="flex-1">
+              <div class="flex justify-between items-center mb-xs">
+                <p class="font-body-sm text-body-sm font-bold text-primary">ADENDA-03-RevA.pdf</p>
+                <span class="font-mono text-mono text-on-surface-variant">28 págs · 1.2 MB</span>
+              </div>
+              <div class="w-full bg-surface-container-high h-1.5"><div class="bg-surface-container-high h-full" style="width:0%"></div></div>
+              <p class="font-mono text-mono text-on-surface-variant mt-xs">En cola · Posición 1 de 1</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel metadatos -->
+    <div class="col-span-5 flex flex-col gap-md">
+      <div class="bg-surface-container-lowest brutalist-border brutalist-shadow p-lg">
+        <h3 class="font-h3 text-h3 text-primary mb-md">Metadatos del documento</h3>
+
+        <div class="flex flex-col gap-sm">
+          <div>
+            <p class="font-label-caps text-label-caps text-on-surface-variant mb-xs">PROYECTO</p>
+            <div class="brutalist-border p-sm bg-surface-container font-body-sm text-body-sm text-primary">Planta Concentradora de Cobre — PROY-001</div>
+          </div>
+          <div>
+            <p class="font-label-caps text-label-caps text-on-surface-variant mb-xs">TIPO DE DOCUMENTO</p>
+            <select class="w-full brutalist-border p-sm bg-surface-container-lowest font-body-sm text-body-sm text-primary" style="border-radius:0;outline:none">
+              <option>Contrato EPC</option><option>Adenda</option><option>Especificación Técnica</option><option>RFI</option><option>Transmittal</option><option>Acta</option><option>Plano</option>
+            </select>
+          </div>
+          <div>
+            <p class="font-label-caps text-label-caps text-on-surface-variant mb-xs">CÓDIGO DE DOCUMENTO</p>
+            <input class="w-full brutalist-border p-sm bg-surface-container-lowest font-body-sm text-body-sm text-primary" style="border-radius:0;outline:none" placeholder="Ej: EPC-2023-001" value="EPC-2023-001"/>
+          </div>
+          <div>
+            <p class="font-label-caps text-label-caps text-on-surface-variant mb-xs">REVISIÓN</p>
+            <input class="w-full brutalist-border p-sm bg-surface-container-lowest font-body-sm text-body-sm text-primary" style="border-radius:0;outline:none" placeholder="Ej: Rev. D" value="Rev. D"/>
+          </div>
+        </div>
+
+        <div class="mt-md bg-secondary-container/30 brutalist-border p-sm flex items-start gap-sm">
+          <span class="material-symbols-outlined text-secondary text-[18px] mt-0.5" style="font-variation-settings:'FILL' 1">auto_awesome</span>
+          <p class="font-body-sm text-body-sm text-on-surface">La IA clasificará automáticamente el tipo documental y extraerá obligaciones, plazos y cláusulas relevantes.</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

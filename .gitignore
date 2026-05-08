@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+.env
+!.env.example
+!.env.demo
+
+# Node
+node_modules/
+dist/
+.next/
+*.local
+
+# Builds
+*.egg-info/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Azure / secrets
+*.pfx
+*.pem
+local.settings.json
+
+# Tests
+.pytest_cache/
+htmlcov/
+.coverage
+coverage.xml

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Auditoría de Consultas — DocuBot</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+tailwind.config={darkMode:"class",theme:{extend:{colors:{"secondary":"#835410","error-container":"#ffdad6","surface-container":"#eceef3","surface-container-lowest":"#ffffff","on-surface":"#191c20","on-surface-variant":"#45474c","primary":"#000000","background":"#f8f9ff","on-secondary":"#ffffff","error":"#ba1a1a","secondary-container":"#fdbd71","surface":"#f8f9ff","primary-container":"#121c2c","on-primary":"#ffffff","surface-container-high":"#e7e8ee"},fontFamily:{"label-caps":["Inter"],"h2":["Noto Serif"],"h3":["Noto Serif"],"mono":["monospace"],"body-sm":["Inter"],"body-md":["Inter"]},fontSize:{"label-caps":["12px",{"lineHeight":"1","letterSpacing":"0.1em","fontWeight":"700"}],"h2":["32px",{"lineHeight":"1.3","letterSpacing":"-0.01em","fontWeight":"600"}],"h3":["24px",{"lineHeight":"1.4","letterSpacing":"0","fontWeight":"600"}],"mono":["13px",{"lineHeight":"1.5","letterSpacing":"0","fontWeight":"400"}],"body-sm":["14px",{"lineHeight":"1.5","letterSpacing":"0","fontWeight":"400"}],"body-md":["16px",{"lineHeight":"1.5","letterSpacing":"0","fontWeight":"400"}]},spacing:{"sm":"8px","gutter":"16px","lg":"24px","md":"16px","xs":"4px","unit":"8px","xl":"40px","margin":"32px"}}}}
+</script>
+<style>.brutalist-border{border:1px solid rgba(0,6,21,0.1)}.brutalist-shadow{box-shadow:2px 2px 0px 0px rgba(0,0,0,0.05)}</style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased overflow-x-hidden">
+
+<nav class="w-[280px] h-full fixed left-0 top-0 border-r border-on-surface/10 bg-primary text-on-primary flex flex-col overflow-y-auto px-md py-lg z-20">
+  <div class="mb-xl"><h1 class="font-h3 text-h3 font-bold mb-xs">DocuBot</h1><p class="font-label-caps text-label-caps text-on-primary/70">AI Document Control</p></div>
+  <ul class="flex flex-col gap-sm flex-grow">
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 0">dashboard</span><span class="font-body-md text-body-md">Dashboard</span></a></li>
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 0">folder_open</span><span class="font-body-md text-body-md">Proyectos</span></a></li>
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 0">description</span><span class="font-body-md text-body-md">Documentos</span></a></li>
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 0">search</span><span class="font-body-md text-body-md">Búsqueda IA</span></a></li>
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 0">notifications</span><span class="font-body-md text-body-md">Alertas</span></a></li>
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary bg-primary-container" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">history</span><span class="font-body-md text-body-md font-bold">Auditoría</span></a></li>
+    <li><a class="flex items-center gap-md px-md py-sm text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors" href="#" style="border-radius:0"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 0">bar_chart</span><span class="font-body-md text-body-md">Métricas</span></a></li>
+  </ul>
+</nav>
+
+<div class="ml-[280px] min-h-screen flex flex-col">
+  <header class="bg-surface flex justify-between items-center h-16 px-lg w-full border-b border-on-surface/10 sticky top-0 z-10">
+    <div class="flex items-center gap-md">
+      <span class="font-h3 text-h3 text-primary uppercase tracking-tighter">Aurenza Group</span>
+      <span class="text-on-surface-variant">/</span>
+      <span class="font-body-md text-body-md text-on-surface-variant">Historial de Consultas IA</span>
+    </div>
+    <div class="flex items-center gap-md">
+      <button class="border border-on-surface/20 px-md py-sm font-label-caps text-label-caps text-on-surface-variant flex items-center gap-xs hover:bg-surface-container transition-colors" style="border-radius:0"><span class="material-symbols-outlined text-[16px]">download</span> Exportar log</button>
+      <div class="w-8 h-8 bg-secondary rounded-full flex items-center justify-center text-on-primary font-bold text-sm">CJ</div>
+    </div>
+  </header>
+
+  <main class="flex-1 p-lg flex flex-col gap-lg">
+
+    <div class="flex gap-md items-center">
+      <div class="flex-1 brutalist-border bg-surface-container-lowest flex items-center gap-sm px-md py-sm">
+        <span class="material-symbols-outlined text-on-surface-variant text-[18px]">search</span>
+        <span class="font-body-sm text-body-sm text-on-surface-variant">Buscar en historial de consultas…</span>
+      </div>
+      <select class="brutalist-border bg-surface-container-lowest px-md py-sm font-body-sm text-body-sm" style="border-radius:0;outline:none"><option>Últimos 7 días</option><option>Últimos 30 días</option><option>Todo</option></select>
+      <select class="brutalist-border bg-surface-container-lowest px-md py-sm font-body-sm text-body-sm" style="border-radius:0;outline:none"><option>Todos los usuarios</option><option>CJ — Christian</option></select>
+    </div>
+
+    <div class="bg-surface-container-lowest brutalist-border brutalist-shadow">
+      <div class="p-md border-b border-on-surface/10 bg-surface-container flex justify-between items-center">
+        <p class="font-label-caps text-label-caps text-on-surface-variant">38 CONSULTAS — HOY 08 MAY 2026</p>
+        <p class="font-mono text-mono text-on-surface-variant">Confianza promedio: 89%</p>
+      </div>
+      <table class="w-full text-left">
+        <thead><tr class="border-b border-on-surface/10">
+          <th class="p-sm pl-md font-label-caps text-label-caps text-on-surface-variant">PREGUNTA</th>
+          <th class="p-sm font-label-caps text-label-caps text-on-surface-variant">PROYECTO</th>
+          <th class="p-sm font-label-caps text-label-caps text-on-surface-variant">USUARIO</th>
+          <th class="p-sm font-label-caps text-label-caps text-on-surface-variant">CONFIANZA</th>
+          <th class="p-sm font-label-caps text-label-caps text-on-surface-variant">LATENCIA</th>
+          <th class="p-sm pr-md font-label-caps text-label-caps text-on-surface-variant">HORA</th>
+        </tr></thead>
+        <tbody class="font-body-sm text-body-sm">
+          <tr class="border-b border-on-surface/5 hover:bg-surface-container transition-colors">
+            <td class="p-sm pl-md text-primary max-w-xs truncate">¿Cuáles son las penalidades por incumplimiento de plazo?</td>
+            <td class="p-sm text-on-surface-variant">Planta Concentradora</td>
+            <td class="p-sm text-on-surface-variant">C. Díaz</td>
+            <td class="p-sm"><span class="px-xs py-[2px] bg-secondary text-on-secondary font-label-caps text-label-caps">94%</span></td>
+            <td class="p-sm font-mono text-mono text-on-surface-variant">1.2s</td>
+            <td class="p-sm pr-md font-mono text-mono text-on-surface-variant">14:32</td>
+          </tr>
+          <tr class="border-b border-on-surface/5 hover:bg-surface-container transition-colors">
+            <td class="p-sm pl-md text-primary max-w-xs truncate">¿Qué dice la cláusula de fuerza mayor?</td>
+            <td class="p-sm text-on-surface-variant">Planta Concentradora</td>
+            <td class="p-sm text-on-surface-variant">A. Torres</td>
+            <td class="p-sm"><span class="px-xs py-[2px] bg-secondary text-on-secondary font-label-caps text-label-caps">88%</span></td>
+            <td class="p-sm font-mono text-mono text-on-surface-variant">1.8s</td>
+            <td class="p-sm pr-md font-mono text-mono text-on-surface-variant">13:15</td>
+          </tr>
+          <tr class="border-b border-on-surface/5 hover:bg-surface-container transition-colors">
+            <td class="p-sm pl-md text-primary max-w-xs truncate">Resumen de obligaciones de subcontratistas</td>
+            <td class="p-sm text-on-surface-variant">Puerto Angamos</td>
+            <td class="p-sm text-on-surface-variant">M. Vargas</td>
+            <td class="p-sm"><span class="px-xs py-[2px] bg-secondary/70 text-on-secondary font-label-caps text-label-caps">79%</span></td>
+            <td class="p-sm font-mono text-mono text-on-surface-variant">2.1s</td>
+            <td class="p-sm pr-md font-mono text-mono text-on-surface-variant">11:47</td>
+          </tr>
+          <tr class="border-b border-on-surface/5 hover:bg-surface-container transition-colors">
+            <td class="p-sm pl-md text-primary max-w-xs truncate">¿Cuál es el plazo de garantía de equipos?</td>
+            <td class="p-sm text-on-surface-variant">Planta Concentradora</td>
+            <td class="p-sm text-on-surface-variant">C. Díaz</td>
+            <td class="p-sm"><span class="px-xs py-[2px] bg-secondary text-on-secondary font-label-caps text-label-caps">92%</span></td>
+            <td class="p-sm font-mono text-mono text-on-surface-variant">0.9s</td>
+            <td class="p-sm pr-md font-mono text-mono text-on-surface-variant">10:03</td>
+          </tr>
+          <tr class="hover:bg-surface-container transition-colors">
+            <td class="p-sm pl-md text-primary max-w-xs truncate">Diferencias entre Rev. C y Rev. D del contrato EPC</td>
+            <td class="p-sm text-on-surface-variant">Planta Concentradora</td>
+            <td class="p-sm text-on-surface-variant">L. Soto</td>
+            <td class="p-sm"><span class="px-xs py-[2px] bg-error-container text-error border border-error/30 font-label-caps text-label-caps">61%</span></td>
+            <td class="p-sm font-mono text-mono text-on-surface-variant">3.4s</td>
+            <td class="p-sm pr-md font-mono text-mono text-on-surface-variant">09:21</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="p-md border-t border-on-surface/10 flex justify-between items-center">
+        <p class="font-mono text-mono text-on-surface-variant">Mostrando 5 de 38 registros</p>
+        <div class="flex gap-xs">
+          <button class="px-md py-xs border border-on-surface/20 font-label-caps text-label-caps text-on-surface-variant" style="border-radius:0">Anterior</button>
+          <button class="px-md py-xs bg-primary text-on-primary font-label-caps text-label-caps" style="border-radius:0">Siguiente</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

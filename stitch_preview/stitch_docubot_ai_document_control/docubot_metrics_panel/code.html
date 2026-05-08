@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DocuBot — Panel de Métricas IA</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "secondary": "#835410", "primary": "#000000", "background": "#f8f9ff",
+        "surface": "#f8f9ff", "surface-container": "#eceef3",
+        "surface-container-lowest": "#ffffff", "surface-container-low": "#f2f3f9",
+        "surface-container-high": "#e7e8ee", "on-background": "#191c20",
+        "on-surface": "#191c20", "on-surface-variant": "#45474c",
+        "on-primary": "#ffffff", "on-secondary": "#ffffff",
+        "secondary-container": "#fdbd71", "primary-container": "#121c2c",
+        "outline": "#75777d", "outline-variant": "#c5c6cd",
+        "error": "#ba1a1a", "error-container": "#ffdad6",
+      },
+      borderRadius: { "DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "0px" },
+      fontFamily: { "h1": ["Noto Serif"], "h2": ["Noto Serif"], "h3": ["Noto Serif"], "body-md": ["Inter"], "body-sm": ["Inter"], "label-caps": ["Inter"] },
+      fontSize: {
+        "h1": ["40px", { lineHeight: "1.2", letterSpacing: "-0.02em", fontWeight: "700" }],
+        "h2": ["32px", { lineHeight: "1.3", letterSpacing: "-0.01em", fontWeight: "600" }],
+        "h3": ["24px", { lineHeight: "1.4", fontWeight: "600" }],
+        "body-md": ["16px", { lineHeight: "1.5", fontWeight: "400" }],
+        "body-sm": ["14px", { lineHeight: "1.5", fontWeight: "400" }],
+        "label-caps": ["12px", { lineHeight: "1", letterSpacing: "0.1em", fontWeight: "700" }],
+      }
+    }
+  }
+}
+</script>
+<style>
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+.bar { display: flex; align-items: flex-end; gap: 4px; height: 80px; }
+.bar-col { flex: 1; background: #835410; opacity: 0.7; border-top: 2px solid #835410; transition: opacity 0.2s; }
+.bar-col:hover { opacity: 1; }
+.sparkline { display: flex; align-items: flex-end; gap: 2px; height: 32px; }
+.spark-col { flex: 1; background: #835410; opacity: 0.6; min-width: 4px; }
+</style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex antialiased">
+
+<!-- Sidebar -->
+<nav class="hidden md:flex w-[280px] h-full fixed left-0 top-0 bg-primary flex-col overflow-y-auto px-4 py-6 z-20">
+  <div class="mb-10">
+    <h1 class="font-h3 text-h3 font-bold text-on-primary">DocuBot</h1>
+    <p class="text-on-primary/70 text-sm mt-1">AI Document Control</p>
+  </div>
+  <ul class="flex flex-col space-y-1 flex-1">
+    <li><a href="#" class="flex items-center space-x-3 px-3 py-2 text-on-primary/70 hover:bg-primary-container text-sm"><span class="material-symbols-outlined text-xl">dashboard</span><span>Dashboard</span></a></li>
+    <li><a href="#" class="flex items-center space-x-3 px-3 py-2 text-on-primary/70 hover:bg-primary-container text-sm"><span class="material-symbols-outlined text-xl">folder_open</span><span>Proyectos</span></a></li>
+    <li><a href="#" class="flex items-center space-x-3 px-3 py-2 text-on-primary/70 hover:bg-primary-container text-sm"><span class="material-symbols-outlined text-xl">description</span><span>Documentos</span></a></li>
+    <li><a href="#" class="flex items-center space-x-3 px-3 py-2 text-on-primary/70 hover:bg-primary-container text-sm"><span class="material-symbols-outlined text-xl">search</span><span>Búsqueda IA</span></a></li>
+    <li><a href="#" class="flex items-center space-x-3 px-3 py-2 text-on-primary/70 hover:bg-primary-container text-sm"><span class="material-symbols-outlined text-xl">compare_arrows</span><span>Versiones</span></a></li>
+    <li><a href="#" class="flex items-center space-x-3 px-3 py-2 text-on-primary/70 hover:bg-primary-container text-sm"><span class="material-symbols-outlined text-xl">schedule</span><span>Obligaciones</span></a></li>
+    <li><a href="#" class="flex items-center space-x-3 px-3 py-2 text-on-primary/70 hover:bg-primary-container text-sm"><span class="material-symbols-outlined text-xl">summarize</span><span>Resúmenes</span></a></li>
+    <li><a href="#" class="flex items-center space-x-3 px-3 py-2 bg-secondary text-on-secondary font-bold text-sm"><span class="material-symbols-outlined text-xl">bar_chart</span><span>Métricas IA</span></a></li>
+  </ul>
+  <div class="mt-auto pt-4 border-t border-on-primary/20">
+    <a href="#" class="flex items-center space-x-3 px-3 py-2 text-on-primary/70 text-sm"><span class="material-symbols-outlined text-xl">account_circle</span><span>C. Díaz — Admin</span></a>
+  </div>
+</nav>
+
+<div class="flex-1 md:ml-[280px] flex flex-col min-h-screen">
+  <header class="bg-surface border-b border-on-surface/10 h-16 px-6 flex justify-between items-center sticky top-0 z-10">
+    <div class="flex items-center space-x-3">
+      <h2 class="font-h3 text-h3 text-primary uppercase tracking-tighter">Aurenza Group</h2>
+      <span class="text-outline">/</span>
+      <span class="text-on-surface-variant text-sm">Panel de Métricas IA</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <select class="border border-outline-variant bg-surface-container-low px-3 py-1.5 text-sm focus:outline-none focus:border-secondary">
+        <option>Hoy — 7 May 2025</option>
+        <option>Últimos 7 días</option>
+        <option>Últimos 30 días</option>
+      </select>
+      <button class="hover:bg-surface-container p-2 text-on-surface-variant"><span class="material-symbols-outlined">refresh</span></button>
+    </div>
+  </header>
+
+  <main class="flex-1 p-6 md:p-8 overflow-y-auto">
+    <div class="mb-6">
+      <p class="font-label-caps text-label-caps text-secondary tracking-widest mb-1">ADMINISTRACIÓN</p>
+      <h1 class="font-h2 text-h2 text-on-background">Métricas y Costos IA</h1>
+      <p class="text-on-surface-variant text-sm mt-1">Consumo de tokens, latencias y presupuesto diario — Solo Administradores</p>
+    </div>
+
+    <!-- Budget Alert -->
+    <div class="bg-secondary/5 border border-secondary/30 border-l-4 border-l-secondary p-4 mb-6 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-secondary">savings</span>
+        <div>
+          <p class="font-bold text-sm text-on-background">Presupuesto diario: USD 50.00</p>
+          <p class="text-xs text-on-surface-variant">Consumido hoy: USD 14.82 (29.6%) — Proyección al cierre: USD 21.40</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <div class="w-32 h-2 bg-outline-variant">
+          <div class="h-full bg-green-500" style="width:29.6%"></div>
+        </div>
+        <span class="text-xs font-bold text-green-700">29.6%</span>
+      </div>
+    </div>
+
+    <!-- KPI Row -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+      <div class="bg-surface-container-lowest border border-on-surface/10 p-4 border-t-4 border-t-secondary">
+        <p class="font-label-caps text-label-caps text-on-surface-variant mb-2">COSTO HOY</p>
+        <div class="font-h2 text-h2 font-bold text-on-background">$14.82</div>
+        <div class="flex items-center gap-1 text-xs text-green-700 mt-1">
+          <span class="material-symbols-outlined text-sm">arrow_downward</span> -8% vs ayer
+        </div>
+        <div class="sparkline mt-2">
+          <div class="spark-col" style="height:40%"></div>
+          <div class="spark-col" style="height:60%"></div>
+          <div class="spark-col" style="height:80%"></div>
+          <div class="spark-col" style="height:55%"></div>
+          <div class="spark-col" style="height:90%"></div>
+          <div class="spark-col" style="height:70%"></div>
+          <div class="spark-col" style="height:100%"></div>
+        </div>
+      </div>
+      <div class="bg-surface-container-lowest border border-on-surface/10 p-4 border-t-4 border-t-primary">
+        <p class="font-label-caps text-label-caps text-on-surface-variant mb-2">TOKENS HOY</p>
+        <div class="font-h2 text-h2 font-bold text-on-background">2.4M</div>
+        <p class="text-xs text-on-surface-variant mt-1">1.9M input / 0.5M output</p>
+        <div class="sparkline mt-2">
+          <div class="spark-col" style="height:50%"></div>
+          <div class="spark-col" style="height:70%"></div>
+          <div class="spark-col" style="height:60%"></div>
+          <div class="spark-col" style="height:85%"></div>
+          <div class="spark-col" style="height:75%"></div>
+          <div class="spark-col" style="height:90%"></div>
+          <div class="spark-col" style="height:100%"></div>
+        </div>
+      </div>
+      <div class="bg-surface-container-lowest border border-on-surface/10 p-4 border-t-4 border-t-green-500">
+        <p class="font-label-caps text-label-caps text-on-surface-variant mb-2">CONSULTAS RAG</p>
+        <div class="font-h2 text-h2 font-bold text-on-background">143</div>
+        <p class="text-xs text-on-surface-variant mt-1">P90 latencia: 8.4s</p>
+        <div class="sparkline mt-2">
+          <div class="spark-col bg-green-500" style="height:30%"></div>
+          <div class="spark-col bg-green-500" style="height:55%"></div>
+          <div class="spark-col bg-green-500" style="height:70%"></div>
+          <div class="spark-col bg-green-500" style="height:90%"></div>
+          <div class="spark-col bg-green-500" style="height:65%"></div>
+          <div class="spark-col bg-green-500" style="height:80%"></div>
+          <div class="spark-col bg-green-500" style="height:100%"></div>
+        </div>
+      </div>
+      <div class="bg-surface-container-lowest border border-on-surface/10 p-4 border-t-4 border-t-outline">
+        <p class="font-label-caps text-label-caps text-on-surface-variant mb-2">REVISIÓN HUMANA</p>
+        <div class="font-h2 text-h2 font-bold text-on-background">12%</div>
+        <p class="text-xs text-green-700 mt-1">↓ Confianza media: 0.87</p>
+        <div class="sparkline mt-2">
+          <div class="spark-col bg-outline" style="height:60%"></div>
+          <div class="spark-col bg-outline" style="height:50%"></div>
+          <div class="spark-col bg-outline" style="height:70%"></div>
+          <div class="spark-col bg-outline" style="height:40%"></div>
+          <div class="spark-col bg-outline" style="height:55%"></div>
+          <div class="spark-col bg-outline" style="height:65%"></div>
+          <div class="spark-col bg-outline" style="height:100%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+
+      <!-- Latency Distribution -->
+      <div class="bg-surface-container-lowest border border-on-surface/10 p-5">
+        <div class="flex items-center justify-between mb-4">
+          <p class="font-label-caps text-label-caps text-on-surface-variant">DISTRIBUCIÓN DE LATENCIA RAG</p>
+          <span class="text-xs text-on-surface-variant">Hoy · 143 consultas</span>
+        </div>
+        <div class="space-y-2 mb-4">
+          <div class="flex items-center gap-3">
+            <span class="font-label-caps text-label-caps text-on-surface-variant w-8">P50</span>
+            <div class="flex-1 h-5 bg-surface-container-low relative">
+              <div class="h-full bg-green-500" style="width:42%"></div>
+            </div>
+            <span class="text-sm font-bold text-green-700 w-12 text-right">4.2s</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="font-label-caps text-label-caps text-on-surface-variant w-8">P75</span>
+            <div class="flex-1 h-5 bg-surface-container-low relative">
+              <div class="h-full bg-secondary" style="width:63%"></div>
+            </div>
+            <span class="text-sm font-bold text-secondary w-12 text-right">6.3s</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="font-label-caps text-label-caps text-on-surface-variant w-8">P90</span>
+            <div class="flex-1 h-5 bg-surface-container-low relative">
+              <div class="h-full bg-secondary" style="width:84%"></div>
+            </div>
+            <span class="text-sm font-bold text-secondary w-12 text-right">8.4s</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="font-label-caps text-label-caps text-on-surface-variant w-8">P99</span>
+            <div class="flex-1 h-5 bg-surface-container-low relative">
+              <div class="h-full bg-primary/60" style="width:100%"></div>
+            </div>
+            <span class="text-sm font-bold text-on-background w-12 text-right">13.1s</span>
+          </div>
+        </div>
+        <div class="border-t border-outline-variant pt-3">
+          <p class="text-xs text-on-surface-variant">SLA target: P90 &lt; 15s <span class="text-green-700 font-bold ml-2">✓ Cumplido</span></p>
+        </div>
+      </div>
+
+      <!-- Cost by Operation -->
+      <div class="bg-surface-container-lowest border border-on-surface/10 p-5">
+        <div class="flex items-center justify-between mb-4">
+          <p class="font-label-caps text-label-caps text-on-surface-variant">COSTO POR OPERACIÓN</p>
+          <span class="text-xs text-on-surface-variant">Hoy · USD 14.82</span>
+        </div>
+        <div class="space-y-3">
+          <div>
+            <div class="flex justify-between text-xs mb-1">
+              <span class="text-on-surface-variant">RAG Queries (GPT-4o)</span>
+              <span class="font-bold">USD 9.24 — 62%</span>
+            </div>
+            <div class="h-4 bg-surface-container-low">
+              <div class="h-full bg-secondary" style="width:62%"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1">
+              <span class="text-on-surface-variant">Resúmenes (GPT-4o)</span>
+              <span class="font-bold">USD 2.81 — 19%</span>
+            </div>
+            <div class="h-4 bg-surface-container-low">
+              <div class="h-full bg-primary/50" style="width:19%"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1">
+              <span class="text-on-surface-variant">Embeddings (ADA-3)</span>
+              <span class="font-bold">USD 1.92 — 13%</span>
+            </div>
+            <div class="h-4 bg-surface-container-low">
+              <div class="h-full bg-outline" style="width:13%"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1">
+              <span class="text-on-surface-variant">Clasificación (GPT-4o-mini)</span>
+              <span class="font-bold">USD 0.85 — 6%</span>
+            </div>
+            <div class="h-4 bg-surface-container-low">
+              <div class="h-full bg-outline-variant" style="width:6%"></div>
+            </div>
+          </div>
+        </div>
+        <div class="border-t border-outline-variant pt-3 mt-3">
+          <p class="text-xs text-on-surface-variant">Costo promedio por consulta RAG: <span class="font-bold text-on-background">$0.065</span></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7-day History Bar Chart (CSS) -->
+    <div class="bg-surface-container-lowest border border-on-surface/10 p-5 mb-6">
+      <div class="flex items-center justify-between mb-5">
+        <p class="font-label-caps text-label-caps text-on-surface-variant">COSTO DIARIO — ÚLTIMOS 7 DÍAS</p>
+        <span class="text-xs text-on-surface-variant">Total: USD 118.40</span>
+      </div>
+      <div class="flex items-end gap-2 h-24">
+        <div class="flex-1 flex flex-col items-center gap-1">
+          <span class="text-xs text-on-surface-variant">$15.2</span>
+          <div class="w-full bg-secondary/70 border-t-2 border-secondary" style="height:62%"></div>
+          <span class="text-xs text-on-surface-variant">L 1</span>
+        </div>
+        <div class="flex-1 flex flex-col items-center gap-1">
+          <span class="text-xs text-on-surface-variant">$18.9</span>
+          <div class="w-full bg-secondary/70 border-t-2 border-secondary" style="height:77%"></div>
+          <span class="text-xs text-on-surface-variant">M 2</span>
+        </div>
+        <div class="flex-1 flex flex-col items-center gap-1">
+          <span class="text-xs text-on-surface-variant">$24.5</span>
+          <div class="w-full bg-secondary/70 border-t-2 border-secondary" style="height:100%"></div>
+          <span class="text-xs text-on-surface-variant">X 3</span>
+        </div>
+        <div class="flex-1 flex flex-col items-center gap-1">
+          <span class="text-xs text-on-surface-variant">$16.1</span>
+          <div class="w-full bg-secondary/70 border-t-2 border-secondary" style="height:66%"></div>
+          <span class="text-xs text-on-surface-variant">J 4</span>
+        </div>
+        <div class="flex-1 flex flex-col items-center gap-1">
+          <span class="text-xs text-on-surface-variant">$20.3</span>
+          <div class="w-full bg-secondary/70 border-t-2 border-secondary" style="height:83%"></div>
+          <span class="text-xs text-on-surface-variant">V 5</span>
+        </div>
+        <div class="flex-1 flex flex-col items-center gap-1">
+          <span class="text-xs text-on-surface-variant">$8.6</span>
+          <div class="w-full bg-outline/50 border-t-2 border-outline" style="height:35%"></div>
+          <span class="text-xs text-on-surface-variant">S 6</span>
+        </div>
+        <div class="flex-1 flex flex-col items-center gap-1">
+          <span class="text-xs font-bold text-secondary">$14.8</span>
+          <div class="w-full bg-secondary border-t-2 border-secondary" style="height:60%"></div>
+          <span class="text-xs font-bold text-secondary">Hoy</span>
+        </div>
+      </div>
+      <div class="mt-3 h-px bg-outline-variant"></div>
+    </div>
+
+    <!-- System Health -->
+    <div class="bg-surface-container-lowest border border-on-surface/10 p-5">
+      <p class="font-label-caps text-label-caps text-on-surface-variant mb-4">SALUD DEL SISTEMA</p>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-3 h-3 bg-green-500 flex-shrink-0"></div>
+          <div>
+            <p class="text-xs font-bold text-on-background">Azure OpenAI</p>
+            <p class="text-xs text-on-surface-variant">Operativo · 99.9%</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="w-3 h-3 bg-green-500 flex-shrink-0"></div>
+          <div>
+            <p class="text-xs font-bold text-on-background">PostgreSQL + pgvector</p>
+            <p class="text-xs text-on-surface-variant">Operativo · 34ms avg</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="w-3 h-3 bg-green-500 flex-shrink-0"></div>
+          <div>
+            <p class="text-xs font-bold text-on-background">Blob Storage</p>
+            <p class="text-xs text-on-surface-variant">Operativo · 4.2 TB usado</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="w-3 h-3 bg-secondary flex-shrink-0"></div>
+          <div>
+            <p class="text-xs font-bold text-on-background">Rate Limiter</p>
+            <p class="text-xs text-on-surface-variant">3 throttles hoy</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

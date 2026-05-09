@@ -151,11 +151,12 @@ def upgrade() -> None:
     # Columna vector nativa (pgvector) — no soportada por DDL de SA, usar SQL directo
     op.execute("ALTER TABLE document_chunks DROP COLUMN IF EXISTS embedding")
     op.execute("ALTER TABLE document_chunks ADD COLUMN embedding vector(3072)")
+    # IVFFlat soporta >2000 dims (HNSW tiene límite de 2000 en pgvector <0.6)
     op.execute("""
-        CREATE INDEX ix_chunks_embedding_hnsw
+        CREATE INDEX ix_chunks_embedding_ivfflat
         ON document_chunks
-        USING hnsw (embedding vector_cosine_ops)
-        WITH (m = 16, ef_construction = 64)
+        USING ivfflat (embedding vector_cosine_ops)
+        WITH (lists = 100)
     """)
     op.execute("""
         CREATE INDEX ix_chunks_text_trgm

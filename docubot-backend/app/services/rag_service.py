@@ -430,4 +430,4 @@ class RagService:
                 }
             return text, usage
 
-        return await loop.run_in_executor(None,
+        return await loop.run_in_executor(None, _call)

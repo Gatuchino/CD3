@@ -1,106 +1,86 @@
 """
-DocuBot — Middleware de autenticación Azure AD B2C.
-Valida JWT tokens y extrae tenant_id, user_id y rol.
+DocuBot — Autenticación JWT local (reemplaza Azure AD B2C).
+Genera y valida tokens HS256 firmados con JWT_SECRET_KEY.
 """
-import httpx
+from datetime import datetime, timedelta
 from jose import jwt, JWTError
+from passlib.context import CryptContext
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from functools import lru_cache
 from app.core.config import settings
 from app.core.demo_mode import IS_DEMO
 
-bearer_scheme = HTTPBearer()
+bearer_scheme = HTTPBearer(auto_error=False)
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-@lru_cache()
-def get_b2c_jwks() -> dict:
-    """Obtiene las claves públicas JWKS de Azure AD B2C."""
-    tenant = settings.AZURE_AD_B2C_TENANT
-    policy = settings.AZURE_AD_B2C_POLICY
-    url = (
-        f"https://{tenant}.b2clogin.com/"
-        f"{tenant}.onmicrosoft.com/{policy}/discovery/v2.0/keys"
-    )
-    response = httpx.get(url, timeout=10)
-    response.raise_for_status()
-    return response.json()
+def hash_password(password: str) -> str:
+    return pwd_context.hash(password)
+
+
+def verify_password(plain: str, hashed: str) -> bool:
+    return pwd_context.verify(plain, hashed)
+
+
+def create_access_token(data: dict) -> str:
+    payload = data.copy()
+    expire = datetime.utcnow() + timedelta(minutes=settings.JWT_EXPIRE_MINUTES)
+    payload.update({"exp": expire})
+    return jwt.encode(payload, settings.JWT_SECRET_KEY, algorithm=settings.JWT_ALGORITHM)
 
 
 class CurrentUser:
-    def __init__(
-        self,
-        user_id: str,
-        tenant_id: str,
-        email: str,
-        role: str,
-        azure_subject: str,
-    ):
+    def __init__(self, user_id: str, tenant_id: str, email: str, role: str):
         self.user_id = user_id
         self.tenant_id = tenant_id
         self.email = email
         self.role = role
-        self.azure_subject = azure_subject
 
 
 async def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),
 ) -> CurrentUser:
-        # ── Demo mode bypass ──────────────────────────────────────────
+    """Valida el JWT y retorna el usuario autenticado."""
+    # Demo mode bypass
     if IS_DEMO:
-        from app.db.models import UserRole
         return CurrentUser(
             user_id="demo-user-001",
-            tenant_id="demo-tenant",
+            tenant_id="demo-tenant-001",
             email="demo@aurenza.cl",
-            name="Usuario Demo",
-            roles=["admin_tenant"],
+            role="admin_tenant",
         )
-    # ──────────────────────────────────────────────────────────────
-"""
-    Valida el JWT de Azure AD B2C y retorna el usuario autenticado.
-    El token debe contener: sub, extension_TenantId, email, extension_Role.
-    """
-    token = credentials.credentials
+
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Token inválido o expirado.",
         headers={"WWW-Authenticate": "Bearer"},
     )
 
+    if credentials is None:
+        raise credentials_exception
+
     try:
-        jwks = get_b2c_jwks()
         payload = jwt.decode(
-            token,
-            jwks,
-            algorithms=["RS256"],
-            audience=settings.AZURE_AD_B2C_CLIENT_ID,
-            options={"verify_exp": True},
+            credentials.credentials,
+            settings.JWT_SECRET_KEY,
+            algorithms=[settings.JWT_ALGORITHM],
         )
+        user_id: str = payload.get("sub")
+        tenant_id: str = payload.get("tenant_id")
+        email: str = payload.get("email", "")
+        role: str = payload.get("role", "viewer")
 
-        azure_subject: str = payload.get("sub")
-        email: str = payload.get("emails", [None])[0] or payload.get("email")
-        tenant_id: str = payload.get("extension_TenantId")
-        role: str = payload.get("extension_Role", "viewer")
-        user_id: str = payload.get("extension_UserId")
-
-        if not azure_subject or not tenant_id:
+        if not user_id or not tenant_id:
             raise credentials_exception
 
-        return CurrentUser(
-            user_id=user_id or azure_subject,
-            tenant_id=tenant_id,
-            email=email or "",
-            role=role,
-            azure_subject=azure_subject,
-        )
+        return CurrentUser(user_id=user_id, tenant_id=tenant_id, email=email, role=role)
 
     except JWTError:
         raise credentials_exception
 
 
 def require_roles(*allowed_roles: str):
-    """Dependencia de FastAPI para restringir acceso por rol."""
+    """Dependencia FastAPI para restringir acceso por rol."""
     async def role_checker(
         current_user: CurrentUser = Depends(get_current_user),
     ) -> CurrentUser:

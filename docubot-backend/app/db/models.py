@@ -40,6 +40,7 @@ class User(Base):
     name = Column(String(255), nullable=False)
     email = Column(String(255), unique=True, nullable=False)
     role = Column(String(80), nullable=False)
+    password_hash = Column(String(255))
     azure_b2c_subject = Column(String(255))
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.utcnow)

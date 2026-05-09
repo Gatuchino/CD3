@@ -11,7 +11,7 @@ from app.core.audit_middleware import AuditMiddleware
 from app.core.security_headers import SecurityHeadersMiddleware
 from app.core.rate_limiter import RateLimitMiddleware
 from app.core.observability import ObservabilityMiddleware
-from app.api.routes import projects, documents, rag, alerts, classifications, obligations, versions, summaries, audit, metrics, internal
+from app.api.routes import projects, documents, rag, alerts, classifications, obligations, versions, summaries, audit, metrics, internal, auth
 
 
 @asynccontextmanager
@@ -57,6 +57,7 @@ app.add_middleware(
 )
 
 # ── Routers ────────────────────────────────────────────────────────────
+app.include_router(auth.router)
 app.include_router(projects.router)
 app.include_router(documents.router)
 app.include_router(rag.router)

@@ -41,6 +41,7 @@ def upgrade() -> None:
         sa.Column("name", sa.String(255), nullable=False),
         sa.Column("email", sa.String(255), unique=True, nullable=False),
         sa.Column("role", sa.String(80), nullable=False),
+        sa.Column("password_hash", sa.String(255)),
         sa.Column("azure_b2c_subject", sa.String(255)),
         sa.Column("is_active", sa.Boolean, server_default="true"),
         sa.Column("created_at", sa.DateTime, server_default=sa.text("now()")),
@@ -135,7 +136,7 @@ def upgrade() -> None:
         sa.Column("document_version_id", UUID(as_uuid=False), sa.ForeignKey("document_versions.id", ondelete="CASCADE"), nullable=False),
         sa.Column("chunk_index", sa.Integer, nullable=False),
         sa.Column("text", sa.Text, nullable=False),
-        sa.Column("embedding", sa.Column("embedding", type_=sa.Text)),  # placeholder — see note
+        sa.Column("chunk_metadata", JSONB),
         sa.Column("token_count", sa.Integer),
         sa.Column("start_page", sa.Integer),
         sa.Column("end_page", sa.Integer),

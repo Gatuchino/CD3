@@ -18,8 +18,8 @@ class Settings(BaseSettings):
     # OpenAI (directo, sin Azure)
     OPENAI_API_KEY: str
     OPENAI_MODEL_GPT4O: str = "gpt-4o"
-    OPENAI_MODEL_EMBEDDINGS: str = "text-embedding-3-large"
-    EMBEDDING_DIMENSIONS: int = 3072
+    OPENAI_MODEL_EMBEDDINGS: str = "text-embedding-3-small"
+    EMBEDDING_DIMENSIONS: int = 1536
 
     # Almacenamiento de archivos (directorio local; en Railway usar volumen persistente)
     STORAGE_LOCAL_PATH: str = "/data/documents"

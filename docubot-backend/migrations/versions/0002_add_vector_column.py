@@ -14,7 +14,7 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    op.execute("ALTER TABLE document_chunks ADD COLUMN IF NOT EXISTS embedding vector(3072)")
+    op.execute("ALTER TABLE document_chunks ADD COLUMN IF NOT EXISTS embedding vector(1536)")
 
 
 def downgrade() -> None:

@@ -157,8 +157,8 @@ class ChunkEmbedding(Base):
 
     id = Column(UUID(as_uuid=False), primary_key=True, default=gen_uuid)
     chunk_id = Column(UUID(as_uuid=False), ForeignKey("document_chunks.id", ondelete="CASCADE"), nullable=False)
-    embedding = Column(Vector(3072))
-    embedding_model = Column(String(100), default="text-embedding-3-large")
+    embedding = Column(Vector(1536))
+    embedding_model = Column(String(100), default="text-embedding-3-small")
     created_at = Column(DateTime, default=datetime.utcnow)
 
     chunk = relationship("DocumentChunk", back_populates="embedding")

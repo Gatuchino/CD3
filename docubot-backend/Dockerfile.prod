@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir --user -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt --target /build/packages
 
 # Stage 2: runtime
 FROM python:3.12-slim AS runtime
@@ -26,13 +26,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Copiar paquetes Python del builder
-COPY --from=builder /root/.local /root/.local
+# Copiar paquetes Python a una ruta accesible por todos los usuarios
+COPY --from=builder /build/packages /app/packages
 
 # Copiar código fuente
 COPY app/ app/
 COPY scripts/ scripts/
 COPY alembic.ini* ./
+COPY migrations/ migrations/
 
 # Directorio de almacenamiento persistente (montar volumen Railway aquí)
 RUN mkdir -p /data/documents
@@ -41,7 +42,8 @@ RUN mkdir -p /data/documents
 RUN useradd -m -u 1001 appuser && chown -R appuser:appuser /app /data
 USER appuser
 
-ENV PATH="/root/.local/bin:$PATH"
+ENV PYTHONPATH="/app/packages"
+ENV PATH="/app/packages/bin:$PATH"
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV ENVIRONMENT=production
@@ -50,7 +52,7 @@ ENV PORT=8000
 EXPOSE 8000
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
     CMD curl -f http://localhost:8000/health || exit 1
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "2", "--no-access-log"]
+CMD ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000} --workers 2 --no-access-log"]

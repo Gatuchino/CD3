@@ -151,15 +151,7 @@ def upgrade() -> None:
     # Columna vector nativa (pgvector) — no soportada por DDL de SA, usar SQL directo
     op.execute("ALTER TABLE document_chunks DROP COLUMN IF EXISTS embedding")
     op.execute("ALTER TABLE document_chunks ADD COLUMN embedding vector(3072)")
-    # Nota: índices vectoriales (HNSW/IVFFlat) tienen límite de 2000 dims en
-    # pgvector < 0.7. Con 3072 dims se omite el índice aquí; Railway ejecutará
-    # búsquedas secuenciales (válido para volúmenes iniciales <100k chunks).
-    # Para habilitar el índice en producción con pgvector >= 0.7 usar halfvec.
-    op.execute("""
-        CREATE INDEX ix_chunks_text_trgm
-        ON document_chunks
-        USING gin (text gin_trgm_ops)
-    """)
+    # Índices vectoriales e índices GIN se crean post-deploy para no bloquear startup.
 
     # ── obligations ────────────────────────────────────────────────────
     op.create_table(

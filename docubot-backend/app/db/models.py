@@ -144,7 +144,7 @@ class DocumentChunk(Base):
     end_page = Column(Integer)
     token_count = Column(Integer)
     source_reference = Column(JSONB)
-    metadata = Column(JSONB)
+    chunk_metadata = Column(JSONB)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     version = relationship("DocumentVersion", back_populates="chunks")

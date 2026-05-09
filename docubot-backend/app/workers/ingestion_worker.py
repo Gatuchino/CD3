@@ -163,7 +163,7 @@ async def process_document_version(
                     end_page=chunk.end_page,
                     token_count=chunk.token_count,
                     source_reference=chunk.source_reference,
-                    metadata=chunk.metadata,
+                    chunk_metadata=chunk.metadata,
                 )
                 db.add(db_chunk)
                 await db.flush()

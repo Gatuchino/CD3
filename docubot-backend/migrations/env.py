@@ -1,13 +1,13 @@
 """
-DocuBot — Alembic env.py con soporte async (asyncpg) y carga de settings.
-Soporta migraciones non_transactional para extensiones PostgreSQL.
+DocuBot — Alembic env.py async (asyncpg).
+Las extensiones PostgreSQL se instalan con una conexión AUTOCOMMIT separada.
 """
 import asyncio
 from logging.config import fileConfig
 
 from sqlalchemy import pool, text
 from sqlalchemy.engine import Connection
-from sqlalchemy.ext.asyncio import async_engine_from_config
+from sqlalchemy.ext.asyncio import create_async_engine
 
 from alembic import context
 
@@ -20,6 +20,7 @@ import app.db.models  # noqa: F401
 
 config = context.config
 
+# ── URL con driver asyncpg ─────────────────────────────────────────────
 db_url = settings.DATABASE_URL
 if db_url.startswith("postgresql://"):
     db_url = db_url.replace("postgresql://", "postgresql+asyncpg://", 1)
@@ -47,44 +48,32 @@ def run_migrations_offline() -> None:
 
 
 def do_run_migrations(connection: Connection) -> None:
-    """Ejecuta migraciones. Las marcadas non_transactional usan AUTOCOMMIT."""
-    # Detectar si la migración actual requiere AUTOCOMMIT
-    # (extensiones como pgvector no pueden instalarse dentro de una transacción)
-    heads = context.get_head_revision()
-
     context.configure(
         connection=connection,
         target_metadata=target_metadata,
         compare_type=True,
-        transaction_per_migration=True,  # cada migración en su propia transacción
     )
-    context.run_migrations()
+    with context.begin_transaction():
+        context.run_migrations()
 
 
 async def run_async_migrations() -> None:
-    connectable = async_engine_from_config(
-        config.get_section(config.config_ini_section, {}),
-        prefix="sqlalchemy.",
-        poolclass=pool.NullPool,
-    )
-
-    async with connectable.connect() as connection:
-        # Ejecutar extensiones con AUTOCOMMIT antes de las migraciones
-        await connection.execute(text("COMMIT"))  # salir de cualquier transacción abierta
-        old_isolation = await connection.get_isolation_level()
-        await connection.execution_options(isolation_level="AUTOCOMMIT")
-
+    # ── Paso 1: instalar extensiones con engine AUTOCOMMIT dedicado ────
+    autocommit_engine = create_async_engine(db_url, isolation_level="AUTOCOMMIT", poolclass=pool.NullPool)
+    async with autocommit_engine.connect() as conn:
         for ext in ["uuid-ossp", "vector", "pg_trgm"]:
             try:
-                await connection.execute(text(f'CREATE EXTENSION IF NOT EXISTS "{ext}"'))
-                print(f"[env.py] Extension '{ext}' OK")
+                await conn.execute(text(f'CREATE EXTENSION IF NOT EXISTS "{ext}"'))
+                print(f"[migrations] Extension '{ext}' OK")
             except Exception as e:
-                print(f"[env.py] Extension '{ext}' skipped: {e}")
+                print(f"[migrations] Extension '{ext}' warning: {e}")
+    await autocommit_engine.dispose()
 
-        await connection.execution_options(isolation_level="READ COMMITTED")
+    # ── Paso 2: correr migraciones con engine normal ───────────────────
+    engine = create_async_engine(db_url, poolclass=pool.NullPool)
+    async with engine.connect() as connection:
         await connection.run_sync(do_run_migrations)
-
-    await connectable.dispose()
+    await engine.dispose()
 
 
 def run_migrations_online() -> None:

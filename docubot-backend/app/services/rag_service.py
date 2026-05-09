@@ -431,3 +431,7 @@ class RagService:
             return text, usage
 
         return await loop.run_in_executor(None, _call)
+
+
+# Instancia singleton
+rag_service = RagService()

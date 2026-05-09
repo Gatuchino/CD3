@@ -16,10 +16,7 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    # ── Extensiones PostgreSQL ─────────────────────────────────────────
-    op.execute("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\"")
-    op.execute("CREATE EXTENSION IF NOT EXISTS vector")
-    op.execute("CREATE EXTENSION IF NOT EXISTS pg_trgm")
+    # Extensiones instaladas por env.py con AUTOCOMMIT (no pueden ir en transacción)
 
     # ── tenants ────────────────────────────────────────────────────────
     op.create_table(
@@ -148,10 +145,8 @@ def upgrade() -> None:
     )
     op.create_index("ix_chunks_version_id", "document_chunks", ["document_version_id"])
 
-    # Columna vector nativa (pgvector) — no soportada por DDL de SA, usar SQL directo
-    op.execute("ALTER TABLE document_chunks DROP COLUMN IF EXISTS embedding")
-    op.execute("ALTER TABLE document_chunks ADD COLUMN embedding vector(3072)")
-    # Índices vectoriales e índices GIN se crean post-deploy para no bloquear startup.
+    # La columna vector(3072) y sus índices se agregan en migración 0002
+    # para no bloquear el startup inicial.
 
     # ── obligations ────────────────────────────────────────────────────
     op.create_table(
@@ -288,6 +283,4 @@ def downgrade() -> None:
     op.drop_table("projects")
     op.drop_table("users")
     op.drop_table("tenants")
-    op.execute("DROP EXTENSION IF EXISTS pg_trgm")
-    op.execute("DROP EXTENSION IF EXISTS vector")
-    op.execute("DROP EXTENSION IF EXISTS \"uuid-ossp\"")
+    pass  # Las extensiones las gestiona env.py

@@ -4,11 +4,8 @@ dockerfilePath = "docubot-backend/Dockerfile.prod"
 buildContext = "docubot-backend"
 
 [deploy]
-startCommand = "uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 2 --no-access-log"
+startCommand = "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 1 --no-access-log"
 healthcheckPath = "/health"
 healthcheckTimeout = 300
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 3
-
-[[deploy.preDeployCommands]]
-command = "alembic upgrade head"
